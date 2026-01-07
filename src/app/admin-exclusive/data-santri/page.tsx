@@ -114,7 +114,7 @@ export default function DataSantriPage() {
                     <p style={{ color: "#64748b", fontSize: "0.9rem" }}>Real-time database monitoring</p>
                 </div>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    <button onClick={() => window.location.href = '/admin-content'} className="refresh-btn" style={{ background: 'var(--secondary)', color: 'white' }}>
+                    <button onClick={() => window.location.href = '/admin-exclusive'} className="refresh-btn" style={{ background: 'var(--secondary)', color: 'white' }}>
                         <i className="fas fa-edit"></i> Edit Konten Web
                     </button>
                     <button onClick={fetchSantriData} className="refresh-btn">

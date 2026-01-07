@@ -69,7 +69,13 @@ export default function AppleAdminPage() {
         return (
             <div className="apple-admin-body" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div className="apple-card" style={{ width: '400px', textAlign: 'center', padding: '3rem' }}>
-                    <div style={{ fontSize: '4rem', marginBottom: '1.5rem', color: '#000' }}></div>
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <img
+                            src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png"
+                            alt="Logo"
+                            style={{ width: '80px', height: 'auto', margin: '0 auto' }}
+                        />
+                    </div>
                     <h2 style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '0.5rem' }}>Management Portal</h2>
                     <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '2rem' }}>Authenticate to access system controls.</p>
                     <input
@@ -97,7 +103,11 @@ export default function AppleAdminPage() {
             {/* Sidebar */}
             <aside className="apple-sidebar">
                 <div style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '2.2rem' }}></span>
+                    <img
+                        src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png"
+                        alt="Logo"
+                        style={{ width: '45px', height: 'auto' }}
+                    />
                     <span style={{ letterSpacing: '-0.03em' }}>Console</span>
                 </div>
 

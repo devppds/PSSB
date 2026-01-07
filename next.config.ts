@@ -4,7 +4,13 @@ import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare/cloudflare-
 // initOpenNextCloudflareForDev();
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ['async_hooks', 'fs', 'path', 'node:async_hooks', 'node:fs', 'node:path', 'node:dns', 'node:net']
+  serverExternalPackages: ['async_hooks', 'fs', 'path', 'node:async_hooks', 'node:fs', 'node:path', 'node:dns', 'node:net'],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;

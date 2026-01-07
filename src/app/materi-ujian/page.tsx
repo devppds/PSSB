@@ -37,7 +37,7 @@ export default function MateriUjianPage() {
                 <section className="section-wrapper" style={{ paddingTop: 0 }}>
 
                     {/* MADRASAH HIDAYATUL MUBTADI'IN (MHM) */}
-                    <h2 className="materi-section-title reveal fade-left">Madrasah Hidayatul Mubtadi'in <small>(MHM)</small></h2>
+                    <h2 className="materi-section-title reveal fade-left">Madrasah Hidayatul Mubtadi&apos;in <small>(MHM)</small></h2>
 
                     <div className="grid-3">
                         {/* KELAS I IBTIDAIYAH MHM */}
@@ -273,11 +273,11 @@ export default function MateriUjianPage() {
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Hadits (Riyadlus Sholihin)</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Hadits (al-Qowaidul Asasiyah fi Ilmi Hadits)</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Tauhid (Jauharoh at-Tauhid)</li>
-                                    <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Fiqh (Fathul Mu'in)</li>
-                                    <li className="info-item"><i className="fas fa-check-circle"></i> Ushul Fiqh (Mabadi' Ushul Fiqh wa Qowaidihi, al-Waroqot)</li>
-                                    <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Nahwu (Alfiyah Ibnu Malik, Qawa'idul I'rob, al-I'rob)</li>
-                                    <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Akhlaq (Ta'limul Muta'allim)</li>
-                                    <li className="info-item"><i className="fas fa-check-circle"></i> Tarikh (Manaqib Aimmatil Arba'ah)</li>
+                                    <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Fiqh (Fathul Mu&apos;in)</li>
+                                    <li className="info-item"><i className="fas fa-check-circle"></i> Ushul Fiqh (Mabadi&apos; Ushul Fiqh wa Qowaidihi, al-Waroqot)</li>
+                                    <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Nahwu (Alfiyah Ibnu Malik, Qawa&apos;idul I&apos;rob, al-I&apos;rob)</li>
+                                    <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Akhlaq (Ta&apos;limul Muta&apos;allim)</li>
+                                    <li className="info-item"><i className="fas fa-check-circle"></i> Tarikh (Manaqib Aimmatil Arba&apos;ah)</li>
                                 </ul>
                             }
                             usiaMinimal="15 tahun."
@@ -289,18 +289,18 @@ export default function MateriUjianPage() {
                             kurikulumContent={
                                 <div className="grid-2">
                                     <ul className="info-list">
-                                        <li className="info-item"><i className="fas fa-check-circle"></i> Al-Qur'an</li>
-                                        <li className="info-item"><i className="fas fa-check-circle"></i> Hadits (Arba'in An-Nawawi)</li>
+                                        <li className="info-item"><i className="fas fa-check-circle"></i> Al-Qur&apos;an</li>
+                                        <li className="info-item"><i className="fas fa-check-circle"></i> Hadits (Arba&apos;in An-Nawawi)</li>
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Mukhtarul Hadits As-Syarif</li>
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Tauhid (Matnu Sanusi)</li>
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Tauhid (Matnu Bajuri)</li>
-                                        <li className="info-item"><i className="fas fa-check-circle"></i> Tauhid ('Aqidatul 'Awam)</li>
+                                        <li className="info-item"><i className="fas fa-check-circle"></i> Tauhid (&apos;Aqidatul &apos;Awam)</li>
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Fiqh (Fathul Qorib)</li>
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Fiqh (Sullamut Taufiq)</li>
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Fiqh (Safinatun Naja)</li>
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Nahwu (Al-Amrithi)</li>
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Nahwu (Al-Ajurumiyah)</li>
-                                        <li className="info-item"><i className="fas fa-check-circle"></i> Nahwu (Al-'Awamil)</li>
+                                        <li className="info-item"><i className="fas fa-check-circle"></i> Nahwu (Al-&apos;Awamil)</li>
                                     </ul>
                                     <ul className="info-list">
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Shorof (Al-Maqshud)</li>
@@ -311,7 +311,7 @@ export default function MateriUjianPage() {
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Akhlaq (Nadhmul Mathlab)</li>
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Tajwid (Tuhfatul Athfal)</li>
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Tajwid (Hidayatus Shibyan)</li>
-                                        <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Imla' Arab</li>
+                                        <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Imla&apos; Arab</li>
                                         <li className="info-item"><i className="fas fa-check-circle"></i> Kitabah Pegon</li>
                                     </ul>
                                 </div>
@@ -331,12 +331,12 @@ export default function MateriUjianPage() {
                                         <li className="info-item"><i className="fas fa-edit"></i> Balaghah (Al-Jauharul Maknun)</li>
                                         <li className="info-item"><i className="fas fa-edit"></i> Nahwu Shorof (Alfiyah Ibn Malik)</li>
                                         <li className="info-item"><i className="fas fa-edit"></i> Ushul Fiqh (Lubbul Ushul)</li>
-                                        <li className="info-item"><i className="fas fa-edit"></i> Imla' (Arab)</li>
+                                        <li className="info-item"><i className="fas fa-edit"></i> Imla&apos; (Arab)</li>
                                     </ul>
                                     <h4 style={{ color: "var(--primary)", marginBottom: "0.5rem", fontSize: "0.95rem" }}>UJIAN LISAN:</h4>
                                     <ul className="info-list">
                                         <li className="info-item"><i className="fas fa-microphone"></i> Fiqh (membaca Fathul Mu’in)</li>
-                                        <li className="info-item"><i className="fas fa-microphone"></i> Hafalan Qur'an (Juz 1)</li>
+                                        <li className="info-item"><i className="fas fa-microphone"></i> Hafalan Qur&apos;an (Juz 1)</li>
                                         <li className="info-item"><i className="fas fa-microphone"></i> Hadits Jami’ul ‘Ulum (1-25)</li>
                                         <li className="info-item"><i className="fas fa-microphone"></i> Fasholatan lengkap</li>
                                         <li className="info-item"><i className="fas fa-microphone"></i> ‘Aqo’id 50</li>
@@ -356,7 +356,7 @@ export default function MateriUjianPage() {
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Ushul Fiqh (Syarhu Jam’il Jawami’)</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Qoidah Ushuliyah wa Fiqhiyah (Muhtashor min Qowa’idul ‘Alla’i wa Kalaamil Asnawi)</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Akhlaq (Mauidhotul Mu'minin)</li>
-                                    <li className="info-item"><i className="fas fa-check-circle"></i> Salalimul Fudlola'</li>
+                                    <li className="info-item"><i className="fas fa-check-circle"></i> Salalimul Fudlola&apos;</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Aswaja (Risalah Aswaja)</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Kawakibul Lama’ah</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Balaghah (‘Uqudul Juman)</li>
@@ -378,7 +378,7 @@ export default function MateriUjianPage() {
                                         <li className="info-item"><i className="fas fa-microphone"></i> Kitab Kanzurroghibin (Syarh Al-Mahalli ‘alal Minhaj)</li>
                                         <li className="info-item"><i className="fas fa-microphone"></i> Munaqosyah Fikih Kebangsaan</li>
                                         <li className="info-item"><i className="fas fa-microphone"></i> Psikotest</li>
-                                        <li className="info-item"><i className="fas fa-microphone"></i> Hafalan Qur'an 3 juz*</li>
+                                        <li className="info-item"><i className="fas fa-microphone"></i> Hafalan Qur&apos;an 3 juz*</li>
                                         <li className="info-item"><i className="fas fa-microphone"></i> Hafalan 150 Hadits Jami’ul ‘Ulum*</li>
                                     </ul>
                                     <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "1rem" }}>*Bagi mahasantri baru non-lulusan
@@ -387,11 +387,11 @@ export default function MateriUjianPage() {
                             }
                             kurikulumContent={
                                 <ul className="info-list">
-                                    <li className="info-item"><i className="fas fa-check-circle"></i> Tafsir (Rowa'iul Bayan)</li>
-                                    <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Tafsir (Al-Itqon Fi Ulum Al-Qur'an)</li>
+                                    <li className="info-item"><i className="fas fa-check-circle"></i> Tafsir (Rowa&apos;iul Bayan)</li>
+                                    <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Tafsir (Al-Itqon Fi Ulum Al-Qur&apos;an)</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Hadits (Syarah Umdatul Ahkam)</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Ilmu Hadits (Muqoddimah ibn Sholah)</li>
-                                    <li className="info-item"><i className="fas fa-check-circle"></i> Fiqh Muwathonah (Nasjul Wi'am Wata'shilil Wahdah al ijtima'iyah)</li>
+                                    <li className="info-item"><i className="fas fa-check-circle"></i> Fiqh Muwathonah (Nasjul Wi&apos;am Wata&apos;shilil Wahdah al ijtima&apos;iyah)</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Fiqh Muwathonah (Nasyru Rahmatil Islam)</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Fiqh Muwathonah (Al Jihad wa Wathoniyatu Ghoiril Muslim)</li>
                                     <li className="info-item"><i className="fas fa-check-circle"></i> Ushul Fiqh (Al-Kaukab As-Sathi’)</li>
@@ -415,10 +415,6 @@ export default function MateriUjianPage() {
                             materiContent={<div className="no-exam-text">Tanpa ujian.</div>}
                             kurikulumContent={<div className="no-exam-text">Sesuai kurikulum MIU.</div>}
                         />
-                        {/*  Note: The previous file was truncated, so I'm stopping here for MIU. 
-                      Ideally, the user should provide the rest or I would infer similar patterns if needed.
-                      For now, this covers the majority of the content shown.
-                  */}
                     </div>
 
                 </section>

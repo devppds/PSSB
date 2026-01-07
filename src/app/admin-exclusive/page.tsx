@@ -829,27 +829,134 @@ export default function AppleAdminPage() {
 
                             {activeTab === 'finance' && (
                                 <div>
+                                    <div className="apple-card" style={{ marginBottom: '30px' }}>
+                                        <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '8px' }}>Manajemen Keuangan</h2>
+                                        <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '30px' }}>Kelola rincian pembayaran santri baru dan lama</p>
+                                    </div>
+
                                     {['pembayaran-tahunan-baru', 'pembayaran-tahunan-lama', 'pembayaran-bulanan'].map(slug => (
                                         <div key={slug} className="apple-card" style={{ marginBottom: '30px' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                                                <h3 style={{ textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em', color: 'var(--apple-text-secondary)' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
+                                                <h3 style={{ textTransform: 'capitalize', fontSize: '1.2rem', fontWeight: 700, color: 'var(--apple-blue)' }}>
                                                     {slug.replace(/-/g, ' ')}
                                                 </h3>
-                                                <button className="apple-btn-primary" style={{ padding: '8px 16px', fontSize: '0.8rem' }} onClick={() => handleSaveGlobal(slug)}>Sync</button>
+                                                <button
+                                                    className="apple-badge badge-blue"
+                                                    style={{ border: 'none', cursor: 'pointer' }}
+                                                    onClick={() => handleAddGlobalItem(slug)}
+                                                >
+                                                    + Tambah Item
+                                                </button>
                                             </div>
-                                            <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '15px' }}>
-                                                {globalContent.filter(i => i.section_slug === slug).map(item => (
-                                                    <div key={item.id} style={{ background: 'white', padding: '15px', borderRadius: '15px', border: '1px solid rgba(0,0,0,0.03)' }}>
-                                                        <label className="apple-label" style={{ fontSize: '0.7rem' }}>{item.label}</label>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '5px' }}>
-                                                            <span style={{ fontWeight: 600, color: 'var(--apple-text-secondary)', fontSize: '1rem' }}>Rp</span>
-                                                            <input className="apple-input" style={{ border: 'none', padding: '0', fontSize: '1.2rem', fontWeight: 700 }} value={item.amount || "0"} onChange={(e) => handleUpdateGlobalItem(item.id, 'amount', e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                ))}
+                                            <div className="apple-table-container">
+                                                <table className="apple-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style={{ paddingLeft: '24px', width: '40px' }}>No</th>
+                                                            <th>Jenis Pembayaran</th>
+                                                            <th style={{ width: '180px' }}>Nominal (Rp)</th>
+                                                            <th style={{ width: '120px' }}>Keterangan</th>
+                                                            <th style={{ width: '150px' }}>Aksi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {globalContent.filter(i => i.section_slug === slug).map((item, idx) => (
+                                                            <tr key={item.id || idx}>
+                                                                <td style={{ paddingLeft: '24px', fontWeight: 600, color: 'var(--apple-text-secondary)' }}>{idx + 1}</td>
+                                                                <td>
+                                                                    <input
+                                                                        className="apple-input"
+                                                                        value={item.label || ''}
+                                                                        onChange={e => handleUpdateGlobalItem(item.id, 'label', e.target.value)}
+                                                                        placeholder="Nama item..."
+                                                                        style={{ padding: '8px 12px', fontSize: '0.9rem' }}
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <input
+                                                                        className="apple-input"
+                                                                        value={item.amount || '0'}
+                                                                        onChange={e => handleUpdateGlobalItem(item.id, 'amount', e.target.value)}
+                                                                        placeholder="0"
+                                                                        style={{ padding: '8px 12px', fontSize: '0.9rem', fontWeight: 600 }}
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <input
+                                                                        className="apple-input"
+                                                                        value={item.description || ''}
+                                                                        onChange={e => handleUpdateGlobalItem(item.id, 'description', e.target.value)}
+                                                                        placeholder="/tahun"
+                                                                        style={{ padding: '8px 12px', fontSize: '0.85rem' }}
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <div style={{ display: 'flex', gap: '5px' }}>
+                                                                        <button
+                                                                            className="apple-btn-primary"
+                                                                            style={{ padding: '6px 12px', fontSize: '0.75rem' }}
+                                                                            onClick={() => handleSaveGlobal(slug)}
+                                                                        >
+                                                                            Simpan
+                                                                        </button>
+                                                                        <button
+                                                                            className="apple-btn-secondary"
+                                                                            style={{ padding: '6px 10px', fontSize: '0.75rem', color: '#ff3b30', background: 'rgba(255, 59, 48, 0.1)' }}
+                                                                            onClick={() => handleDeleteGlobalItem(item.id)}
+                                                                        >
+                                                                            <i className="fas fa-trash"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     ))}
+
+                                    {/* Keterangan Section */}
+                                    <div className="apple-card">
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
+                                            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--apple-blue)' }}>Keterangan Pembayaran</h3>
+                                            <button
+                                                className="apple-badge badge-blue"
+                                                style={{ border: 'none', cursor: 'pointer' }}
+                                                onClick={() => handleAddGlobalItem('keterangan-pembayaran')}
+                                            >
+                                                + Tambah Keterangan
+                                            </button>
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                            {globalContent.filter(item => item.section_slug === 'keterangan-pembayaran').map((item, idx) => (
+                                                <div key={item.id || idx} style={{ display: 'flex', gap: '8px', alignItems: 'center', padding: '12px', background: '#f5f5f7', borderRadius: '10px' }}>
+                                                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--apple-text-secondary)', minWidth: '25px' }}>{idx + 1}.</span>
+                                                    <input
+                                                        className="apple-input"
+                                                        value={item.label || ''}
+                                                        onChange={e => handleUpdateGlobalItem(item.id, 'label', e.target.value)}
+                                                        placeholder="Tulis keterangan..."
+                                                        style={{ flex: 1, padding: '8px 12px', fontSize: '0.9rem', background: 'white' }}
+                                                    />
+                                                    <button
+                                                        onClick={() => handleSaveGlobal('keterangan-pembayaran')}
+                                                        className="apple-btn-primary"
+                                                        style={{ padding: '6px 12px', fontSize: '0.75rem', whiteSpace: 'nowrap' }}
+                                                    >
+                                                        Simpan
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeleteGlobalItem(item.id)}
+                                                        className="apple-btn-secondary"
+                                                        style={{ padding: '6px 10px', fontSize: '0.75rem', color: '#ff3b30', background: 'rgba(255, 59, 48, 0.1)' }}
+                                                    >
+                                                        <i className="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </>

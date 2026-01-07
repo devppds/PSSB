@@ -229,7 +229,21 @@ select {
     border-radius: 12px;
     font-size: 1rem;
     transition: all 0.2s;
-    background: var(--ppdb-bg);
+    background-color: #ffffff;
+    color: var(--ppdb-text);
+    appearance: auto;
+}
+
+option {
+    color: #1f2937;
+    background-color: #ffffff;
+}
+
+optgroup {
+    color: var(--ppdb-primary);
+    font-weight: 700;
+    font-style: normal;
+    background-color: #f1f5f9;
 }
 
 input:focus,

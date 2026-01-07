@@ -1,4 +1,5 @@
 {
+    /** PSSB Cloudflare Pages Configuration */
     "name": "pssb-ds",
     "compatibility_date": "2025-01-01",
     "compatibility_flags": [

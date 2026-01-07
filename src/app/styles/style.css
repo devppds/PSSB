@@ -1510,6 +1510,19 @@ footer.footer-wrapper {
     transition-delay: 0.5s;
 }
 
+/* History Image Responsive Fix */
+@media (max-width: 600px) {
+    .timeline-content div[style*="float"] {
+        float: none !important;
+        margin: 0 auto 1.5rem auto !important;
+        display: block;
+    }
+
+    .timeline-content {
+        text-align: center;
+    }
+}
+
 /* Enhanced Card Hover */
 /* ===== PREMIUM ENHANCEMENTS ===== */
 /* 1. Hero Background Pattern & Premium Typography */

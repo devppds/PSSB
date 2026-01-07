@@ -884,27 +884,87 @@ export default function AppleAdminPage() {
                 ))}
             </div>
 
-            {/* Gallery Modal */}
+            {/* Gallery Modal - UPGRADED WITH UPLOAD */}
             {galleryModal.isOpen && (
                 <div className="apple-modal-overlay" onClick={() => setGalleryModal({ isOpen: false, item: null })}>
-                    <div className="apple-confirm-card" style={{ maxWidth: '500px' }} onClick={e => e.stopPropagation()}>
-                        <div className="apple-confirm-title">Media Item</div>
+                    <div className="apple-confirm-card" style={{ maxWidth: '550px' }} onClick={e => e.stopPropagation()}>
+                        <div className="apple-confirm-title">Upload Media</div>
+
+                        {/* File Upload Section */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <label className="apple-label">Upload Gambar</label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="apple-input"
+                                onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+
+                                    showToast("Uploading", "Sedang mengupload gambar...", "info");
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+
+                                    try {
+                                        const res = await fetch('/api/upload', {
+                                            method: 'POST',
+                                            body: formData
+                                        });
+                                        const data = await res.json();
+                                        if (data.url) {
+                                            setGalleryModal({
+                                                ...galleryModal,
+                                                item: { ...galleryModal.item, image_url: data.url }
+                                            });
+                                            showToast("Sukses", "Gambar berhasil diupload!", "success");
+                                        }
+                                    } catch (err) {
+                                        showToast("Error", "Gagal upload gambar", "error");
+                                    }
+                                }}
+                            />
+                            {galleryModal.item?.image_url && (
+                                <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                                    <img
+                                        src={galleryModal.item.image_url}
+                                        alt="Preview"
+                                        style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', border: '1px solid #ddd' }}
+                                    />
+                                </div>
+                            )}
+                        </div>
+
                         <div style={{ marginBottom: '20px' }}>
                             <label className="apple-label">Judul / Caption</label>
-                            <input className="apple-input" value={galleryModal.item.title || ''} onChange={e => setGalleryModal({ ...galleryModal, item: { ...galleryModal.item, title: e.target.value } })} placeholder="Judul gambar..." />
+                            <input className="apple-input" value={galleryModal.item?.title || ''} onChange={e => setGalleryModal({ ...galleryModal, item: { ...galleryModal.item, title: e.target.value } })} placeholder="Judul gambar..." />
                         </div>
+
                         <div style={{ marginBottom: '20px' }}>
                             <label className="apple-label">Kategori</label>
-                            <input className="apple-input" value={galleryModal.item.category || ''} onChange={e => setGalleryModal({ ...galleryModal, item: { ...galleryModal.item, category: e.target.value } })} placeholder="Contoh: Kegiatan, Asrama, dll" />
+                            <select
+                                className="apple-input"
+                                value={galleryModal.item?.category || ''}
+                                onChange={e => setGalleryModal({ ...galleryModal, item: { ...galleryModal.item, category: e.target.value } })}
+                            >
+                                <option value="">Pilih Kategori...</option>
+                                <option value="Bahtsul Masa'il">Bahtsul Masa'il</option>
+                                <option value="Kitab Kuning">Kitab Kuning</option>
+                                <option value="Formal dan Non-Formal">Formal dan Non-Formal</option>
+                                <option value="Pengajian Bandongan/Kilatan">Pengajian Bandongan/Kilatan</option>
+                                <option value="Bahtsul Masa'il Kubro">Bahtsul Masa'il Kubro</option>
+                                <option value="Takhossus Arab (Nahwu Shorof)">Takhossus Arab (Nahwu Shorof)</option>
+                                <option value="Ziaroh Wali & Ulama">Ziaroh Wali & Ulama</option>
+                                <option value="Kegiatan Santri">Kegiatan Santri</option>
+                                <option value="Asrama">Asrama</option>
+                                <option value="Fasilitas">Fasilitas</option>
+                            </select>
                         </div>
-                        <div style={{ marginBottom: '20px' }}>
-                            <label className="apple-label">URL Gambar</label>
-                            <input className="apple-input" value={galleryModal.item.image_url || ''} onChange={e => setGalleryModal({ ...galleryModal, item: { ...galleryModal.item, image_url: e.target.value } })} placeholder="https://..." />
-                        </div>
+
                         <div style={{ marginBottom: '20px' }}>
                             <label className="apple-label">Urutan</label>
-                            <input type="number" className="apple-input" value={galleryModal.item.order_index || 0} onChange={e => setGalleryModal({ ...galleryModal, item: { ...galleryModal.item, order_index: parseInt(e.target.value) } })} />
+                            <input type="number" className="apple-input" value={galleryModal.item?.order_index || 0} onChange={e => setGalleryModal({ ...galleryModal, item: { ...galleryModal.item, order_index: parseInt(e.target.value) } })} />
                         </div>
+
                         <div className="apple-confirm-btns">
                             <button className="apple-confirm-btn btn-danger" style={{ background: 'var(--apple-blue)', color: 'white' }} onClick={handleSaveGalleryItem}>Simpan</button>
                             <button className="apple-confirm-btn btn-secondary" onClick={() => setGalleryModal({ isOpen: false, item: null })}>Batal</button>

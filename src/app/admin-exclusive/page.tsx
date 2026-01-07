@@ -12,6 +12,7 @@ export default function AppleAdminPage() {
     const [globalContent, setGlobalContent] = useState<any[]>([]);
     const [registrations, setRegistrations] = useState<any[]>([]);
     const [gallery, setGallery] = useState<any[]>([]);
+    const [timeline, setTimeline] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [authLoading, setAuthLoading] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -104,6 +105,7 @@ export default function AppleAdminPage() {
             const flattened = Object.values(contentData.content || {}).flat() as any[];
             setGlobalContent(flattened);
             setGallery(contentData.gallery_list || []);
+            setTimeline(contentData.timeline || []);
             setRegistrations(santriData || []);
         } catch (err) {
             console.error(err);
@@ -212,6 +214,56 @@ export default function AppleAdminPage() {
                 setGallery(prev => prev.filter(p => p.id !== id));
             } catch (e) { showToast("Error", "Gagal menghapus media.", "error"); }
         });
+    };
+
+    // Timeline Handlers
+    const handleUpdateTimeline = (id: any, field: string, value: any) => {
+        setTimeline(prev => prev.map(item => item.id === id ? { ...item, [field]: value } : item));
+    };
+
+    const handleSaveTimeline = async (item: any) => {
+        setSaving(true);
+        // If id is string (temp id), make it null for DB
+        const payload = { ...item, id: typeof item.id === 'string' ? null : item.id };
+        try {
+            await fetch('/api/content/timeline', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            showToast("Sukses", "Data sejarah disimpan.", "success");
+            fetchData();
+        } catch (e) { showToast("Error", "Gagal menyimpan sejarah.", "error"); }
+        finally { setSaving(false); }
+    };
+
+    const handleDeleteTimeline = (id: any) => {
+        if (typeof id === 'string') {
+            setTimeline(prev => prev.filter(i => i.id !== id));
+            return;
+        }
+        confirmAction("Hapus Sejarah?", "Item ini akan dihapus permanen.", async () => {
+            try {
+                await fetch('/api/content/timeline', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+                showToast("Terhapus", "Data berhasil dihapus.", "success");
+                setTimeline(prev => prev.filter(i => i.id !== id));
+            } catch (e) { showToast("Error", "Gagal menghapus.", "error"); }
+        });
+    };
+
+    const handleAddTimeline = () => {
+        setTimeline([...timeline, {
+            id: 'new-' + Date.now(),
+            year: new Date().getFullYear().toString(),
+            date_label: 'Tanggal Peristiwa',
+            title: 'Judul Peristiwa',
+            content: '',
+            image_url: ''
+        }]);
     };
 
     const handleUpdateSantriStatus = async (id: number, status: string, catatan: string) => {
@@ -512,6 +564,52 @@ export default function AppleAdminPage() {
                                         </div>
                                         <div className="apple-input-group">
                                             <input className="apple-input" placeholder="URL Video Profil (YouTube/Cloudinary)" value={settings.video_url || ""} onChange={(e) => setSettings({ ...settings, video_url: e.target.value })} />
+                                        </div>
+                                    </div>
+
+                                    {/* TIMELINE MANAGEMENT SECTION */}
+                                    <div style={{ marginTop: '40px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                                            <h3 className="apple-label" style={{ fontSize: '1.1rem', margin: 0 }}>Timeline / Sejarah Detail</h3>
+                                            <button className="apple-badge badge-blue" style={{ border: 'none', cursor: 'pointer' }} onClick={handleAddTimeline}>+ Tambah Peristiwa</button>
+                                        </div>
+                                        <div className="apple-table-container">
+                                            <table className="apple-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th style={{ width: '80px', paddingLeft: '24px' }}>Tahun</th>
+                                                        <th style={{ width: '150px' }}>Label Tanggal</th>
+                                                        <th style={{ width: '200px' }}>Judul</th>
+                                                        <th>Konten & Gambar</th>
+                                                        <th style={{ width: '100px' }}>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {timeline.map((item, idx) => (
+                                                        <tr key={item.id || idx}>
+                                                            <td style={{ paddingLeft: '24px' }}>
+                                                                <input className="apple-input" value={item.year || ''} onChange={e => handleUpdateTimeline(item.id, 'year', e.target.value)} placeholder="YYYY" style={{ width: '60px' }} />
+                                                            </td>
+                                                            <td>
+                                                                <input className="apple-input" value={item.date_label || ''} onChange={e => handleUpdateTimeline(item.id, 'date_label', e.target.value)} placeholder="Contoh: 20 Feb 2002" />
+                                                            </td>
+                                                            <td>
+                                                                <input className="apple-input" value={item.title || ''} onChange={e => handleUpdateTimeline(item.id, 'title', e.target.value)} placeholder="Judul..." />
+                                                            </td>
+                                                            <td>
+                                                                <textarea className="apple-input" value={item.content || ''} onChange={e => handleUpdateTimeline(item.id, 'content', e.target.value)} placeholder="Deskripsi peristiwa..." rows={3} style={{ marginBottom: '8px' }} />
+                                                                <input className="apple-input" value={item.image_url || ''} onChange={e => handleUpdateTimeline(item.id, 'image_url', e.target.value)} placeholder="URL Gambar..." style={{ fontSize: '0.8rem' }} />
+                                                            </td>
+                                                            <td>
+                                                                <div style={{ display: 'flex', gap: '5px', flexDirection: 'column' }}>
+                                                                    <button className="apple-btn-primary" style={{ padding: '4px 8px', fontSize: '0.7rem' }} onClick={() => handleSaveTimeline(item)}>Simpan</button>
+                                                                    <button className="apple-btn-secondary" style={{ padding: '4px 8px', fontSize: '0.7rem', color: 'red', background: '#fff0f0' }} onClick={() => handleDeleteTimeline(item.id)}>Hapus</button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>

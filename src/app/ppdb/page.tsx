@@ -2,7 +2,6 @@
 
 import "@/app/styles/ppdb.css";
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import Link from "next/link";
 
 // Interfaces for Region Data
 interface Region {
@@ -11,9 +10,9 @@ interface Region {
 }
 
 const STEPS = [
-    { id: 1, title: "Santri", icon: "fa-user-graduate" },
-    { id: 2, title: "Sekolah", icon: "fa-school" },
-    { id: 3, title: "Wali", icon: "fa-users" },
+    { id: 1, title: "Data Santri", icon: "fa-user-graduate" },
+    { id: 2, title: "Jenjang & Minat", icon: "fa-school" },
+    { id: 3, title: "Orang Tua", icon: "fa-users" },
     { id: 4, title: "Alamat", icon: "fa-map-marker-alt" },
     { id: 5, title: "Berkas", icon: "fa-file-upload" }
 ];
@@ -21,7 +20,21 @@ const STEPS = [
 export default function PPDBPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
-    const [formData, setFormData] = useState<any>({});
+
+    // State to hold all form data matching legacy naming conventions
+    const [formData, setFormData] = useState<any>({
+        Dropdown: "", // Jenis Kelamin
+        Dropdown1: "", // Pendidikan Terakhir Santri
+        Dropdown2: "", // Agama
+        Dropdown3: "", // Kelas Tujuan
+        Dropdown4: "", // Pekerjaan Ayah
+        Dropdown5: "", // Pekerjaan Ibu
+        Dropdown6: "", // Penghasilan Ayah
+        Dropdown7: "", // Penghasilan Ibu
+        Dropdown8: "", // Pendidikan Ayah
+        Dropdown9: "", // Pendidikan Ibu
+        Address1_Country: "Indonesia"
+    });
 
     const [otherFields, setOtherFields] = useState({
         agama: false,
@@ -31,6 +44,7 @@ export default function PPDBPage() {
         pekerjaanIbu: false
     });
 
+    // Region Data State
     const [provinces, setProvinces] = useState<Region[]>([]);
     const [regencies, setRegencies] = useState<Region[]>([]);
     const [districts, setDistricts] = useState<Region[]>([]);
@@ -41,6 +55,7 @@ export default function PPDBPage() {
     const [selectedDistrict, setSelectedDistrict] = useState("");
     const [selectedVillage, setSelectedVillage] = useState("");
 
+    // Fetch Provinces
     useEffect(() => {
         fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
             .then(res => res.json())
@@ -48,6 +63,7 @@ export default function PPDBPage() {
             .catch(err => console.error("Gagal ambil provinsi", err));
     }, []);
 
+    // Fetch Regencies
     useEffect(() => {
         if (selectedProvince) {
             fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${selectedProvince}.json`)
@@ -61,6 +77,7 @@ export default function PPDBPage() {
         setVillages([]);
     }, [selectedProvince]);
 
+    // Fetch Districts
     useEffect(() => {
         if (selectedRegency) {
             fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${selectedRegency}.json`)
@@ -73,6 +90,7 @@ export default function PPDBPage() {
         setVillages([]);
     }, [selectedRegency]);
 
+    // Fetch Villages
     useEffect(() => {
         if (selectedDistrict) {
             fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${selectedDistrict}.json`)
@@ -107,6 +125,7 @@ export default function PPDBPage() {
         const { name, value } = e.target;
         setFormData((prev: any) => ({ ...prev, [name]: value }));
 
+        // Toggle "Lainnya" fields
         if (name === "Dropdown2") setOtherFields(p => ({ ...p, agama: value === "Lainnya" }));
         if (name === "Dropdown8") setOtherFields(p => ({ ...p, pendidikanAyah: value === "Lainnya" }));
         if (name === "Dropdown4") setOtherFields(p => ({ ...p, pekerjaanAyah: value === "Lainnya" }));
@@ -141,6 +160,7 @@ export default function PPDBPage() {
         });
 
         try {
+            // Using the new Next.js API route or matching legacy action if applicable
             const response = await fetch('/api/submit-registration', {
                 method: 'POST',
                 body: uploadData,
@@ -159,6 +179,19 @@ export default function PPDBPage() {
             setIsLoading(false);
         }
     };
+
+    // Helper for Select Options
+    const incomeOptions = [
+        "< Rp 3.000.000",
+        "Rp 3.000.000 - Rp 5.000.000",
+        "Rp 5.000.000 - Rp 7.000.000",
+        "Rp 7.000.000 - Rp 10.000.000",
+        "> Rp 10.000.000"
+    ];
+
+    const educationOptions = ["SD/MI", "SMP/MTS", "SMA/MA", "S1 (Sarjana)", "S2 (Magister)", "S3 (Doctor)", "Lainnya"];
+    const jobOptions = ["Wiraswasta", "Karyawan Swasta", "Pegawai Negeri Sipil", "Rumah Tangga", "Lainnya"];
+    const religionOptions = ["Islam", "Protestan", "Katolik", "Hindu", "Buddha", "Konghucu", "Lainnya"];
 
     return (
         <div style={{ backgroundColor: 'var(--bg-body)', minHeight: '100vh' }}>
@@ -181,7 +214,7 @@ export default function PPDBPage() {
                     {STEPS.map((step) => (
                         <div key={step.id} className={`step-item-luxury ${currentStep === step.id ? 'active' : ''} ${currentStep > step.id ? 'completed' : ''}`}>
                             <div className="step-circle-luxury">
-                                {currentStep > step.id ? <i className="fas fa-check"></i> : step.id}
+                                {currentStep > step.id ? <i className="fas fa-check"></i> : <i className={`fas ${step.icon}`}></i>}
                             </div>
                             <span className="step-label-luxury">{step.title}</span>
                             {step.id < STEPS.length && <div className="step-line-luxury"></div>}
@@ -192,24 +225,24 @@ export default function PPDBPage() {
                 {/* FORM CONTENT LUXE */}
                 <form onSubmit={handleSubmit} className="form-card-luxury">
 
-                    {/* STEP 1: DATA PRIBADI */}
+                    {/* STEP 1: DATA PRIBADI SANTRI */}
                     <div className={`step-content ${currentStep === 1 ? 'show' : 'hide'}`}>
                         <div className="step-header-luxury">
                             <div className="header-icon-box"><i className="fas fa-user-graduate"></i></div>
                             <div>
                                 <h2>Data Pribadi Santri</h2>
-                                <p>Informasi dasar calon santri sesuai identitas resmi kartu keluarga.</p>
+                                <p>Isi identitas calon santri sesuai dengan Kartu Keluarga (KK).</p>
                             </div>
                         </div>
 
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
                                 <label>Nama Depan *</label>
-                                <input type="text" name="Name_First" placeholder="Contoh: Ahmad" onChange={handleInputChange} required />
+                                <input type="text" name="Name_First" placeholder="Nama Depan" onChange={handleInputChange} required />
                             </div>
                             <div className="input-luxury">
                                 <label>Nama Belakang *</label>
-                                <input type="text" name="Name_Last" placeholder="Contoh: Fauzi" onChange={handleInputChange} required />
+                                <input type="text" name="Name_Last" placeholder="Nama Belakang" onChange={handleInputChange} required />
                             </div>
                         </div>
 
@@ -232,7 +265,7 @@ export default function PPDBPage() {
                             <div className="input-luxury">
                                 <label>Jenis Kelamin *</label>
                                 <select name="Dropdown" onChange={handleInputChange} required>
-                                    <option value="">Pilih...</option>
+                                    <option value="">Pilih Jenis Kelamin</option>
                                     <option value="Laki-Laki">Laki-Laki</option>
                                     <option value="Perempuan">Perempuan</option>
                                 </select>
@@ -254,14 +287,17 @@ export default function PPDBPage() {
                             <div className="input-luxury">
                                 <label>Agama *</label>
                                 <select name="Dropdown2" onChange={handleInputChange} required>
-                                    <option value="Islam">Islam</option>
-                                    <option value="Lainnya">Lainnya</option>
+                                    <option value="">Pilih Agama</option>
+                                    {religionOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                 </select>
+                                {otherFields.agama && (
+                                    <input type="text" name="other_agama" placeholder="Sebutkan agama..." className="mt-2" />
+                                )}
                             </div>
                             <div className="input-luxury">
                                 <label>Pendidikan Terakhir *</label>
                                 <select name="Dropdown1" onChange={handleInputChange} required>
-                                    <option value="">Pilih...</option>
+                                    <option value="">Pilih Pendidikan</option>
                                     <option value="SD/MI">SD/MI</option>
                                     <option value="SMP/MTS">SMP/MTS</option>
                                     <option value="SMA/MA">SMA/MA</option>
@@ -270,13 +306,13 @@ export default function PPDBPage() {
                         </div>
                     </div>
 
-                    {/* STEP 2: JENJANG */}
+                    {/* STEP 2: JENJANG & MINAT */}
                     <div className={`step-content ${currentStep === 2 ? 'show' : 'hide'}`}>
                         <div className="step-header-luxury">
                             <div className="header-icon-box"><i className="fas fa-school"></i></div>
                             <div>
-                                <h2>Jenjang Pendidikan</h2>
-                                <p>Pilih tingkatan kelas yang akan diikuti di pesantren.</p>
+                                <h2>Jenjang Pendidikan & Minat</h2>
+                                <p>Pilih kelas yang akan dituju dan informasi minat santri.</p>
                             </div>
                         </div>
 
@@ -284,16 +320,20 @@ export default function PPDBPage() {
                             <label>Akan Masuk Kelas *</label>
                             <select name="Dropdown3" onChange={handleInputChange} required>
                                 <option value="">Pilih Jenjang/Kelas</option>
-                                <optgroup label="MIU (Madrasah Ihya Ulumiddin)">
+                                <optgroup label="MIU (Santri Sekolah Formal)">
                                     <option value="I Ula">I Ula</option>
                                     <option value="II Ula">II Ula</option>
                                     <option value="III Ula">III Ula</option>
+                                    <option value="I Wustho">I Wustho</option>
+                                    <option value="I Ulya">I Ulya</option>
                                 </optgroup>
-                                <optgroup label="MHM (Madrasah Hidayatul Mubtadiin)">
+                                <optgroup label="MHM (Santri Salaf)">
                                     <option value="V Ibtida'iyyah">V Ibtida'iyyah</option>
                                     <option value="VI Ibtida'iyyah">VI Ibtida'iyyah</option>
                                     <option value="I Tsanawiyyah">I Tsanawiyyah</option>
                                     <option value="I Aliyyah">I Aliyyah</option>
+                                    <option value="I Ma'had Aly">I Ma'had Aly</option>
+                                    <option value="II Ma'had Aly">II Ma'had Aly</option>
                                 </optgroup>
                             </select>
                         </div>
@@ -301,56 +341,137 @@ export default function PPDBPage() {
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
                                 <label>Hobi *</label>
-                                <input type="text" name="SingleLine" placeholder="Contoh: Membaca" onChange={handleInputChange} />
+                                <input type="text" name="SingleLine" placeholder="Kegemaran" onChange={handleInputChange} required />
                             </div>
                             <div className="input-luxury">
                                 <label>Cita-Cita *</label>
-                                <input type="text" name="SingleLine1" placeholder="Contoh: Guru" onChange={handleInputChange} />
+                                <input type="text" name="SingleLine1" placeholder="Tujuan Masa Depan" onChange={handleInputChange} required />
                             </div>
                         </div>
                     </div>
 
-                    {/* STEP 3: ORANG TUA */}
+                    {/* STEP 3: DATA ORANG TUA / WALI */}
                     <div className={`step-content ${currentStep === 3 ? 'show' : 'hide'}`}>
                         <div className="step-header-luxury">
                             <div className="header-icon-box"><i className="fas fa-users"></i></div>
                             <div>
                                 <h2>Data Orang Tua / Wali</h2>
-                                <p>Pastikan data wali dapat dihubungi untuk keperluan administrasi.</p>
+                                <p>Informasi lengkap mengenai orang tua atau wali santri.</p>
                             </div>
                         </div>
 
+                        {/* AYAH */}
+                        <h3 className="section-label-gold">Data Ayah</h3>
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Nama Ayah *</label>
-                                <input type="text" name="Name1_First" placeholder="Nama Lengkap Ayah" onChange={handleInputChange} required />
+                                <label>Nama Depan Ayah *</label>
+                                <input type="text" name="Name1_First" placeholder="Nama Depan" onChange={handleInputChange} required />
                             </div>
                             <div className="input-luxury">
-                                <label>Nomor HP Ayah / WA *</label>
-                                <input type="text" name="PhoneNumber_countrycode" placeholder="08xxxx" onChange={handleInputChange} required />
+                                <label>Nama Belakang Ayah</label>
+                                <input type="text" name="Name1_Last" placeholder="Nama Belakang" onChange={handleInputChange} />
                             </div>
                         </div>
-
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Nama Ibu *</label>
-                                <input type="text" name="Name2_First" placeholder="Nama Lengkap Ibu" onChange={handleInputChange} required />
+                                <label>NIK Ayah *</label>
+                                <input type="text" name="Number3" maxLength={16} placeholder="16 Digit NIK" onChange={handleInputChange} required />
+                            </div>
+                            <div className="input-luxury">
+                                <label>No. HP/WA Ayah *</label>
+                                <input type="text" name="PhoneNumber_countrycode" placeholder="+62" onChange={handleInputChange} required />
+                            </div>
+                        </div>
+                        <div className="form-grid-luxury">
+                            <div className="input-luxury">
+                                <label>Pendidikan Ayah *</label>
+                                <select name="Dropdown8" onChange={handleInputChange} required>
+                                    <option value="">Pilih Pendidikan</option>
+                                    {educationOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                </select>
+                                {otherFields.pendidikanAyah && <input type="text" name="other_pendidikan_ayah" placeholder="Sebutkan..." className="mt-2" />}
                             </div>
                             <div className="input-luxury">
                                 <label>Pekerjaan Ayah *</label>
-                                <input type="text" name="Dropdown4" placeholder="Contoh: Petani" onChange={handleInputChange} />
+                                <select name="Dropdown4" onChange={handleInputChange} required>
+                                    <option value="">Pilih Pekerjaan</option>
+                                    {jobOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                </select>
+                                {otherFields.pekerjaanAyah && <input type="text" name="other_pekerjaan_ayah" placeholder="Sebutkan..." className="mt-2" />}
                             </div>
+                        </div>
+                        <div className="input-luxury">
+                            <label>Penghasilan Ayah *</label>
+                            <select name="Dropdown6" onChange={handleInputChange} required>
+                                <option value="">Pilih Rentang Penghasilan</option>
+                                {incomeOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                            </select>
+                        </div>
+
+                        <div className="divider-h"></div>
+
+                        {/* IBU */}
+                        <h3 className="section-label-gold">Data Ibu</h3>
+                        <div className="form-grid-luxury">
+                            <div className="input-luxury">
+                                <label>Nama Depan Ibu *</label>
+                                <input type="text" name="Name2_First" placeholder="Nama Depan" onChange={handleInputChange} required />
+                            </div>
+                            <div className="input-luxury">
+                                <label>Nama Belakang Ibu</label>
+                                <input type="text" name="Name2_Last" placeholder="Nama Belakang" onChange={handleInputChange} />
+                            </div>
+                        </div>
+                        <div className="form-grid-luxury">
+                            <div className="input-luxury">
+                                <label>NIK Ibu *</label>
+                                <input type="text" name="Number4" maxLength={16} placeholder="16 Digit NIK" onChange={handleInputChange} required />
+                            </div>
+                            <div className="input-luxury">
+                                <label>No. HP/WA Ibu *</label>
+                                <input type="text" name="PhoneNumber1_countrycode" placeholder="+62" onChange={handleInputChange} required />
+                            </div>
+                        </div>
+                        <div className="form-grid-luxury">
+                            <div className="input-luxury">
+                                <label>Pendidikan Ibu *</label>
+                                <select name="Dropdown9" onChange={handleInputChange} required>
+                                    <option value="">Pilih Pendidikan</option>
+                                    {educationOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                </select>
+                                {otherFields.pendidikanIbu && <input type="text" name="other_pendidikan_ibu" placeholder="Sebutkan..." className="mt-2" />}
+                            </div>
+                            <div className="input-luxury">
+                                <label>Pekerjaan Ibu *</label>
+                                <select name="Dropdown5" onChange={handleInputChange} required>
+                                    <option value="">Pilih Pekerjaan</option>
+                                    {jobOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                </select>
+                                {otherFields.pekerjaanIbu && <input type="text" name="other_pekerjaan_ibu" placeholder="Sebutkan..." className="mt-2" />}
+                            </div>
+                        </div>
+                        <div className="input-luxury">
+                            <label>Penghasilan Ibu *</label>
+                            <select name="Dropdown7" onChange={handleInputChange} required>
+                                <option value="">Pilih Rentang Penghasilan</option>
+                                {incomeOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                            </select>
                         </div>
                     </div>
 
-                    {/* STEP 4: ALAMAT */}
+                    {/* STEP 4: ALAMAT LENGKAP */}
                     <div className={`step-content ${currentStep === 4 ? 'show' : 'hide'}`}>
                         <div className="step-header-luxury">
                             <div className="header-icon-box"><i className="fas fa-map-marker-alt"></i></div>
                             <div>
                                 <h2>Alamat Domisili</h2>
-                                <p>Alamat lengkap tempat tinggal wali santri saat ini.</p>
+                                <p>Alamat lengkap tempat tinggal wali santri.</p>
                             </div>
+                        </div>
+
+                        <div className="input-luxury">
+                            <label>Jalan / Desa / RT & RW *</label>
+                            <input type="text" name="Address1_AddressLine1" placeholder="Nama Jalan, Nama Desa/Dusun, RT/RW" onChange={handleInputChange} required />
                         </div>
 
                         <div className="form-grid-luxury">
@@ -366,7 +487,7 @@ export default function PPDBPage() {
                             <div className="input-luxury">
                                 <label>Kota / Kabupaten *</label>
                                 <select value={selectedRegency} onChange={(e) => handleRegionChange(e, 'reg')} disabled={!selectedProvince} required>
-                                    <option value="">Pilih...</option>
+                                    <option value="">Pilih Kota/Kabupaten</option>
                                     {regencies.map(reg => (
                                         <option key={reg.id} value={reg.id}>{reg.name}</option>
                                     ))}
@@ -374,30 +495,60 @@ export default function PPDBPage() {
                             </div>
                         </div>
 
-                        <div className="input-luxury">
-                            <label>Alamat Lengkap (Dusun/RT/RW/No. Rumah) *</label>
-                            <input type="text" name="Address1_AddressLine1" placeholder="Contoh: Dusun Lirboyo RT 01 RW 02" onChange={handleInputChange} required />
-                        </div>
-                    </div>
-
-                    {/* STEP 5: BERKAS */}
-                    <div className={`step-content ${currentStep === 5 ? 'show' : 'hide'}`}>
-                        <div className="step-header-luxury">
-                            <div className="header-icon-box"><i className="fas fa-file-upload"></i></div>
-                            <div>
-                                <h2>Berkas Pendukung</h2>
-                                <p>Unggah foto dan dokumen kartu keluarga untuk validasi data.</p>
+                        <div className="form-grid-luxury">
+                            <div className="input-luxury">
+                                <label>Kecamatan *</label>
+                                <select value={selectedDistrict} onChange={(e) => handleRegionChange(e, 'dis')} disabled={!selectedRegency} required>
+                                    <option value="">Pilih Kecamatan</option>
+                                    {districts.map(dis => (
+                                        <option key={dis.id} value={dis.id}>{dis.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="input-luxury">
+                                <label>Desa / Kelurahan *</label>
+                                <select value={selectedVillage} onChange={(e) => handleRegionChange(e, 'vil')} disabled={!selectedDistrict} required>
+                                    <option value="">Pilih Desa/Kelurahan</option>
+                                    {villages.map(vil => (
+                                        <option key={vil.id} value={vil.id}>{vil.name}</option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
 
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Fas Foto Santri (3x4) *</label>
+                                <label>Kode Pos</label>
+                                <input type="text" name="Address1_ZipCode" placeholder="Kode Pos" onChange={handleInputChange} />
+                            </div>
+                            <div className="input-luxury">
+                                <label>Negara</label>
+                                <select name="Address1_Country" disabled>
+                                    <option value="Indonesia">Indonesia</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* STEP 5: BERKAS PENDUKUNG */}
+                    <div className={`step-content ${currentStep === 5 ? 'show' : 'hide'}`}>
+                        <div className="step-header-luxury">
+                            <div className="header-icon-box"><i className="fas fa-file-upload"></i></div>
+                            <div>
+                                <h2>Berkas Pendukung</h2>
+                                <p>Unggah dokumen yang diperlukan untuk verifikasi pendaftaran.</p>
+                            </div>
+                        </div>
+
+                        <div className="form-grid-luxury">
+                            <div className="input-luxury">
+                                <label>Foto Santri (3x4) *</label>
                                 <div className="upload-box-luxury">
                                     <input type="file" name="FileUpload" accept="image/*" onChange={handleFileChange} required style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
                                     <i className="fas fa-camera"></i>
                                     <p style={{ fontSize: '0.8rem' }}>{formData.FileUpload ? formData.FileUpload.name : "Klik untuk Pilih Foto"}</p>
                                 </div>
+                                <small className="text-muted">Berbaju putih, berkerah & berkopyah hitam.</small>
                             </div>
                             <div className="input-luxury">
                                 <label>Scan Kartu Keluarga *</label>
@@ -406,7 +557,18 @@ export default function PPDBPage() {
                                     <i className="fas fa-id-card"></i>
                                     <p style={{ fontSize: '0.8rem' }}>{formData.FileUpload1 ? formData.FileUpload1.name : "Klik untuk Pilih KK"}</p>
                                 </div>
+                                <small className="text-muted">Terlihat jelas, tidak blur.</small>
                             </div>
+                        </div>
+
+                        <div className="input-luxury" style={{ marginTop: '1rem' }}>
+                            <label>Scan Ijazah Terakhir *</label>
+                            <div className="upload-box-luxury">
+                                <input type="file" name="FileUpload2" accept="image/*,application/pdf" onChange={handleFileChange} required style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
+                                <i className="fas fa-certificate"></i>
+                                <p style={{ fontSize: '0.8rem' }}>{formData.FileUpload2 ? formData.FileUpload2.name : "Klik untuk Pilih Scan Ijazah"}</p>
+                            </div>
+                            <small className="text-muted">Terlihat jelas, tidak blur.</small>
                         </div>
                     </div>
 

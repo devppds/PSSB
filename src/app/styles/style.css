@@ -98,20 +98,23 @@ h6 {
 }
 
 /* Global Page Hero Style */
-.page-hero {
+.page-hero,
+.info-hero-section {
     background-color: #f0f7ff;
-    padding: 6rem 1.5rem 6rem;
+    padding: 8rem 1.5rem 6rem;
     text-align: center;
     position: relative;
     border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+    background: radial-gradient(circle at center top, rgba(37, 99, 235, 0.05) 0%, transparent 60%);
+    overflow: hidden;
 }
 
 .page-hero-title {
-    font-size: 3.5rem;
+    font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     letter-spacing: -0.01em;
-    line-height: 1.1 !important;
+    line-height: 1.2 !important;
     font-family: var(--font-playfair), serif;
 }
 
@@ -128,15 +131,29 @@ h6 {
     color: var(--text-muted);
     max-width: 700px;
     margin: 0 auto;
+    line-height: 1.6;
+}
+
+.ornament-icon {
+    display: inline-block;
+    font-size: 3rem;
+    color: var(--gold-main);
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+    filter: drop-shadow(0 4px 6px rgba(217, 119, 6, 0.2));
 }
 
 @media (max-width: 768px) {
-    .page-hero {
-        padding: 4rem 1rem 3.5rem;
+
+    .page-hero,
+    .info-hero-section {
+        padding: 6rem 1rem 4rem;
     }
 
     .page-hero-title {
         font-size: 2.4rem;
+        /* Fallback */
+        font-size: clamp(2rem, 8vw, 2.5rem);
         word-break: break-word;
     }
 }

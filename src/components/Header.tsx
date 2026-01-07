@@ -32,7 +32,7 @@ export default function Header() {
     const isActive = (path: string) => pathname === path ? 'active' : '';
 
     return (
-        <header className={`header-wrapper ${scrolled ? 'scrolled' : ''}`} style={{ position: 'fixed', width: '100%', top: 0, zIndex: 9999 }}>
+        <header className={`header-wrapper ${scrolled ? 'scrolled' : ''}`}>
             <div className="header-top-row">
                 <div className="header-inner">
                     <div className="header-logo-section">

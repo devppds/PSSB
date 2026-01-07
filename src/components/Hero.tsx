@@ -3,15 +3,19 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-export default function Hero() {
-    const [settings, setSettings] = useState<any>(null);
+export default function Hero({ settings: initialSettings }: { settings?: any }) {
+    const [settings, setSettings] = useState<any>(initialSettings);
 
     useEffect(() => {
-        fetch('/api/content/settings')
-            .then(res => res.json())
-            .then(data => setSettings(data))
-            .catch(err => console.error("Gagal ambil settings hero", err));
-    }, []);
+        if (!initialSettings) {
+            fetch('/api/content/settings')
+                .then(res => res.json())
+                .then(data => setSettings(data))
+                .catch(err => console.error("Gagal ambil settings hero", err));
+        } else {
+            setSettings(initialSettings);
+        }
+    }, [initialSettings]);
 
     const titleBase = settings?.hero_title || "Pondok Pesantren";
     const titleGradient = settings?.hero_title_gradient || "Darussalam Lirboyo";

@@ -3,6 +3,17 @@ import React from 'react';
 import Link from 'next/link';
 
 export default function Footer() {
+    const [waNumber, setWaNumber] = React.useState("6285156644026");
+
+    React.useEffect(() => {
+        fetch('/api/content/settings')
+            .then(res => res.json())
+            .then(data => {
+                if (data.whatsapp_number) setWaNumber(data.whatsapp_number);
+            })
+            .catch(err => console.error("Gagal ambil footer settings", err));
+    }, []);
+
     return (
         <footer>
             <div className="footer-wrapper">
@@ -26,7 +37,7 @@ export default function Footer() {
                                 <a href="https://www.instagram.com/pp.darussalamlirboyo/" target="_blank" aria-label="Instagram" title="Instagram"><i className="fab fa-instagram"></i></a>
                                 <a href="https://www.tiktok.com/@bumidarussalam" target="_blank" aria-label="TikTok" title="TikTok"><i className="fab fa-tiktok"></i></a>
                                 <a href="https://www.youtube.com/@bumidarussalamlirboyo5149" target="_blank" aria-label="YouTube" title="YouTube"><i className="fab fa-youtube"></i></a>
-                                <a href="https://wa.me/6285809111996" target="_blank" aria-label="WhatsApp" title="WhatsApp"><i className="fab fa-whatsapp"></i></a>
+                                <a href={`https://wa.me/${waNumber}`} target="_blank" aria-label="WhatsApp" title="WhatsApp"><i className="fab fa-whatsapp"></i></a>
                             </div>
                         </div>
 
@@ -75,7 +86,7 @@ export default function Footer() {
                 <div className="whatsapp-bubble" id="waBubble">
                     Butuh Bantuan?
                 </div>
-                <button className="whatsapp-float" id="waFloatBtn" onClick={() => window.open('https://wa.me/6285809111996', '_blank')}>
+                <button className="whatsapp-float" id="waFloatBtn" onClick={() => window.open(`https://wa.me/${waNumber}`, '_blank')}>
                     <i className="fab fa-whatsapp"></i>
                 </button>
             </div>

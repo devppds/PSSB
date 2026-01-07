@@ -1,19 +1,30 @@
 "use client";
 
 import "@/app/styles/informasi.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function InformasiPage() {
-    useEffect(() => {
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
+    const [data, setData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const res = await fetch('/api/content/all');
+                const json = await res.json();
+                setData(json);
+            } catch (err) {
+                console.error("Gagal load informasi", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
-                    // Staggered delay implementation
                     setTimeout(() => {
                         entry.target.classList.add('active');
                     }, index * 100);
@@ -23,10 +34,20 @@ export default function InformasiPage() {
             });
         }, observerOptions);
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            observer.observe(el);
-        });
-    }, []);
+        if (!loading) {
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+    }, [loading]);
+
+    if (loading) {
+        return (
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-body)' }}>
+                <i className="fas fa-spinner fa-spin fa-3x" style={{ color: 'var(--primary)' }}></i>
+            </div>
+        );
+    }
+
+    const { settings, content } = data || {};
 
     return (
         <div style={{ backgroundColor: 'var(--bg-body)' }}>
@@ -35,10 +56,17 @@ export default function InformasiPage() {
                 <div className="reveal fade-bottom">
                     <span className="ornament-icon"><i className="fas fa-scroll"></i></span>
                     <h1 className="page-hero-title">
-                        <span className="text-dark">Informasi</span> <span className="text-primary">Pendaftaran</span>
+                        {settings?.info_hero_title?.includes(' ') ? (
+                            <>
+                                <span className="text-dark">{settings.info_hero_title.split(' ')[0]}</span>{' '}
+                                <span className="text-primary">{settings.info_hero_title.split(' ').slice(1).join(' ')}</span>
+                            </>
+                        ) : (
+                            <span className="text-primary">{settings?.info_hero_title || "Informasi Pendaftaran"}</span>
+                        )}
                     </h1>
                     <p className="page-hero-subtitle">
-                        Panduan resmi tata cara pendaftaran santri baru Pondok Pesantren Darussalam Lirboyo Tahun Pelajaran 2025/2026.
+                        {settings?.info_hero_subtitle || "Panduan resmi tata cara pendaftaran santri baru Pondok Pesantren Darussalam Lirboyo."}
                     </p>
                 </div>
             </section>
@@ -50,23 +78,24 @@ export default function InformasiPage() {
                 <div className="glass-card bento-item-large reveal fade-bottom">
                     <span className="gold-accent-text">Sambutan Pendaftaran</span>
                     <h2 className="card-title-luxury">
-                        Digitalisasi Pesantren
+                        {settings?.info_intro_title || "Digitalisasi Pesantren"}
                     </h2>
                     <p className="lead-text" style={{ fontSize: '1rem', color: 'var(--text-main)' }}>
-                        Kini, teknologi dan media digital menjadi sarana penting guna memenuhi berbagai kebutuhan.
-                        <strong> Pondok Pesantren Darussalam Lirboyo</strong> menghadirkan layanan digital untuk mempermudah pendaftaran dari mana saja.
+                        {settings?.info_intro_lead}
                     </p>
-                    <p style={{ lineHeight: 1.8, color: "var(--text-muted)", fontSize: '0.95rem' }}>
-                        Mengingat jumlah pendaftar yang terus meningkat dari seluruh penjuru nusantara hingga mancanegara, sistem online ini hadir sebagai solusi administrasi yang cepat, akurat, dan transparan bagi para calon pengembara ilmu.
+                    <p style={{ lineHeight: 1.8, color: "var(--text-muted)", fontSize: '0.95rem', whiteSpace: 'pre-line' }}>
+                        {settings?.info_intro_text}
                     </p>
                 </div>
 
                 {/* 2. STATS/HIGHLIGHT (SMALL) - Bento Style */}
                 <div className="glass-card bento-item-small reveal fade-bottom" style={{ background: 'var(--primary-dark)', color: 'white' }}>
                     <span className="gold-accent-text" style={{ color: 'var(--accent)' }}>Target & Kuota</span>
-                    <h3 style={{ fontFamily: 'var(--font-playfair)', fontSize: '2.5rem', marginBottom: '1rem', color: 'white' }}>Global</h3>
+                    <h3 style={{ fontFamily: 'var(--font-playfair)', fontSize: '2.5rem', marginBottom: '1rem', color: 'white' }}>
+                        {settings?.info_quota_target || "Global"}
+                    </h3>
                     <p style={{ opacity: 0.9, fontSize: '0.9rem' }}>
-                        Menerima santri baru dari tingkat Ibtidaiyah hingga Tsanawiyah dengan kuota terbatas setiap tahunnya.
+                        {settings?.info_quota_desc || "Menerima santri baru dengan kuota terbatas setiap tahunnya."}
                     </p>
                     <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
@@ -88,21 +117,13 @@ export default function InformasiPage() {
                     </h2>
 
                     <div className="bento-steps">
-                        <div className="bento-step-card">
-                            <div className="step-number-luxury">01</div>
-                            <h4 style={{ marginBottom: '10px', color: 'var(--primary-dark)' }}>Isi Data Diri</h4>
-                            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Mendaftarkan akun dan mengisi biodata lengkap sesuai KK dan dokumen resmi.</p>
-                        </div>
-                        <div className="bento-step-card">
-                            <div className="step-number-luxury">02</div>
-                            <h4 style={{ marginBottom: '10px', color: 'var(--primary-dark)' }}>Unggah Berkas</h4>
-                            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Melampirkan pas foto, scan kartu keluarga, dan akta kelahiran.</p>
-                        </div>
-                        <div className="bento-step-card">
-                            <div className="step-number-luxury">03</div>
-                            <h4 style={{ marginBottom: '10px', color: 'var(--primary-dark)' }}>Verifikasi</h4>
-                            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Proses validasi data oleh tim sekretariat dan penerbitan nomor ujian.</p>
-                        </div>
+                        {(content?.alur || []).map((step: any, idx: number) => (
+                            <div key={idx} className="bento-step-card">
+                                <div className="step-number-luxury">{String(idx + 1).padStart(2, '0')}</div>
+                                <h4 style={{ marginBottom: '10px', color: 'var(--primary-dark)' }}>{step.label}</h4>
+                                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{step.description}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
@@ -115,12 +136,9 @@ export default function InformasiPage() {
                     <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Mohon pastikan foto yang diunggah memenuhi kriteria berikut agar proses validasi lancar:</p>
 
                     <div className="photo-grid-premium">
-                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Background Biru Polos</div>
-                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Baju Putih Berkerah</div>
-                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Kopyah Hitam Polos</div>
-                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Ukuran 3x4 (Maks 5MB)</div>
-                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Rambut Rapi (Pendek)</div>
-                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Kualitas Gambar Jelas</div>
+                        {(content?.['syarat-foto'] || []).map((item: any, idx: number) => (
+                            <div key={idx} className="photo-badge"><i className="fas fa-check-circle"></i> {item.label}</div>
+                        ))}
                     </div>
                 </div>
 

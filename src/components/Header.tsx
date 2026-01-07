@@ -10,7 +10,17 @@ export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const pathname = usePathname();
 
+    const [taInfo, setTaInfo] = useState("TA. 1446 - 1447 H. / 2025 - 2026 M.");
+
     useEffect(() => {
+        // Fetch Settings
+        fetch('/api/content/settings')
+            .then(res => res.json())
+            .then(data => {
+                if (data.ta_info) setTaInfo(data.ta_info);
+            })
+            .catch(err => console.error("Gagal ambil pendaftaran settings", err));
+
         // Date Logic
         const today = new Date();
         const masehi = new Intl.DateTimeFormat('id-ID', { dateStyle: 'full' }).format(today);
@@ -46,7 +56,7 @@ export default function Header() {
                     </div>
 
                     <div className="header-status-badge">
-                        <span id="ta-info">TA. 1446 - 1447 H. / 2025 - 2026 M.</span>
+                        <span id="ta-info">{taInfo}</span>
                     </div>
 
                     <button

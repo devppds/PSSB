@@ -11,80 +11,63 @@ import RincianPembayaran from './RincianPembayaran';
 import CallToAction from './CallToAction';
 import GalleryModal from './GalleryModal';
 
-const galleryData: { [key: string]: string[] } = {
-    "Bahtsul Masa'il": [
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710616/BAHSTU_2_llh7iy.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710605/BAHSTU_3_z4rxnv.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710621/BAHSTU_lfvf3u.webp"
-    ],
-    "Kitab Kuning": [
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710610/NGAJI_1_oshwpt.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710606/NGAJI_dmoez6.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710607/JAM_IYYAH_1_tuvkbi.webp"
-    ],
-    "Ziaroh Wali & Ulama": [
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710632/ZIAROH_ellm9c.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710620/ZIAROH_3_c0y56r.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710619/ZIAROH_4_uyk0ek.webp"
-    ],
-    "Takhossus Arab (Nahwu Shorof)": [
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710601/UJIAN_2_bnjzxh.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710613/UJIAN_1_klqwqz.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710614/UJIAN_oa3ucc.webp"
-    ],
-    "Pengajian Bandongan/Kilatan": [
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710610/NGAJI_1_oshwpt.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710606/NGAJI_dmoez6.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710607/JAM_IYYAH_1_tuvkbi.webp"
-    ],
-    "Bahtsul Masa'il Kubro": [
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710616/BAHSTU_2_llh7iy.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710605/BAHSTU_3_z4rxnv.webp",
-        "https://res.cloudinary.com/dceamfy3n/image/upload/v1766710621/BAHSTU_lfvf3u.webp"
-    ]
-};
-
 export default function HomeClient() {
+    const [data, setData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
     const [modal, setModal] = useState({ isOpen: false, title: '', images: [] as string[] });
 
-    const openGallery = (title: string) => {
-        const imgs = galleryData[title] || ['https://res.cloudinary.com/dceamfy3n/image/upload/v1766596060/pendidikan_cuvjxk.webp'];
-        setModal({ isOpen: true, title, images: imgs });
-    };
-
     useEffect(() => {
-        // Animation Logic
-        const observerOptions = {
-            threshold: 0.05,
-            rootMargin: "0px 0px -50px 0px"
+        const fetchAll = async () => {
+            try {
+                const res = await fetch('/api/content/all');
+                const json = await res.json();
+                setData(json);
+            } catch (err) {
+                console.error("Gagal load data home", err);
+            } finally {
+                setLoading(false);
+            }
         };
+        fetchAll();
 
+        // Animation Logic
+        const observerOptions = { threshold: 0.05, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                } else {
-                    entry.target.classList.remove('active');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('active');
+                else entry.target.classList.remove('active');
             });
         }, observerOptions);
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            observer.observe(el);
-        });
-    }, []);
+        if (!loading) {
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+    }, [loading]);
+
+    const openGallery = (title: string) => {
+        const imgs = data?.gallery?.[title] || ['https://res.cloudinary.com/dceamfy3n/image/upload/v1766596060/pendidikan_cuvjxk.webp'];
+        setModal({ isOpen: true, title, images: imgs });
+    };
+
+    if (loading) {
+        return (
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-body)' }}>
+                <i className="fas fa-spinner fa-spin fa-3x" style={{ color: 'var(--primary)' }}></i>
+            </div>
+        );
+    }
 
     return (
         <>
-            <Hero />
-            <VisiMisi />
-            <ProfilSejarah />
-            <VideoProfil />
-            <ProgramUnggulan onOpenGallery={openGallery} />
-            <ProgramTambahan onOpenGallery={openGallery} />
-            <Ekstrakurikuler />
-            <RincianPembayaran />
-            <CallToAction />
+            <Hero settings={data?.settings} />
+            <VisiMisi text={data?.settings?.visi_text} list={data?.content?.misi} />
+            <ProfilSejarah history={data?.settings?.about_history} />
+            <VideoProfil url={data?.settings?.video_url} />
+            <ProgramUnggulan onOpenGallery={openGallery} list={data?.content?.['program-unggulan']} />
+            <ProgramTambahan onOpenGallery={openGallery} list={data?.content?.['program-tambahan']} />
+            <Ekstrakurikuler list={data?.content?.ekskul} />
+            <RincianPembayaran data={data?.content} />
+            <CallToAction settings={data?.settings} />
             <GalleryModal isOpen={modal.isOpen} onClose={() => setModal({ ...modal, isOpen: false })} title={modal.title} images={modal.images} />
         </>
     );

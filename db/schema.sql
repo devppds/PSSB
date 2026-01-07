@@ -45,9 +45,33 @@ CREATE TABLE IF NOT EXISTS page_heroes (
     ornament_icon TEXT DEFAULT 'fa-star'
 );
 
+-- 3. Content Sections (For general list items like Misi, Ekskul, Alur, etc.)
+CREATE TABLE IF NOT EXISTS global_content (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    section_slug TEXT NOT NULL, -- e.g., 'misi', 'ekskul', 'alur-pendaftaran', 'persyaratan-foto'
+    category TEXT, -- Optional (e.g., 'Ujian Tulis' or 'MHM Putra')
+    label TEXT NOT NULL,
+    description TEXT, -- Optional detail
+    icon TEXT, -- FontAwesome class
+    amount TEXT, -- For financial items
+    order_index INTEGER DEFAULT 0
+);
+
+-- 4. Gallery & Media
+CREATE TABLE IF NOT EXISTS site_gallery (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category TEXT NOT NULL, -- e.g., 'Bahtsul Masail', 'Kitab Kuning'
+    image_url TEXT NOT NULL,
+    order_index INTEGER DEFAULT 0
+);
+
 -- Seed Initial Data for Site Settings
-INSERT OR REPLACE INTO site_settings (key, value) VALUES ('ta_info', 'TA. 1446 - 1447 H. / 2025 - 2026 M.');
-INSERT OR REPLACE INTO site_settings (key, value) VALUES ('whatsapp_number', '6285156644026');
-INSERT OR REPLACE INTO site_settings (key, value) VALUES ('hero_title', 'Pondok Pesantren');
-INSERT OR REPLACE INTO site_settings (key, value) VALUES ('hero_title_gradient', 'Darussalam Lirboyo');
-INSERT OR REPLACE INTO site_settings (key, value) VALUES ('hero_subtitle', 'Mencetak Generasi Bertakwa, Berakhlak Qur''ani dan As-Sunnah dan Berilmu dengan Memadukan Tradisi Salaf dan Modern.');
+DELETE FROM site_settings;
+INSERT INTO site_settings (key, value) VALUES ('ta_info', 'TA. 1446 - 1447 H. / 2025 - 2026 M.');
+INSERT INTO site_settings (key, value) VALUES ('whatsapp_number', '6285156644026');
+INSERT INTO site_settings (key, value) VALUES ('hero_title', 'Pondok Pesantren');
+INSERT INTO site_settings (key, value) VALUES ('hero_title_gradient', 'Darussalam Lirboyo');
+INSERT INTO site_settings (key, value) VALUES ('hero_subtitle', 'Mencetak Generasi Bertakwa, Berakhlak Qur''ani dan As-Sunnah dan Berilmu dengan Memadukan Tradisi Salaf dan Modern.');
+INSERT INTO site_settings (key, value) VALUES ('video_url', 'https://www.youtube-nocookie.com/embed/3UdUhHAbR9c');
+INSERT INTO site_settings (key, value) VALUES ('visi_text', 'Mencetak insan bertaqwa, berakhlak Al Qur''an dan As Sunnah.');
+INSERT INTO site_settings (key, value) VALUES ('about_history', 'Pesantren ini berdiri sejak...'); 

@@ -1,5 +1,20 @@
 
-export default function Ekstrakurikuler() {
+export default function Ekstrakurikuler({ list }: { list?: any[] }) {
+    const defaultEkskul = [
+        { label: 'Pembinaan Organisasi' },
+        { label: 'Seni Baca Al-Qur’an' },
+        { label: 'Pelatihan Rebana' },
+        { label: 'Pelatihan Khitobah' },
+        { label: 'Pelatihan Public Speaking' },
+        { label: 'Pelatihan Komputer' }
+    ];
+
+    const displayList = list && list.length > 0 ? list : defaultEkskul;
+
+    // Split into 2 chunks for the first 2 cards
+    const chunk1 = displayList.slice(0, 3);
+    const chunk2 = displayList.slice(3, 6);
+
     return (
         <section className="section-wrapper" id="ekstrakulikuler">
             <h2 className="section-title">Ekstrakulikuler</h2>
@@ -12,16 +27,16 @@ export default function Ekstrakurikuler() {
                 <div className="grid-3">
                     <div className="glass-card reveal fade-bottom delay-100">
                         <ul className="misi-list" style={{ margin: 0 }}>
-                            <li><i className="fas fa-check-circle check-icon"></i> Pembinaan Organisasi</li>
-                            <li><i className="fas fa-check-circle check-icon"></i> Seni Baca Al-Qur’an</li>
-                            <li><i className="fas fa-check-circle check-icon"></i> Pelatihan Rebana</li>
+                            {chunk1.map((item, idx) => (
+                                <li key={idx}><i className="fas fa-check-circle check-icon"></i> {item.label}</li>
+                            ))}
                         </ul>
                     </div>
                     <div className="glass-card reveal fade-bottom delay-200">
                         <ul className="misi-list" style={{ margin: 0 }}>
-                            <li><i className="fas fa-check-circle check-icon"></i> Pelatihan Khitobah</li>
-                            <li><i className="fas fa-check-circle check-icon"></i> Pelatihan Public Speaking</li>
-                            <li><i className="fas fa-check-circle check-icon"></i> Pelatihan Komputer</li>
+                            {chunk2.map((item, idx) => (
+                                <li key={idx}><i className="fas fa-check-circle check-icon"></i> {item.label}</li>
+                            ))}
                         </ul>
                     </div>
                     <div className="glass-card reveal fade-bottom delay-300"

@@ -1,5 +1,5 @@
 
-export default function VisiMisi() {
+export default function VisiMisi({ text, list }: { text?: string, list?: any[] }) {
     return (
         <section className="section-wrapper" id="visi-misi" style={{ position: "relative", paddingBottom: "6rem" }}>
             <h2 className="section-title">Visi &amp; Misi</h2>
@@ -7,17 +7,24 @@ export default function VisiMisi() {
                 <div className="grid-2">
                     <div className="glass-card reveal fade-left">
                         <h3 className="header-title" style={{ fontSize: "1.8rem", marginBottom: "1rem" }}>Visi</h3>
-                        <p style={{ fontSize: "1.1rem", color: "var(--text-muted)" }}>Mencetak insan bertaqwa, berakhlak Al Qur'an dan As
-                            Sunnah.</p>
+                        <p style={{ fontSize: "1.1rem", color: "var(--text-muted)" }}>
+                            {text || "Mencetak insan bertaqwa, berakhlak Al Qur'an dan As Sunnah."}
+                        </p>
                     </div>
                     <div className="glass-card reveal fade-right delay-100">
                         <h3 className="header-title" style={{ fontSize: "1.8rem", marginBottom: "1rem" }}>Misi</h3>
                         <ul className="misi-list">
-                            <li><i className="fas fa-check-circle check-icon"></i> Mengembangkan ilmu agama berbasis pada kitab mu'tabaroh
-                            </li>
-                            <li><i className="fas fa-check-circle check-icon"></i> Menumbuhkan kecintaan membaca, menulis dan berkarya</li>
-                            <li><i className="fas fa-check-circle check-icon"></i> Membangun karakter bertanggung jawab dan taat pada norma
-                                sosial dan agama</li>
+                            {list && list.length > 0 ? (
+                                list.map((item, idx) => (
+                                    <li key={item.id || idx}><i className="fas fa-check-circle check-icon"></i> {item.label}</li>
+                                ))
+                            ) : (
+                                <>
+                                    <li><i className="fas fa-check-circle check-icon"></i> Mengembangkan ilmu agama berbasis pada kitab mu'tabaroh</li>
+                                    <li><i className="fas fa-check-circle check-icon"></i> Menumbuhkan kecintaan membaca, menulis dan berkarya</li>
+                                    <li><i className="fas fa-check-circle check-icon"></i> Membangun karakter bertanggung jawab dan taat pada norma sosial dan agama</li>
+                                </>
+                            )}
                         </ul>
                     </div>
                 </div>

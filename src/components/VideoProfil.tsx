@@ -1,4 +1,6 @@
-export default function VideoProfil() {
+export default function VideoProfil({ url }: { url?: string }) {
+    const videoSrc = url || "https://www.youtube-nocookie.com/embed/3UdUhHAbR9c";
+
     return (
         <section className="section-wrapper" id="video-profil" style={{ background: "#f8fafc" }}>
             <h2 className="section-title">Video Profil</h2>
@@ -6,7 +8,7 @@ export default function VideoProfil() {
                 <div className="glass-card reveal zoom-in" style={{ padding: "1rem", maxWidth: "900px", margin: "0 auto", width: "100%" }}>
                     <div className="video-container">
                         <iframe id="profileProjector"
-                            src="https://www.youtube-nocookie.com/embed/3UdUhHAbR9c?enablejsapi=1&mute=1&rel=0"
+                            src={`${videoSrc}?enablejsapi=1&mute=1&rel=0`}
                             title="YouTube video player" frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>

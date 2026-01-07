@@ -113,9 +113,14 @@ export default function DataSantriPage() {
                     <h1>Data Santri Baru 2026</h1>
                     <p style={{ color: "#64748b", fontSize: "0.9rem" }}>Real-time database monitoring</p>
                 </div>
-                <button onClick={fetchSantriData} className="refresh-btn">
-                    <i className="fas fa-sync-alt"></i> Refresh Data
-                </button>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <button onClick={() => window.location.href = '/admin-content'} className="refresh-btn" style={{ background: 'var(--secondary)', color: 'white' }}>
+                        <i className="fas fa-edit"></i> Edit Konten Web
+                    </button>
+                    <button onClick={fetchSantriData} className="refresh-btn">
+                        <i className="fas fa-sync-alt"></i> Refresh Data
+                    </button>
+                </div>
             </div>
 
             <div className="table-container">

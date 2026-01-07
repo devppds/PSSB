@@ -25,6 +25,9 @@ export default function ProfilSejarah() {
                     <div className="glass-card timeline-content" style={{ padding: '2rem', borderTop: '4px solid var(--gold-main)' }}>
                         <span className="gold-accent-text">20 Februari 2002</span>
                         <h3 className="card-title-luxury" style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Pendirian & Peresmian</h3>
+                        <div style={{ float: 'right', width: '100px', height: '100px', marginLeft: '1rem', marginBottom: '1rem', borderRadius: '50%', overflow: 'hidden', border: '3px solid var(--gold-light)', boxShadow: 'var(--shadow-premium)' }}>
+                            <img src="/images/romo-yai.webp" alt="KH. Ahmad Mahin Thoha" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </div>
                         <p style={{ color: "var(--text-muted)", fontSize: '0.95rem', lineHeight: 1.6 }}>
                             Diresmikan langsung oleh KH. Ahmad Mahin Thoha sebagai unit resmi Pondok Pesantren Lirboyo (PPDS).
                             Lembaga ini hadir untuk menjawab kebutuhan santri yang ingin memadukan tradisi salaf dengan pendidikan formal modern.
@@ -38,6 +41,9 @@ export default function ProfilSejarah() {
                     <div className="glass-card timeline-content" style={{ padding: '2rem', borderTop: '4px solid var(--primary)' }}>
                         <span className="gold-accent-text" style={{ color: 'var(--primary)' }}>Era Kontemporer</span>
                         <h3 className="card-title-luxury" style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--primary-dark)' }}>Integrasi Sistem</h3>
+                        <div style={{ float: 'left', width: '100px', height: '100px', marginRight: '1rem', marginBottom: '1rem', borderRadius: '50%', overflow: 'hidden', border: '3px solid var(--primary-light)', boxShadow: 'var(--shadow-premium)' }}>
+                            <img src="/images/gus-amin.webp" alt="Pengasuh Saat Ini" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </div>
                         <p style={{ color: "var(--text-muted)", fontSize: '0.95rem', lineHeight: 1.6 }}>
                             Pengembangan dua pilar utama pendidikan: <strong>Madrasah Hidayatul Mubtadiin (MHM)</strong> untuk fokus salafiyah murni
                             dan <strong>Madrasah Ihya' Ulumiddin (MIU)</strong> bagi santri yang menempuh jalur formal (sekolah/kuliah), menciptakan lulusan yang adaptif dan berwawasan luas.

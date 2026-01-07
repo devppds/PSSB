@@ -27,12 +27,14 @@ export default function InformasiPage() {
     }, []);
 
     return (
-        <div style={{ backgroundColor: '#f0f7ff' }}>
+        <div>
             {/* HERO SECTION */}
-            <section className="info-hero">
+            <section className="page-hero">
                 <div className="reveal fade-bottom">
-                    <h1 className="hero-title">Informasi <span className="text-gradient">Pendaftaran</span></h1>
-                    <p style={{ fontSize: "1.1rem", color: "var(--text-muted)", maxWidth: "600px", margin: "0 auto" }}>
+                    <h1 className="page-hero-title">
+                        <span className="text-dark">Informasi</span> <span className="text-primary">Pendaftaran</span>
+                    </h1>
+                    <p className="page-hero-subtitle">
                         Panduan resmi tata cara pendaftaran santri baru Pondok Pesantren Darussalam Lirboyo.
                     </p>
                 </div>

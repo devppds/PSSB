@@ -170,14 +170,16 @@ export default function PPDBPage() {
     return (
         <div className="ppdb-container">
             {/* HERO SECTION */}
-            <header className="ppdb-header">
+            <section className="page-hero">
                 <div className="header-content">
-                    <h1 className="header-title">
+                    <h1 className="page-hero-title">
                         <span className="text-dark">Pendaftaran</span> <span className="text-primary">Santri Baru</span>
                     </h1>
-                    <p>Lengkapi formulir pendaftaran TA 2026-2027</p>
+                    <p className="page-hero-subtitle">
+                        Lengkapi formulir pendaftaran TA 2026-2027
+                    </p>
                 </div>
-            </header>
+            </section>
 
             <main className="ppdb-main">
                 {/* PROGRESS TRACKER */}

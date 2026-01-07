@@ -102,6 +102,50 @@ h6 {
     /* Slate 900 */
 }
 
+/* Global Page Hero Style */
+.page-hero {
+    background-color: #f0f7ff;
+    padding: 6rem 1.5rem 6rem;
+    text-align: center;
+    position: relative;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+}
+
+.page-hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+    line-height: 1.1 !important;
+    font-family: var(--font-playfair), serif;
+}
+
+.page-hero-title .text-dark {
+    color: #1a202c;
+}
+
+.page-hero-title .text-primary {
+    color: #2563eb;
+}
+
+.page-hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .page-hero {
+        padding: 4rem 1rem 3.5rem;
+    }
+
+    .page-hero-title {
+        font-size: 2.4rem;
+        word-break: break-word;
+    }
+}
+
 .text-gradient {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     -webkit-background-clip: text;

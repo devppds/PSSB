@@ -23,11 +23,12 @@ export default function MateriUjianPage() {
         <>
             <main>
                 {/* HERO SECTION */}
-                <section className="materi-hero">
+                <section className="page-hero">
                     <div className="reveal fade-bottom">
-                        <h1 className="hero-title" style={{ marginBottom: "1rem", color: "var(--primary-dark)" }}>Materi & <span className="text-gradient">Kurikulum</span>
+                        <h1 className="page-hero-title">
+                            <span className="text-dark">Materi &</span> <span className="text-primary">Kurikulum</span>
                         </h1>
-                        <p style={{ fontSize: "1.2rem", color: "var(--text-muted)", maxWidth: "700px", margin: "0 auto" }}>
+                        <p className="page-hero-subtitle">
                             Informasi lengkap rincian materi ujian masuk, kurikulum kitab salaf, dan batas usia minimal santri.
                         </p>
                     </div>

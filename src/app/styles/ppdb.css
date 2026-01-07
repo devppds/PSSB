@@ -26,52 +26,6 @@ body {
     padding-bottom: 5rem;
 }
 
-/* HEADER SECTION */
-/* HEADER SECTION - NEW STYLE (MATCHING IMAGE 2) */
-.ppdb-header {
-    background-color: #f0f7ff;
-    /* Very light pale blue like image background */
-    padding: 4rem 1.5rem 8rem;
-    text-align: center;
-    position: relative;
-    border-bottom: 1px solid rgba(30, 64, 175, 0.1);
-}
-
-.header-content {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 5;
-}
-
-.header-title {
-    font-size: 3.5rem;
-    font-weight: 800;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    font-family: 'Playfair Display', serif, system-ui;
-    /* Adding a serif touch if available */
-}
-
-.header-title .text-dark {
-    color: #1a202c;
-    /* Darker navy/black from image 2 */
-}
-
-.header-title .text-primary {
-    color: #2563eb;
-    /* Vibrant blue from image 2 */
-}
-
-.ppdb-header p {
-    font-size: 1.15rem;
-    color: #4b5563;
-    /* Muted gray for description */
-    font-weight: 500;
-    max-width: 500px;
-    margin: 0 auto;
-}
 
 /* Re-adjust main content positioning for light header */
 .ppdb-main {

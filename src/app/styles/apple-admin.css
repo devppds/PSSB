@@ -171,6 +171,187 @@
     color: var(--apple-text-secondary);
 }
 
+/* Apple Toast Notifications */
+.apple-toast-container {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.apple-toast {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 18px;
+    padding: 12px 20px;
+    min-width: 300px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    animation: toastScaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    pointer-events: auto;
+}
+
+.apple-toast i {
+    font-size: 1.2rem;
+}
+
+.apple-toast.success i {
+    color: #34c759;
+}
+
+.apple-toast.error i {
+    color: #ff3b30;
+}
+
+.apple-toast.info i {
+    color: #007aff;
+}
+
+.apple-toast-content {
+    flex: 1;
+}
+
+.apple-toast-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--apple-text);
+    margin-bottom: 2px;
+}
+
+.apple-toast-message {
+    font-size: 0.85rem;
+    color: var(--apple-text-secondary);
+}
+
+@keyframes toastScaleIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.apple-toast.exit {
+    animation: toastScaleOut 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes toastScaleOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+/* Custom Modal for Confirms */
+.apple-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+}
+
+.apple-confirm-card {
+    background: white;
+    width: 320px;
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.apple-confirm-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.apple-confirm-msg {
+    color: var(--apple-text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.apple-confirm-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.apple-confirm-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-danger {
+    background: #ff3b30;
+    color: white;
+}
+
+.btn-secondary {
+    background: #f2f2f7;
+    color: #007aff;
+}
+
+.apple-confirm-btn:active {
+    transform: scale(0.97);
+}
+
 @media (max-width: 1024px) {
     .apple-sidebar {
         width: 80px;

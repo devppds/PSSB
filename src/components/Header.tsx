@@ -1,10 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [dateInfo, setDateInfo] = useState({ masehi: '', hijri: '' });
+    const pathname = usePathname();
+
+    useEffect(() => {
+        // Date Logic
+        const today = new Date();
+        const masehi = new Intl.DateTimeFormat('id-ID', { dateStyle: 'full' }).format(today);
+        const hijri = new Intl.DateTimeFormat('id-ID', { calendar: 'islamic-umalqura', day: 'numeric', month: 'long', year: 'numeric' }).format(today);
+
+        setDateInfo({
+            masehi: masehi,
+            hijri: hijri.replace('AH', 'H')
+        });
+    }, []);
+
+    const isActive = (path: string) => pathname === path ? 'active' : '';
 
     return (
         <header className="header-wrapper">
@@ -37,21 +54,23 @@ export default function Header() {
             <div className="header-nav-row">
                 <div className="header-inner">
                     <nav className="header-nav">
-                        <Link href="/" className="nav-link">
+                        <Link href="/" className={`nav-link ${isActive('/')}`}>
                             <i className="fas fa-home"></i> BERANDA
                         </Link>
-                        <Link href="/informasi" className="nav-link">
+                        <Link href="/informasi" className={`nav-link ${isActive('/informasi')}`}>
                             <i className="fas fa-info-circle"></i> INFORMASI PENDAFTARAN
                         </Link>
-                        <Link href="/materi-ujian" className="nav-link">
+                        <Link href="/materi-ujian" className={`nav-link ${isActive('/materi-ujian')}`}>
                             <i className="fas fa-folder-open"></i> MATERI UJIAN
                         </Link>
-                        <Link href="/ppdb" className="nav-link">
-                            <i className="fas fa-info-circle"></i> DAFTAR ONLINE
+                        <Link href="/ppdb" className={`nav-link ${isActive('/ppdb')}`}>
+                            <i className="fas fa-edit"></i> DAFTAR ONLINE
                         </Link>
                     </nav>
 
-
+                    <div className="header-date-display" id="header-date-display">
+                        <span id="date-masehi">{dateInfo.masehi}</span> | <span id="date-hijri">{dateInfo.hijri}</span>
+                    </div>
                 </div>
             </div>
 
@@ -64,20 +83,23 @@ export default function Header() {
                         <i className="fas fa-times"></i>
                     </button>
                     <nav className="mobile-nav">
-                        <Link href="/" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+                        <Link href="/" className={`mobile-nav-link ${isActive('/')}`} onClick={() => setMobileMenuOpen(false)}>
                             Beranda
                         </Link>
-                        <Link href="/informasi" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+                        <Link href="/informasi" className={`mobile-nav-link ${isActive('/informasi')}`} onClick={() => setMobileMenuOpen(false)}>
                             Informasi Pendaftaran
                         </Link>
-                        <Link href="/materi-ujian" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+                        <Link href="/materi-ujian" className={`mobile-nav-link ${isActive('/materi-ujian')}`} onClick={() => setMobileMenuOpen(false)}>
                             Materi Ujian
                         </Link>
-                        <Link href="/ppdb" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+                        <Link href="/ppdb" className={`mobile-nav-link ${isActive('/ppdb')}`} onClick={() => setMobileMenuOpen(false)}>
                             Daftar Online
                         </Link>
                     </nav>
-
+                    <div className="mobile-calendar">
+                        <p id="mobile-date-masehi">{dateInfo.masehi}</p>
+                        <p id="mobile-date-hijri">{dateInfo.hijri}</p>
+                    </div>
                 </div>
             </div>
         </header>

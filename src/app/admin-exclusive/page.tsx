@@ -798,31 +798,55 @@ export default function AppleAdminPage() {
 
                             {activeTab === 'curriculum' && (
                                 <div className="apple-card">
-                                    <div style={{ marginBottom: '40px' }}>
-                                        <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '8px' }}>Pusat Kurikulum</h2>
-                                        <p style={{ color: 'var(--apple-text-secondary)' }}>Manajemen materi ujian masuk dan bahan ajar setiap jenjang.</p>
-                                    </div>
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '24px' }}>
-                                        <div className="apple-card" style={{ background: '#f5f5f7', border: 'none', cursor: 'pointer' }}>
-                                            <div style={{ width: '60px', height: '60px', borderRadius: '18px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-                                                <i className="fas fa-book-open fa-2x" style={{ color: 'var(--apple-blue)' }}></i>
+                                    <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+                                        <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 30px', boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)' }}>
+                                            <i className="fas fa-graduation-cap fa-3x" style={{ color: 'white' }}></i>
+                                        </div>
+                                        <h2 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '15px' }}>Manajemen Kurikulum</h2>
+                                        <p style={{ fontSize: '1.1rem', color: 'var(--apple-text-secondary)', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px' }}>
+                                            Kelola materi ujian masuk, kurikulum kitab salaf, dan batas usia minimal santri untuk setiap jenjang pendidikan.
+                                        </p>
+
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', maxWidth: '900px', margin: '0 auto 40px' }}>
+                                            <div style={{ padding: '25px', background: '#f5f5f7', borderRadius: '15px', textAlign: 'left' }}>
+                                                <i className="fas fa-book-open" style={{ fontSize: '2rem', color: 'var(--apple-blue)', marginBottom: '15px' }}></i>
+                                                <h4 style={{ fontWeight: 700, marginBottom: '8px' }}>Madrasah Hidayatul Mubtadi'in (MHM)</h4>
+                                                <p style={{ fontSize: '0.85rem', color: 'var(--apple-text-secondary)' }}>9 tingkatan dari I Ibtidaiyah hingga Aliyah</p>
                                             </div>
-                                            <h4 style={{ fontWeight: 800, fontSize: '1.3rem', marginBottom: '8px' }}>Madrasah Diniyah</h4>
-                                            <p style={{ fontSize: '0.9rem', color: 'var(--apple-text-secondary)', marginBottom: '20px' }}>Kelola materi Ula, Wustho, dan Ulya secara mendetail.</p>
-                                            <button className="apple-btn-primary" style={{ padding: '10px 20px', fontSize: '0.85rem' }}>Buka Modul</button>
-                                        </div>
-                                        <div className="apple-card" style={{ background: '#f5f5f7', border: 'none', cursor: 'pointer' }}>
-                                            <div style={{ width: '60px', height: '60px', borderRadius: '18px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-                                                <i className="fas fa-quran fa-2x" style={{ color: '#34c759' }}></i>
+                                            <div style={{ padding: '25px', background: '#f5f5f7', borderRadius: '15px', textAlign: 'left' }}>
+                                                <i className="fas fa-mosque" style={{ fontSize: '2rem', color: '#34c759', marginBottom: '15px' }}></i>
+                                                <h4 style={{ fontWeight: 700, marginBottom: '8px' }}>Ma'had Aly Lirboyo</h4>
+                                                <p style={{ fontSize: '0.85rem', color: 'var(--apple-text-secondary)' }}>Marhalah Ula & Tsaniyah</p>
                                             </div>
-                                            <h4 style={{ fontWeight: 800, fontSize: '1.3rem', marginBottom: '8px' }}>Tahfidz Program</h4>
-                                            <p style={{ fontSize: '0.9rem', color: 'var(--apple-text-secondary)', marginBottom: '20px' }}>Pengaturan target setoran dan kategori hafalan.</p>
-                                            <button className="apple-btn-primary" style={{ padding: '10px 20px', fontSize: '0.85rem', background: '#34c759' }}>Buka Modul</button>
+                                            <div style={{ padding: '25px', background: '#f5f5f7', borderRadius: '15px', textAlign: 'left' }}>
+                                                <i className="fas fa-quran" style={{ fontSize: '2rem', color: '#ff9500', marginBottom: '15px' }}></i>
+                                                <h4 style={{ fontWeight: 700, marginBottom: '8px' }}>Madrasah Ihya' Ulumiddin (MIU)</h4>
+                                                <p style={{ fontSize: '0.85rem', color: 'var(--apple-text-secondary)' }}>6 tingkatan Ula, Wustho, dan Ulya</p>
+                                            </div>
                                         </div>
-                                        <div className="apple-card" style={{ border: '2px dashed #ddd', background: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '220px', opacity: 0.6 }}>
-                                            <i className="fas fa-plus fa-2x" style={{ marginBottom: '15px' }}></i>
-                                            <p style={{ fontWeight: 600 }}>Tambah Kategori</p>
-                                        </div>
+
+                                        <a
+                                            href="/informasi"
+                                            target="_blank"
+                                            className="apple-btn-primary"
+                                            style={{
+                                                padding: '15px 40px',
+                                                fontSize: '1rem',
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                gap: '10px',
+                                                textDecoration: 'none',
+                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
+                                            }}
+                                        >
+                                            <i className="fas fa-external-link-alt"></i>
+                                            Buka Halaman Materi Ujian
+                                        </a>
+
+                                        <p style={{ fontSize: '0.85rem', color: 'var(--apple-text-secondary)', marginTop: '20px' }}>
+                                            <i className="fas fa-info-circle"></i> Halaman ini memiliki editor lengkap untuk mengelola kategori, tingkatan, dan detail materi ujian.
+                                        </p>
                                     </div>
                                 </div>
                             )}

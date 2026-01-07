@@ -101,7 +101,7 @@ h6 {
 .page-hero,
 .info-hero-section {
     background-color: #f0f7ff;
-    padding: 8rem 1.5rem 6rem;
+    padding: 11rem 1.5rem 6rem;
     text-align: center;
     position: relative;
     border-bottom: 1px solid rgba(37, 99, 235, 0.1);
@@ -147,7 +147,7 @@ h6 {
 
     .page-hero,
     .info-hero-section {
-        padding: 6rem 1rem 4rem;
+        padding: 9rem 1rem 4rem;
     }
 
     .page-hero-title {

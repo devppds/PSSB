@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [dateInfo, setDateInfo] = useState({ masehi: '', hijri: '' });
+    const [scrolled, setScrolled] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -19,12 +20,19 @@ export default function Header() {
             masehi: masehi,
             hijri: hijri.replace('AH', 'H')
         });
+
+        // Scroll Logic
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     const isActive = (path: string) => pathname === path ? 'active' : '';
 
     return (
-        <header className="header-wrapper">
+        <header className={`header-wrapper ${scrolled ? 'scrolled' : ''}`} style={{ position: 'fixed', width: '100%', top: 0, zIndex: 9999 }}>
             <div className="header-top-row">
                 <div className="header-inner">
                     <div className="header-logo-section">

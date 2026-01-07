@@ -16,13 +16,21 @@ const playfair = Playfair_Display({
   weight: ["400", "500", "600", "700", "800"]
 });
 
-export const metadata: Metadata = {
-  title: "Pondok Pesantren Darussalam Lirboyo",
-  description: "Mencetak Generasi Bertakwa, Berakhlak Qur'ani dan As-Sunnah...",
-  other: {
-    "viewport": "width=device-width, initial-scale=1",
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/content/settings`, { cache: 'no-store' });
+    const settings = await res.json();
+    return {
+      title: settings.meta_title || "Pondok Pesantren Darussalam Lirboyo",
+      description: settings.meta_description || "Mencetak Generasi Bertakwa, Berakhlak Qur'ani dan As-Sunnah...",
+    };
+  } catch (e) {
+    return {
+      title: "Pondok Pesantren Darussalam Lirboyo",
+      description: "Mencetak Generasi Bertakwa, Berakhlak Qur'ani dan As-Sunnah...",
+    };
   }
-};
+}
 
 export default function RootLayout({
   children,

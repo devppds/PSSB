@@ -40,7 +40,45 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.json(data);
     } catch (error: any) {
-        console.error('Fetch Materi Error:', error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}
+
+export async function POST(req: NextRequest) {
+    try {
+        const { categories, items, contents } = await req.json();
+        const ctx = await getCloudflareContext();
+        const env = ctx.env as unknown as { DB: any };
+
+        const queries: any[] = [];
+
+        if (categories) {
+            categories.forEach((cat: any) => {
+                queries.push(env.DB.prepare('INSERT OR REPLACE INTO materi_categories (id, name, order_index) VALUES (?, ?, ?)')
+                    .bind(cat.id || null, cat.name, cat.order_index || 0));
+            });
+        }
+
+        if (items) {
+            items.forEach((item: any) => {
+                queries.push(env.DB.prepare('INSERT OR REPLACE INTO materi_items (id, category_id, title, age, size, description, order_index) VALUES (?, ?, ?, ?, ?, ?, ?)')
+                    .bind(item.id || null, item.category_id, item.title, item.age, item.size, item.description, item.order_index || 0));
+            });
+        }
+
+        if (contents) {
+            contents.forEach((c: any) => {
+                queries.push(env.DB.prepare('INSERT OR REPLACE INTO materi_contents (id, item_id, section_type, group_title, icon_type, label, order_index) VALUES (?, ?, ?, ?, ?, ?, ?)')
+                    .bind(c.id || null, c.item_id, c.section_type, c.group_title, c.icon_type, c.label, c.order_index || 0));
+            });
+        }
+
+        if (queries.length > 0) {
+            await env.DB.batch(queries);
+        }
+
+        return NextResponse.json({ success: true });
+    } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

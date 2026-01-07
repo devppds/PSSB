@@ -60,9 +60,48 @@ CREATE TABLE IF NOT EXISTS global_content (
 -- 4. Gallery & Media
 CREATE TABLE IF NOT EXISTS site_gallery (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
     category TEXT NOT NULL, -- e.g., 'Bahtsul Masail', 'Kitab Kuning'
     image_url TEXT NOT NULL,
-    order_index INTEGER DEFAULT 0
+    order_index INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5. Data Pendaftar (Santri)
+CREATE TABLE IF NOT EXISTS santri_pendaftar (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    -- Identitas Pribadi
+    nama_depan TEXT NOT NULL,
+    nama_belakang TEXT,
+    nik TEXT UNIQUE,
+    nisn TEXT,
+    tempat_lahir TEXT,
+    tanggal_lahir TEXT,
+    jenis_kelamin TEXT,
+    agama TEXT DEFAULT 'Islam',
+    jenjang_kelas TEXT,
+    
+    -- Alamat
+    alamat_jalan TEXT,
+    alamat_kota TEXT,
+    
+    -- Orang Tua
+    nama_ayah TEXT,
+    pekerjaan_ayah TEXT,
+    no_hp_ayah TEXT,
+    nama_ibu TEXT,
+    no_hp_ibu TEXT,
+    
+    -- Berkas (Links)
+    foto_santri TEXT,
+    scan_kk TEXT,
+    scan_ijazah TEXT,
+    
+    -- Metadata System
+    status TEXT DEFAULT 'Pending', -- Pending, Terverifikasi, Ditolak
+    catatan_admin TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Seed Initial Data for Site Settings
@@ -75,3 +114,6 @@ INSERT INTO site_settings (key, value) VALUES ('hero_subtitle', 'Mencetak Genera
 INSERT INTO site_settings (key, value) VALUES ('video_url', 'https://www.youtube-nocookie.com/embed/3UdUhHAbR9c');
 INSERT INTO site_settings (key, value) VALUES ('visi_text', 'Mencetak insan bertaqwa, berakhlak Al Qur''an dan As Sunnah.');
 INSERT INTO site_settings (key, value) VALUES ('about_history', 'Pesantren ini berdiri sejak...'); 
+INSERT INTO site_settings (key, value) VALUES ('meta_title', 'PPDB Pondok Pesantren Darussalam Lirboyo Kediri');
+INSERT INTO site_settings (key, value) VALUES ('meta_description', 'Pendaftaran Santri Baru Pondok Pesantren Darussalam Lirboyo Kediri. Mencetak Generasi Bertakwa dan Berakhlak Qur''ani.');
+INSERT INTO site_settings (key, value) VALUES ('meta_keywords', 'ppdb, pesantren, lirboyo, darussalam, kediri, pendaftaran santri baru');

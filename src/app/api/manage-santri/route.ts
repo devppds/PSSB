@@ -4,7 +4,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare/cloudflare-context'
 
 export async function POST(req: NextRequest) {
     try {
-        const { action, id } = await req.json();
+        const { action, id, status, catatan } = await req.json();
 
         if (!id) {
             return NextResponse.json({ error: 'ID is required' }, { status: 400 });
@@ -21,9 +21,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: true, message: 'Data berhasil dihapus.' });
         }
 
-        if (action === 'verify') {
-            // For now, just a placeholder. In a real app, you might move this to another table or set a flag.
-            return NextResponse.json({ success: true, message: 'Data terverifikasi (Simulasi).' });
+        if (action === 'update_status') {
+            await env.DB.prepare('UPDATE pendaftaran_santri SET status = ?, catatan_admin = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?')
+                .bind(status, catatan, id)
+                .run();
+            return NextResponse.json({ success: true, message: 'Status santri diperbarui.' });
         }
 
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });

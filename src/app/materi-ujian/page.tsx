@@ -301,29 +301,25 @@ export default function MateriUjianPage() {
                 <BentoMateriCard
                     title="MHM - ALIYAH"
                     age="15 Tahun"
-                    size="materi-item-large"
+                    size="materi-item-med"
                     materi={
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                            <div>
-                                <h4 style={{ color: 'var(--primary)', marginBottom: '0.5rem', fontSize: '0.9rem' }}>UJIAN TULIS:</h4>
-                                <ul>
-                                    <Li><Edit />Nahwu (Nadzom Al-‘Amrithi)</Li>
-                                    <Li><Edit />Shorof (Nadzom Al-Maqshud & Amtsilah)</Li>
-                                    <Li><Edit />Imla’ (Arab)</Li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 style={{ color: 'var(--primary)', marginBottom: '0.5rem', fontSize: '0.9rem' }}>UJIAN LISAN:</h4>
-                                <ul>
-                                    <Li><Mic />Membaca Fathul Qorib</Li>
-                                    <Li><Mic />Hafalan Alfiyah Ibnu Malik 350 bait</Li>
-                                    <Li><Mic />Uji Fasholatan lengkap</Li>
-                                </ul>
-                            </div>
-                        </div>
+                        <>
+                            <h4 style={{ color: 'var(--primary)', marginBottom: '0.5rem', fontSize: '0.9rem' }}>UJIAN TULIS:</h4>
+                            <ul>
+                                <Li><Edit />Nahwu (Nadzom Al-‘Amrithi)</Li>
+                                <Li><Edit />Shorof (Nadzom Al-Maqshud & Amtsilah)</Li>
+                                <Li><Edit />Imla’ (Arab)</Li>
+                            </ul>
+                            <h4 style={{ color: 'var(--primary)', marginBottom: '0.5rem', fontSize: '0.9rem', marginTop: '1rem' }}>UJIAN LISAN:</h4>
+                            <ul>
+                                <Li><Mic />Membaca Fathul Qorib</Li>
+                                <Li><Mic />Hafalan Alfiyah Ibnu Malik 350 bait</Li>
+                                <Li><Mic />Uji Fasholatan lengkap</Li>
+                            </ul>
+                        </>
                     }
                     kurikulum={
-                        <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '10px' }}>
+                        <ul>
                             <Li><Check />Tafsir (Tafsirul Jalalain)</Li>
                             <Li><Check />Hadits (Riyadlus Sholihin)</Li>
                             <Li><Check />Ilmu Hadits (al-Qowaidul Asasiyah)</Li>

@@ -1531,6 +1531,43 @@ footer.footer-wrapper {
     pointer-events: none;
 }
 
+.hero-glow-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+    z-index: -1;
+    filter: blur(60px);
+    animation: glowMove 15s ease-in-out infinite alternate;
+}
+
+@keyframes glowMove {
+    from {
+        transform: translate(-40%, -60%);
+    }
+
+    to {
+        transform: translate(-60%, -40%);
+    }
+}
+
+.hero-section::after {
+    content: '\f6de';
+    /* Scroll icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 5%;
+    top: 20%;
+    font-size: 15rem;
+    color: rgba(37, 99, 235, 0.03);
+    transform: rotate(-15deg);
+    pointer-events: none;
+}
+
 .hero-title,
 .section-title,
 .header-title {

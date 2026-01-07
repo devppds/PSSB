@@ -1,0 +1,223 @@
+/* Premium Page Styles */
+.materi-hero {
+    background: radial-gradient(circle at center, rgba(37, 99, 235, 0.05) 0%, transparent 70%),
+        linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    padding: 10rem 1.5rem 6rem;
+    text-align: center;
+    position: relative;
+    margin-top: 60px;
+}
+
+.materi-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(var(--primary) 1px, transparent 1px);
+    background-size: 30px 30px;
+    opacity: 0.05;
+}
+
+/* Integrated Class Card - Synchronized with Main Theme */
+.class-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    color: var(--text-main);
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    cursor: default;
+}
+
+.class-card:hover {
+    box-shadow: 0 15px 35px rgba(197, 160, 89, 0.15), 0 0 15px rgba(197, 160, 89, 0.2);
+    border-color: var(--accent-gold);
+}
+
+.class-card-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+}
+
+.class-card-header h3 {
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.inner-tab-switcher {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.inner-tab-switcher::-webkit-scrollbar {
+    display: none;
+}
+
+.inner-tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.75rem 0.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.inner-tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--accent-gold);
+}
+
+.inner-tab-btn i {
+    font-size: 1.1rem;
+}
+
+.inner-tab-content {
+    /* display: none; Managed by React */
+    background: rgba(248, 250, 252, 0.8);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    min-height: 250px;
+    animation: fadeIn 0.4s ease;
+    border: 1px solid var(--border-color);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Content Lists */
+.info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: var(--text-main);
+}
+
+.info-item i {
+    color: var(--accent-gold);
+    margin-top: 0.25rem;
+    font-size: 1.2rem;
+}
+
+.status-alert {
+    background: var(--accent-gold-light);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-top: 2rem;
+    color: var(--primary-dark);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    font-weight: 500;
+}
+
+.no-exam-text {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding: 3rem 0;
+    color: var(--primary);
+}
+
+/* Category Labels */
+.materi-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--primary-dark);
+    margin: 4rem 0 2rem;
+    padding-left: 1.5rem;
+    border-left: 6px solid var(--accent-gold);
+}
+
+/* Grid Layouts */
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+@media (max-width: 1200px) {
+    .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .materi-hero {
+        padding: 8rem 1.5rem 4rem;
+    }
+
+    .grid-3,
+    .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .class-card {
+        border-radius: 25px;
+        padding: 1rem;
+    }
+
+    .class-card-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .inner-tab-btn {
+        font-size: 0.85rem;
+        gap: 0.5rem;
+    }
+
+    .materi-section-title {
+        font-size: 1.8rem;
+    }
+}

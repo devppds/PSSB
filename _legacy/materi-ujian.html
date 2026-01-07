@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi & Kurikulum - Pondok Pesantren Darussalam Lirboyo</title>
+
+  <!-- Premium Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png"
+    href="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png">
+
+  <style>
+    /* Premium Page Styles */
+    .materi-hero {
+      background: radial-gradient(circle at center, rgba(37, 99, 235, 0.05) 0%, transparent 70%),
+        linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      padding: 10rem 1.5rem 6rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .materi-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(var(--primary) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.05;
+    }
+
+    /* Integrated Class Card - Synchronized with Main Theme */
+    .class-card {
+      background: var(--bg-glass);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      color: var(--text-main);
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+      cursor: default;
+    }
+
+    .class-card:hover {
+      box-shadow: 0 15px 35px rgba(197, 160, 89, 0.15), 0 0 15px rgba(197, 160, 89, 0.2);
+      border-color: var(--accent-gold);
+    }
+
+    .class-card-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+    }
+
+    .class-card-header h3 {
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .inner-tab-switcher {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .inner-tab-switcher::-webkit-scrollbar {
+      display: none;
+    }
+
+    .inner-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.75rem 0.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .inner-tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--accent-gold);
+    }
+
+    .inner-tab-btn i {
+      font-size: 1.1rem;
+    }
+
+    .inner-tab-content {
+      display: none;
+      background: rgba(248, 250, 252, 0.8);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      min-height: 250px;
+      animation: fadeIn 0.4s ease;
+      border: 1px solid var(--border-color);
+    }
+
+    .inner-tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Content Lists */
+    .info-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: var(--text-main);
+    }
+
+    .info-item i {
+      color: var(--accent-gold);
+      margin-top: 0.25rem;
+      font-size: 1.2rem;
+    }
+
+    .status-alert {
+      background: var(--accent-gold-light);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin-top: 2rem;
+      color: var(--primary-dark);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      border: 1px solid rgba(197, 160, 89, 0.3);
+      font-weight: 500;
+    }
+
+    .no-exam-text {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      padding: 3rem 0;
+      color: var(--primary);
+    }
+
+    /* Category Labels */
+    .materi-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: var(--primary-dark);
+      margin: 4rem 0 2rem;
+      padding-left: 1.5rem;
+      border-left: 6px solid var(--accent-gold);
+    }
+
+    /* Grid Layouts */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    @media (max-width: 1200px) {
+      .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .materi-hero {
+        padding: 8rem 1.5rem 4rem;
+      }
+
+      .grid-3,
+      .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .class-card {
+        border-radius: 25px;
+        padding: 1rem;
+      }
+
+      .class-card-header h3 {
+        font-size: 1.1rem;
+      }
+
+      .inner-tab-btn {
+        font-size: 0.85rem;
+        gap: 0.5rem;
+      }
+
+      .materi-section-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body data-page="materi-ujian">
+  <!-- HEADER LOADER -->
+  <header class="header-wrapper" id="header-placeholder"></header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="materi-hero">
+      <div class="reveal fade-bottom">
+        <h1 class="hero-title" style="margin-bottom: 1rem; color: var(--primary-dark);">Materi &
+          <span class="text-gradient">Kurikulum</span>
+        </h1>
+        <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto;">
+          Informasi lengkap rincian materi ujian masuk, kurikulum kitab salaf, dan batas usia minimal santri.
+        </p>
+      </div>
+    </section>
+
+    <!-- CONTENT SECTION -->
+    <section class="section-wrapper" style="padding-top: 0;">
+
+      <!-- MADRASAH HIDAYATUL MUBTADI'IN (MHM) -->
+      <h2 class="materi-section-title reveal fade-left">Madrasah Hidayatul Mubtadi'in <small>(MHM)</small></h2>
+
+      <div class="grid-3">
+
+        <!-- KELAS I IBTIDAIYAH MHM -->
+        <div class="class-card reveal fade-bottom">
+          <div class="class-card-header">
+            <h3>MHM - I IBTIDAIYAH</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <div class="no-exam-text">Tidak ada.</div>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> CTBQ An-Nahdliyah</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tauhid I</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fasholatan I</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Akhlaq I</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ta’limul Lughah I</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Terampil Menulis Arab dan Pegon I</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hidayatul Mubtadi’ I</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Indo I</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Daerah I</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> MTK I</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> PKN I</li>
+            </ul>
+          </div>
+          <div class="status-alert">
+            <i class="fas fa-user-clock"></i> Usia Minimal: <strong>6 tahun.</strong>
+          </div>
+        </div>
+
+        <!-- KELAS II IBTIDAIYAH MHM -->
+        <div class="class-card reveal fade-bottom delay-100">
+          <div class="class-card-header">
+            <h3>MHM - II IBTIDAIYAH</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <div class="no-exam-text">Tidak ada.</div>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> CTBQ An-Nahdliyah</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tauhid II</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hidayatul Mubtadi’ II</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fasholatan II</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Akhlaq II</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ta’limul Lughah II</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Terampil Menulis Arab dan Pegon II</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Indo II</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Daerah II</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> MTK II</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> PKN II</li>
+            </ul>
+          </div>
+          <div class="status-alert">
+            <i class="fas fa-user-clock"></i> Usia Minimal: <strong>7 tahun.</strong>
+          </div>
+        </div>
+
+        <!-- KELAS III IBTIDAIYAH MHM -->
+        <div class="class-card reveal fade-bottom">
+          <div class="class-card-header">
+            <h3>MHM - III IBTIDAIYAH</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <div class="no-exam-text">Tidak ada.</div>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qur’an</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tauhid Jawan</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fasholatan III</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hidayatul Mubtadi’ III</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ngudi Susilo</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tarikh Nabi Muhammad SAW</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ro’sul Sirah</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Pegon I</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Indo III</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Daerah III</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> PKN III</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Matematika III</li>
+            </ul>
+          </div>
+          <div class="status-alert">
+            <i class="fas fa-user-clock"></i> Usia Minimal: <strong>8 tahun.</strong>
+          </div>
+        </div>
+
+        <!-- KELAS IV IBTIDAIYAH MHM -->
+        <div class="class-card reveal fade-bottom delay-100">
+          <div class="class-card-header">
+            <h3>MHM - IV IBTIDAIYAH</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <div class="no-exam-text">Tidak ada.</div>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qur’an</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Zadul Mubtadi’</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fasholatan IV</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hidayatul Mubtadi’ IV</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Nadhmul Akhlaq Alala</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Bahasa Arab Dasar</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tarikhul Anbiya’</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Isra’ Mi’raj</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Pegon II</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Indo IV</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Daerah IV</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> PKN IV</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Matematika IV</li>
+            </ul>
+          </div>
+          <div class="status-alert">
+            <i class="fas fa-user-clock"></i> Usia Minimal: <strong>9 tahun.</strong>
+          </div>
+        </div>
+
+        <!-- KELAS V IBTIDAIYAH MHM -->
+        <div class="class-card reveal fade-bottom">
+          <div class="class-card-header">
+            <h3>MHM - V IBTIDAIYAH</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <h4 style="color:var(--primary); margin-bottom:1rem;">UJIAN TULIS:</h4>
+            <ul class="info-list" style="margin-bottom:1.5rem;">
+              <li class="info-item"><i class="fas fa-edit"></i> Tauhid (Zadul Mubtadi’)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Fiqh (Hidayatul Mubtadi’ IV)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Imla’ (Pegon)</li>
+            </ul>
+            <h4 style="color:var(--primary); margin-bottom:1rem;">UJIAN LISAN:</h4>
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-microphone"></i> Fasholatan lengkap</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Surat pendek (An-Naas s.d. Al-Kafirun)</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Aqo’id 50</li>
+            </ul>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qur’an</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Arba’in An-Nahdliyah</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> ‘Aqidatul ‘Awam</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fathur Rohman</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Safinatun Naja</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Nadhom Al-Ajurumiyah Jawan</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Nadhmul Mathlab</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ta’limul Lughoh Al-‘Arobiyah</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Pegon III</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Ke-NU-an I</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Indo V</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Daerah V</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> MTK V</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> PKN V</li>
+            </ul>
+          </div>
+          <div class="status-alert">
+            <i class="fas fa-user-clock"></i> Usia Minimal: <strong>10 tahun.</strong>
+          </div>
+        </div>
+
+        <!-- KELAS VI IBTIDAIYAH MHM -->
+        <div class="class-card reveal fade-bottom delay-100">
+          <div class="class-card-header">
+            <h3>MHM - VI IBTIDAIYAH</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <h4 style="color:var(--primary); margin-bottom:1rem;">UJIAN TULIS:</h4>
+            <ul class="info-list" style="margin-bottom:1.5rem;">
+              <li class="info-item"><i class="fas fa-edit"></i> Fiqh (Safinatun Naja)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Tauhid (‘Aqidatul ‘Awam)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Nadzom Al-Ajurumiyah Jawan</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Imla’ (Pegon)</li>
+            </ul>
+            <h4 style="color:var(--primary); margin-bottom:1rem;">UJIAN LISAN:</h4>
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-microphone"></i> Fasholatan lengkap</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Surat pendek (An-Naas s.d. Al-Quraisy)</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Aqo’id 50</li>
+            </ul>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qur’an</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Mukhtarul Hadits As-Syarif</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Taisirul Kholaq</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tanwirul Hija</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Matnu Al-Ajurumiyah</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-‘Awamil</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Qoidah Natsar</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Amtsilah At-Tashrifiyah</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Zaaduththulab</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hidayatus Shibyan</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Ke-NU-an II</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> PKN VI</li>
+            </ul>
+          </div>
+          <div class="status-alert">
+            <i class="fas fa-user-clock"></i> Usia Minimal: <strong>11 tahun.</strong>
+          </div>
+        </div>
+
+        <!-- KELAS I TSANAWIYAH MHM -->
+        <div class="class-card reveal fade-bottom">
+          <div class="class-card-header">
+            <h3>MHM - I TSANAWIYAH</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <h4 style="color:var(--primary); margin-bottom:1rem;">UJIAN TULIS:</h4>
+            <ul class="info-list" style="margin-bottom:1.5rem;">
+              <li class="info-item"><i class="fas fa-edit"></i> Shorof (Qo’idah Natsar)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Nahwu (Matnu Al-Ajurumiyah)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Imla’ (Pegon)</li>
+            </ul>
+            <h4 style="color:var(--primary); margin-bottom:1rem;">UJIAN LISAN:</h4>
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-microphone"></i> Asy-Syamsy</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Aqo’id 50</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Tashrif bab I–VI</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Fasholatan lengkap</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Surat An-Naas s.d. At-Takatsur</li>
+            </ul>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qur’an</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Arba’in An-Nawawiyah</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Matnu Ibrohim Al-Bajuri</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Sullamut Taufiq</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Ajurumiyah</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qowa’id As-Shorfiyah</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Amtsilah At-Tashrifiyah</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-I’lal</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tuhfatul Athfal</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fathul Mubin I</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Washoya</li>
+              <li class="info-item"><i class="fas fa-graduation-cap"></i> Ke-NU-an III</li>
+            </ul>
+          </div>
+          <div class="status-alert">
+            <i class="fas fa-user-clock"></i> Usia Minimal: <strong>12 tahun.</strong>
+          </div>
+        </div>
+
+        <!-- KELAS ALIYAH MHM -->
+        <div class="class-card reveal fade-bottom delay-100">
+          <div class="class-card-header">
+            <h3>MHM - ALIYAH</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <h4 style="color:var(--primary); margin-bottom:1rem;">UJIAN TULIS:</h4>
+            <ul class="info-list" style="margin-bottom:1.5rem;">
+              <li class="info-item"><i class="fas fa-edit"></i> Nahwu (Nadzom Al-‘Amrithi)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Shorof (Nadzom Al-Maqshud & Amtsilah At-Tashrifiyah)
+              </li>
+              <li class="info-item"><i class="fas fa-edit"></i> Imla’ (Arab)</li>
+            </ul>
+            <h4 style="color:var(--primary); margin-bottom:1rem;">UJIAN LISAN:</h4>
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-microphone"></i> Membaca Fathul Qorib</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Hafalan Alfiyah Ibnu Malik 350 bait</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Uji Fasholatan lengkap</li>
+            </ul>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tafsir (Tafsirul Jalalain)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hadits (Riyadlus Sholihin)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Hadits (al-Qowaidul Asasiyah fi Ilmi
+                Hadits)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tauhid (Jauharoh at-Tauhid)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Fiqh (Fathul Mu'in)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ushul Fiqh (Mabadi' Ushul Fiqh wa Qowaidihi,
+                al-Waroqot)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Nahwu (Alfiyah Ibnu Malik, Qawa'idul I'rob,
+                al-I'rob)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Akhlaq (Ta'limul Muta'allim)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tarikh (Manaqib Aimmatil Arba'ah)</li>
+            </ul>
+          </div>
+          <div class="status-alert">
+            <i class="fas fa-user-clock"></i> Usia Minimal: <strong>15 tahun.</strong>
+          </div>
+        </div>
+        <!-- MADRASAH I'DADIYAH (PERSIAPAN MHM) -->
+        <div class="class-card reveal fade-bottom delay-200">
+          <div class="class-card-header">
+            <h3>MADRASAH I'DADIYAH (PERSIAPAN MHM)</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <div class="no-exam-text">-</div>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <div class="grid-2">
+              <ul class="info-list">
+                <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qur'an</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Hadits (Arba'in An-Nawawi)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Mukhtarul Hadits As-Syarif</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Tauhid (Matnu Sanusi)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Tauhid (Matnu Bajuri)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Tauhid ('Aqidatul 'Awam)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh (Fathul Qorib)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh (Sullamut Taufiq)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh (Safinatun Naja)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Nahwu (Al-Amrithi)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Nahwu (Al-Ajurumiyah)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Nahwu (Al-'Awamil)</li>
+              </ul>
+              <ul class="info-list">
+                <li class="info-item"><i class="fas fa-check-circle"></i> Shorof (Al-Maqshud)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Shorof (Amtsilah At-Tashrifiyah)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Shorof (Al-I’lal)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Akhlaq (Tahliyah wa Targhib)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Akhlaq (Taisirul Kholaq)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Akhlaq (Nadhmul Mathlab)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Tajwid (Tuhfatul Athfal)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Tajwid (Hidayatus Shibyan)</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Imla' Arab</li>
+                <li class="info-item"><i class="fas fa-check-circle"></i> Kitabah Pegon</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MA'HAD ALY SECTION -->
+      <h2 class="materi-section-title reveal fade-left">Ma’had Aly <small>(Lirboyo)</small></h2>
+
+      <div class="grid-2">
+
+        <!-- MARHALAH ULA -->
+        <div class="class-card reveal fade-bottom">
+          <div class="class-card-header">
+            <h3>MA'HAD ALY - MARHALAH ULA</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <h4 style="color:var(--primary); margin-bottom:0.5rem; font-size: 0.95rem;">UJIAN TULIS:</h4>
+            <ul class="info-list" style="margin-bottom:1rem;">
+              <li class="info-item"><i class="fas fa-edit"></i> Balaghah (Al-Jauharul Maknun)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Nahwu Shorof (Alfiyah Ibn Malik)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Ushul Fiqh (Lubbul Ushul)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Imla' (Arab)</li>
+            </ul>
+            <h4 style="color:var(--primary); margin-bottom:0.5rem; font-size: 0.95rem;">UJIAN LISAN:</h4>
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-microphone"></i> Fiqh (membaca Fathul Mu’in)</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Hafalan Qur'an (Juz 1)</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Hadits Jami’ul ‘Ulum (1-25)</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Fasholatan lengkap</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> ‘Aqo’id 50</li>
+            </ul>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tafsir (Muhtashor Tafsir Ayatil Ahkam)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tafsir (At-Tahbir)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hadits (Tahdzibut Targhib Wat Tarhib)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Hadits (Alfiyah Suyuthi)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hadits Ahkam (‘Umdatul Ahkam)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tauhid (Mafahim YA)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Fiqh (Al-Mahalli)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh Muwathonah (Fikih Kebangsaan)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ushul Fiqh (Syarhu Jam’il Jawami’)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Qoidah Ushuliyah wa Fiqhiyah (Muhtashor min
+                Qowa’idul ‘Alla’i wa Kalaamil Asnawi)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Akhlaq (Mauidhotul Mu'minin)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Salalimul Fudlola'</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Aswaja (Risalah Aswaja)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Kawakibul Lama’ah</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Balaghah (‘Uqudul Juman)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Falak (Tashilul Amtsilah)</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- MARHALAH TSANIYAH -->
+        <div class="class-card reveal fade-bottom delay-100">
+          <div class="class-card-header">
+            <h3>MA'HAD ALY - MARHALAH TSANIYAH</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <h4 style="color:var(--primary); margin-bottom:1rem;">UJIAN TULIS:</h4>
+            <ul class="info-list" style="margin-bottom:1.5rem;">
+              <li class="info-item"><i class="fas fa-edit"></i> Fikih Kebangsaan (2 soal uraian)</li>
+            </ul>
+            <h4 style="color:var(--primary); margin-bottom:1rem;">UJIAN LISAN:</h4>
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-microphone"></i> Kitab Kanzurroghibin (Syarh Al-Mahalli ‘alal
+                Minhaj)</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Munaqosyah Fikih Kebangsaan</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Psikotest</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Hafalan Qur'an 3 juz*</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Hafalan 150 Hadits Jami’ul ‘Ulum*</li>
+            </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem;">*Bagi mahasantri baru non-lulusan
+              Marhalah Ula Ma'had Aly Lirboyo</p>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tafsir (Rowa'iul Bayan)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tafsir (Al-Itqon Fi Ulum Al-Qur'an)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hadits (Syarah Umdatul Ahkam)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Hadits (Muqoddimah ibn Sholah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh Muwathonah (Nasjul Wi'am Wata'shilil Wahdah
+                al ijtima'iyah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh Muwathonah (Nasyru Rahmatil Islam)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh Muwathonah (Al Jihad wa Wathoniyatu Ghoiril
+                Muslim)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ushul Fiqh (Al-Kaukab As-Sathi’)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Qoidah Ushuliyah wa Fiqhiyah (Qowaidul Ahkam)
+              </li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Akhlaq (Metode Penelitian)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Metode Penelitian</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Sejarah Peradaban Islam</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Sosiologi</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Psikologi Islam</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Pengantar Filsafat Islam</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- MADRASAH IHYA' ULUMIDDIN (MIU) -->
+      <h2 class="materi-section-title reveal fade-left">Madrasah Ihya' Ulumiddin <small>(MIU)</small></h2>
+
+      <div class="grid-3">
+
+        <!-- KELAS I ULA MIU -->
+        <div class="class-card reveal fade-bottom">
+          <div class="class-card-header">
+            <h3>MIU - Kelas I Ula</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <div class="no-exam-text">Tanpa ujian.</div>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qur’an</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hadis (Arba’in An-Nahdliyah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Mukhtar Al-Hadis As-Syarif</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tauhid (Zadul Mubtadi)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh (Fasholatan)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tajwid (Tajwid Jawan)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fathur Rohman</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hidayatus Shibyan</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Akhlaq (Nadzm Alala)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ta’lim Al-Muta’allim</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Kitabah (Pegon I)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tarikh (Pedoman Ke-NU-an I)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- KELAS II ULA MIU -->
+        <div class="class-card reveal fade-bottom delay-100">
+          <div class="class-card-header">
+            <h3>MIU - Kelas II Ula</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <h4 style="color:var(--primary); margin-bottom:0.5rem;">UJIAN TULIS:</h4>
+            <ul class="info-list" style="margin-bottom:1rem;">
+              <li class="info-item"><i class="fas fa-edit"></i> Tauhid (Zadul Al-Mubtadi’ I)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Fiqh (Safinat As-Sholah)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Imla’ (Pegon I)</li>
+            </ul>
+            <h4 style="color:var(--primary); margin-bottom:0.5rem;">UJIAN LISAN:</h4>
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-microphone"></i> ‘Aqo’id 50</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Fasholatan lengkap</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Surat pendek (An-Naas s.d. At-Takatsur)</li>
+            </ul>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qur’an</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tauhid (Zadul Mubtadi’)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tajwid (Fathur Rohman)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh (Safinatun Naja)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Akhlaq (Nadzm Al-Mathlab)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Nahwu (Nadzm Jurumiyah Jawan)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Kitabah (Pegon II)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tarikh (Pedoman Ke-NU-an II)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- KELAS III ULA MIU -->
+        <div class="class-card reveal fade-bottom">
+          <div class="class-card-header">
+            <h3>MIU - Kelas III Ula</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <h4 style="color:var(--primary); margin-bottom:0.5rem;">UJIAN TULIS:</h4>
+            <ul class="info-list" style="margin-bottom:1rem;">
+              <li class="info-item"><i class="fas fa-edit"></i> Tauhid (Zadul Al-Mubtadi’ II)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Fiqh (Safina)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Nahwu (Jawan)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Imla’ (Pegon II)</li>
+            </ul>
+            <h4 style="color:var(--primary); margin-bottom:0.5rem;">UJIAN LISAN:</h4>
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-microphone"></i> ‘Aqo’id 50</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Fasholatan lengkap</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Surat pendek (An-Naas s.d. Al-‘Alaq)</li>
+            </ul>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qur’an</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tauhid (Aqidatul ‘Awam)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tajwid (Hidayatus Shibyan)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh (Hidayatul Mubtadi)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Akhlaq (Taisir Al-Kholoq)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Nahwu (‘Awamil)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Nahwu (Al-Jurumiyah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Shorof (Qoidah Natsar)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Kitabah (Pegon III)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tarikh (Pedoman Ke-NU-an III)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- KELAS I WUSTHO MIU -->
+        <div class="class-card reveal fade-bottom delay-100">
+          <div class="class-card-header">
+            <h3>MIU - Kelas I Wustho</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <h4 style="color:var(--primary); margin-bottom:0.5rem;">UJIAN TULIS:</h4>
+            <ul class="info-list" style="margin-bottom:1rem;">
+              <li class="info-item"><i class="fas fa-edit"></i> Tauhid (‘Aqidat Al-‘Awam)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Nahwu (Ajurumiyah & ‘Awamil)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Shorof (Natsar)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Imla’ (Pegon III)</li>
+            </ul>
+            <h4 style="color:var(--primary); margin-bottom:0.5rem;">UJIAN LISAN:</h4>
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-microphone"></i> ‘Aqo’id 50</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Fasholatan lengkap</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Tashrif Istilahi (Bab I–VI)</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Surat An-Naas s.d. Ad-Dhuha</li>
+            </ul>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list" style="font-size: 0.95rem;">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qur’an</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tafsir (Tafsir Al-Jalalain)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hadis (Arba’in An-Nawawi)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hadis (Bulughul Marom)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tauhid (Matn Al-Ibrohim)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tauhid (Khoridatul Bahiyyah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tajwid (Tuhfatul Athfal)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tajwid (Al-Jazariyah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh (Sullam At-Taufiq)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh (Fathul Qorib)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Akhlaq (Ta’lim Al-Muta’allim)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Akhlaq (Washoya)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Nahwu (Al-Jurumiyah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Nahwu (Fushul Al-Fikriyah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Nahwu (Al-‘Imrithi)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Shorof (Al-Amtsilah At-Tashrifiyah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Shorof (Al-I’lal)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Shorof (Al-Maqshud)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Imla’ (Qowaid Al-Imla’)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tarikh (Fath Al-Mubin)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Organisasi Administrasi</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- KELAS I ULYA MIU -->
+        <div class="class-card reveal fade-bottom">
+          <div class="class-card-header">
+            <h3>MIU - Kelas I Ulya</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <h4 style="color:var(--primary); margin-bottom:0.5rem;">UJIAN TULIS:</h4>
+            <ul class="info-list" style="margin-bottom:1rem;">
+              <li class="info-item"><i class="fas fa-edit"></i> Tauhid (Sanusiyyah)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Nahwu (Nadzm Al-‘Imrithy)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Shorof (Maqshud & Amtsilah)</li>
+              <li class="info-item"><i class="fas fa-edit"></i> Imla’ (Arab)</li>
+            </ul>
+            <h4 style="color:var(--primary); margin-bottom:0.5rem;">UJIAN LISAN:</h4>
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-microphone"></i> ‘Aqo’id 50</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Fasholatan lengkap</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Fiqh (membaca Fath Al-Qorib)</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Hafalan Alfiyah (250 bait)</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Membaca Al-Qur’an</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Surat An-Naas s.d. Asy-Syams</li>
+            </ul>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <ul class="info-list" style="font-size: 0.95rem;">
+              <li class="info-item"><i class="fas fa-check-circle"></i> Al-Qur’an</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tafsir (Tafsir Al-Jalalain)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Hadis (Riyad As-Sholihin)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tauhid (Jawahir Al-Kalamiyyah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Tauhid (Kifayatul ‘Awam)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Fiqh (Fath Al-Mu’in)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ushul Fiqh (Al-Waroqot)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Qoidah Fiqh (Faroid Al-Bahiyyah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Mawaris (‘Uddat Al-Farid)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Akhlaq (Mau’idzot Al-Mu’minin)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Akhlaq (Minhaj Al-‘Abidin)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Nahwu (Alfiyah Ibn Malik)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Nahwu (Qowa’id Al-I’rob)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Balaghah (Jauhar Al-Maknun)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Hadis (Baiquniyah)</li>
+              <li class="info-item"><i class="fas fa-check-circle"></i> Ilmu Tafsir (Imam Ad-Dirayah)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- KELAS I'DADIYAH MIU -->
+        <div class="class-card reveal fade-bottom delay-100">
+          <div class="class-card-header">
+            <h3>MIU - Kelas I'dadiyah</h3>
+          </div>
+          <div class="inner-tab-switcher">
+            <button class="inner-tab-btn active" onclick="switchInnerTab(this, 'materi')">
+              <i class="fas fa-book-open"></i> Materi Ujian
+            </button>
+            <button class="inner-tab-btn" onclick="switchInnerTab(this, 'kurikulum')">
+              <i class="fas fa-scroll"></i> Kurikulum
+            </button>
+          </div>
+          <div class="inner-tab-content active" data-type="materi">
+            <h4 style="color:var(--primary); margin-bottom:0.5rem;">UJIAN TULIS:</h4>
+            <ul class="info-list" style="margin-bottom:1rem;">
+              <li class="info-item"><i class="fas fa-edit"></i> Imla’ (Pegon & Memaknai)</li>
+            </ul>
+            <h4 style="color:var(--primary); margin-bottom:0.5rem;">UJIAN LISAN:</h4>
+            <ul class="info-list">
+              <li class="info-item"><i class="fas fa-microphone"></i> ‘Aqo’id 50</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Fasholatan lengkap</li>
+              <li class="info-item"><i class="fas fa-microphone"></i> Surat pendek (An-Naas s.d. Al-‘Alaq)</li>
+            </ul>
+          </div>
+          <div class="inner-tab-content" data-type="kurikulum">
+            <div class="no-exam-text" style="font-size: 1rem; padding: 2rem 0;">Penguatan Kitabah Pegon dan Pemaknaan
+              Kitab.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+  <!-- FOOTER LOADER -->
+  <footer id="footer-placeholder"></footer>
+
+  <!-- SCRIPTS -->
+  <script src="js/load-components.js"></script>
+  <script>
+    function switchInnerTab(btn, type) {
+      const card = btn.closest('.class-card');
+
+      // Update buttons
+      card.querySelectorAll('.inner-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Update contents
+      card.querySelectorAll('.inner-tab-content').forEach(content => {
+        content.classList.remove('active');
+        if (content.getAttribute('data-type') === type) {
+          content.classList.add('active');
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

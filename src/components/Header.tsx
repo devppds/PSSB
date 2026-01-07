@@ -7,7 +7,7 @@ export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     return (
-        <>
+        <header className="header-wrapper">
             <div className="header-top-row">
                 <div className="header-inner">
                     <div className="header-logo-section">
@@ -80,6 +80,6 @@ export default function Header() {
 
                 </div>
             </div>
-        </>
+        </header>
     );
 }

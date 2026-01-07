@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Footer() {
     return (
-        <>
+        <footer>
             <div className="footer-wrapper">
                 <div className="footer-content">
                     <div className="footer-main">
@@ -56,18 +56,18 @@ export default function Footer() {
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="footer-legal">
-                <div className="footer-legal-content">
-                    <p>
-                        <i className="far fa-copyright"></i>
-                        <span id="year"> {new Date().getFullYear()}</span>
-                        <Link href="/data-santri" style={{ color: 'inherit', textDecoration: 'none' }}><strong> PPDS Lirboyo</strong></Link> - All Rights Reserved.
-                    </p>
-                    <a href="https://wa.me/6285171542025" target="_blank" className="dev-link">
-                        <i className="fas fa-code"></i> Developed by Secretary - Cyber PPDS
-                    </a>
+                <div className="footer-legal">
+                    <div className="footer-legal-content">
+                        <p>
+                            <i className="far fa-copyright"></i>
+                            <span id="year"> {new Date().getFullYear()}</span>
+                            <Link href="/data-santri" style={{ color: 'inherit', textDecoration: 'none' }}><strong> PPDS Lirboyo</strong></Link> - All Rights Reserved.
+                        </p>
+                        <a href="https://wa.me/6285171542025" target="_blank" className="dev-link">
+                            <i className="fas fa-code"></i> Developed by Secretary - Cyber PPDS
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -79,6 +79,6 @@ export default function Footer() {
                     <i className="fab fa-whatsapp"></i>
                 </button>
             </div>
-        </>
+        </footer>
     );
 }

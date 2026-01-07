@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "chrome",
+            "name": "https://pssb-ds.pages.dev/",
+            "request": "launch",
+            "url": "https://pssb-ds.pages.dev/"
+        }
+    ]
+}

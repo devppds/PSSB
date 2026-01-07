@@ -1,12 +1,20 @@
 "use client";
 import "@/app/styles/ppdb.css";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import Link from "next/link";
+
+// Interfaces for Region Data
+interface Region {
+    id: string;
+    name: string;
+}
 
 export default function PPDBPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState<any>({});
     const [errors, setErrors] = useState<any>({});
+
+    // Validasi Field "Lainnya"
     const [otherFields, setOtherFields] = useState({
         agama: false,
         pendidikanAyah: false,
@@ -15,12 +23,88 @@ export default function PPDBPage() {
         pekerjaanIbu: false
     });
 
+    // --- STATE WILAYAH (API INDONESIA) ---
+    const [provinces, setProvinces] = useState<Region[]>([]);
+    const [regencies, setRegencies] = useState<Region[]>([]);
+    const [districts, setDistricts] = useState<Region[]>([]);
+    const [villages, setVillages] = useState<Region[]>([]);
+
+    const [selectedProvince, setSelectedProvince] = useState("");
+    const [selectedRegency, setSelectedRegency] = useState("");
+    const [selectedDistrict, setSelectedDistrict] = useState("");
+    const [selectedVillage, setSelectedVillage] = useState("");
+
+    // 1. Fetch Provinces on Mount
+    useEffect(() => {
+        fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
+            .then(res => res.json())
+            .then(data => setProvinces(data))
+            .catch(err => console.error("Gagal ambil provinsi", err));
+    }, []);
+
+    // 2. Fetch Regencies (Kab/Kota) when Province changes
+    useEffect(() => {
+        if (selectedProvince) {
+            fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${selectedProvince}.json`)
+                .then(res => res.json())
+                .then(data => setRegencies(data))
+                .catch(err => console.error("Gagal ambil kabupaten", err));
+            setRegencies([]);
+            setDistricts([]);
+            setVillages([]);
+            setFormData((prev: any) => ({ ...prev, Address1_City: "", Address1_AddressLine2: "", Address1_Region: "" })); // Reset related fields
+        }
+    }, [selectedProvince]);
+
+    // 3. Fetch Districts (Kecamatan) when Regency changes
+    useEffect(() => {
+        if (selectedRegency) {
+            fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${selectedRegency}.json`)
+                .then(res => res.json())
+                .then(data => setDistricts(data))
+                .catch(err => console.error("Gagal ambil kecamatan", err));
+            setDistricts([]);
+            setVillages([]);
+            setFormData((prev: any) => ({ ...prev, Address1_AddressLine2: "" }));
+        }
+    }, [selectedRegency]);
+
+    // 4. Fetch Villages (Desa/Kelurahan) when District changes
+    useEffect(() => {
+        if (selectedDistrict) {
+            fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${selectedDistrict}.json`)
+                .then(res => res.json())
+                .then(data => setVillages(data))
+                .catch(err => console.error("Gagal ambil desa", err));
+            setVillages([]);
+        }
+    }, [selectedDistrict]);
+
+    // HANDLERS
+    const handleRegionChange = (e: ChangeEvent<HTMLSelectElement>, type: 'prov' | 'reg' | 'dis' | 'vil') => {
+        const { value, options, selectedIndex } = e.target;
+        const label = options[selectedIndex].text;
+
+        if (type === 'prov') {
+            setSelectedProvince(value);
+            setFormData((prev: any) => ({ ...prev, Address1_Region: label }));
+        } else if (type === 'reg') {
+            setSelectedRegency(value);
+            setFormData((prev: any) => ({ ...prev, Address1_City: label }));
+        } else if (type === 'dis') {
+            setSelectedDistrict(value);
+            setFormData((prev: any) => ({ ...prev, Address1_AddressLine2: label })); // Using AddressLine2 for Kecamatan
+        } else if (type === 'vil') {
+            setSelectedVillage(value);
+            // Desa/Kelurahan kita gabung ke detail jalan atau field khusus jika ada. 
+            // Disini kita masukkan ke variable sementara atau gabung ke alamat baris 1.
+            setFormData((prev: any) => ({ ...prev, Address1_Village: label }));
+        }
+    };
+
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData((prev: any) => ({ ...prev, [name]: value }));
-        if (errors[name]) {
-            setErrors((prev: any) => ({ ...prev, [name]: null }));
-        }
 
         // Handle "Lainnya" toggle
         if (name === "Dropdown2") setOtherFields(p => ({ ...p, agama: value === "Lainnya" }));
@@ -34,21 +118,19 @@ export default function PPDBPage() {
         const { name, files } = e.target;
         if (files && files[0]) {
             setFormData((prev: any) => ({ ...prev, [name]: files[0] }));
-            if (errors[name]) {
-                setErrors((prev: any) => ({ ...prev, [name]: null }));
-            }
         }
     };
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        // TODO: Implement Validation and API Call
+        // Validasi Simple
+        console.log("Submitting Data:", formData);
 
         // Mock success
         setTimeout(() => {
             setIsLoading(false);
-            alert("Pendaftaran Berhasil Dikirim! (Simulasi - Backend belum terhubung)");
+            alert("Pendaftaran Berhasil Dikirim! (Data Wilayah: " + formData.Address1_Region + ", " + formData.Address1_City + ")");
         }, 2000);
     };
 
@@ -338,42 +420,68 @@ export default function PPDBPage() {
                                         </div>
                                     </div>
                                 </div>
-                                {/* More Ibu fields if needed... similar pattern */}
                             </div>
 
-                            {/* SECTION 4: ALAMAT LENGKAP */}
+                            {/* SECTION 4: ALAMAT LENGKAP - UPDATED WITH AUTOFILL */}
                             <div className="form-section-card">
                                 <div className="section-header">
                                     <div className="section-icon"><i className="fas fa-map-marker-alt"></i></div>
                                     <h3>Alamat Lengkap Domisili</h3>
                                 </div>
-                                <div className="zf-tempFrmWrapper">
-                                    <label className="zf-labelName">Jalan / Desa / RT & RW <em className="zf-important">*</em></label>
-                                    <input type="text" name="Address1_AddressLine1" placeholder="Nama Jalan, Nama Desa/Dusun, RT/RW" onChange={handleInputChange} required />
-                                </div>
-                                <div className="custom-grid" style={{ marginTop: "1rem" }}>
+
+                                <div className="custom-grid">
                                     <div className="zf-tempFrmWrapper">
                                         <label className="zf-labelName">Provinsi <em className="zf-important">*</em></label>
-                                        <select className="zf-form-sBox" name="Address1_Region" onChange={handleInputChange}>
-                                            <option value="">Pilih Provinsi (Manual Input for now)</option>
-                                            <option value="Jawa Timur">Jawa Timur</option>
-                                            <option value="Jawa Tengah">Jawa Tengah</option>
-                                            {/* Add more or use API */}
+                                        <select className="zf-form-sBox" value={selectedProvince} onChange={(e) => handleRegionChange(e, 'prov')} required>
+                                            <option value="">Pilih Provinsi</option>
+                                            {provinces.map(prov => (
+                                                <option key={prov.id} value={prov.id}>{prov.name}</option>
+                                            ))}
                                         </select>
                                     </div>
+
                                     <div className="zf-tempFrmWrapper">
                                         <label className="zf-labelName">Kota/Kabupaten <em className="zf-important">*</em></label>
-                                        <input type="text" name="Address1_City" placeholder="Kota/Kabupaten" onChange={handleInputChange} required />
+                                        <select className="zf-form-sBox" value={selectedRegency} onChange={(e) => handleRegionChange(e, 'reg')} disabled={!selectedProvince} required>
+                                            <option value="">{selectedProvince ? "Pilih Kota/Kab" : "Pilih Provinsi Dulu"}</option>
+                                            {regencies.map(reg => (
+                                                <option key={reg.id} value={reg.id}>{reg.name}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                 </div>
+
                                 <div className="custom-grid" style={{ marginTop: "1rem" }}>
                                     <div className="zf-tempFrmWrapper">
                                         <label className="zf-labelName">Kecamatan <em className="zf-important">*</em></label>
-                                        <input type="text" name="Address1_AddressLine2" placeholder="Kecamatan" onChange={handleInputChange} required />
+                                        <select className="zf-form-sBox" value={selectedDistrict} onChange={(e) => handleRegionChange(e, 'dis')} disabled={!selectedRegency} required>
+                                            <option value="">{selectedRegency ? "Pilih Kecamatan" : "Pilih Kota/Kab Dulu"}</option>
+                                            {districts.map(dis => (
+                                                <option key={dis.id} value={dis.id}>{dis.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="zf-tempFrmWrapper">
+                                        <label className="zf-labelName">Desa/Kelurahan <em className="zf-important">*</em></label>
+                                        <select className="zf-form-sBox" value={selectedVillage} onChange={(e) => handleRegionChange(e, 'vil')} disabled={!selectedDistrict} required>
+                                            <option value="">{selectedDistrict ? "Pilih Desa/Kelurahan" : "Pilih Kecamatan Dulu"}</option>
+                                            {villages.map(vil => (
+                                                <option key={vil.id} value={vil.id}>{vil.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="custom-grid" style={{ marginTop: "1rem" }}>
+                                    <div className="zf-tempFrmWrapper">
+                                        <label className="zf-labelName">Kode Pos (Otomatis/Manual)</label>
+                                        {/* Catatan: API Emsifa tidak selalu return kode pos, jadi user tetap bisa edit */}
+                                        <input type="text" name="Address1_ZipCode" placeholder="Kode Pos" onChange={handleInputChange} />
                                     </div>
                                     <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Kode Pos <em className="zf-important">*</em></label>
-                                        <input type="text" name="Address1_ZipCode" placeholder="Kode Pos" onChange={handleInputChange} required />
+                                        <label className="zf-labelName">Jalan / RT & RW <em className="zf-important">*</em></label>
+                                        <input type="text" name="Address1_AddressLine1" placeholder="Nama Jalan, No. Rumah, RT/RW" onChange={handleInputChange} required />
                                     </div>
                                 </div>
                             </div>

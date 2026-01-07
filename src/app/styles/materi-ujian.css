@@ -1,213 +1,160 @@
-/* Premium Page Styles */
-.section-wrapper {
+/* Modern Luxury Styling for Materi & Kurikulum Page */
+
+.materi-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: min-content;
+    gap: 1.5rem;
     max-width: 1280px;
     margin: -3rem auto 4rem;
-    position: relative;
-    z-index: 10;
     padding: 0 1.5rem;
-}
-
-/* Integrated Class Card - Synchronized with Main Theme */
-.class-card {
-    background: var(--bg-glass);
-    backdrop-filter: blur(10px);
-    border-radius: var(--radius-xl);
-    padding: 1.5rem;
-    color: var(--text-main);
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow-lg);
     position: relative;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    transition: border-color 0.4s ease, box-shadow 0.4s ease;
-    cursor: default;
+    z-index: 20;
 }
 
-.class-card:hover {
-    box-shadow: 0 15px 35px rgba(197, 160, 89, 0.15), 0 0 15px rgba(197, 160, 89, 0.2);
-    border-color: var(--accent-gold);
-}
-
-.class-card-header {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem;
-    text-align: center;
-    margin-bottom: 2rem;
-    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
-}
-
-.class-card-header h3 {
-    margin: 0;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.inner-tab-switcher {
+/* Glass Card Enhanced */
+.glass-card-materi {
+    background: var(--bg-glass);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-2xl);
+    padding: 2rem;
+    box-shadow: var(--shadow-premium);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    height: 100%;
     display: flex;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    padding: 0 1rem;
-    overflow-x: auto;
-    scrollbar-width: none;
+    flex-direction: column;
+}
+
+.glass-card-materi:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 30px 40px -15px rgba(0, 0, 0, 0.1);
+    border-color: var(--gold-main);
+}
+
+/* Bento Sizing */
+.materi-item-large {
+    grid-column: span 12;
+}
+
+.materi-item-med {
+    grid-column: span 6;
+}
+
+.materi-item-small {
+    grid-column: span 4;
+}
+
+/* Section Header Decoration */
+.materi-category-header {
+    grid-column: span 12;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.materi-category-header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 80%;
+    background: var(--gold-gradient);
+    border-radius: 10px;
+}
+
+.materi-category-header h2 {
+    font-family: var(--font-playfair), serif;
+    font-size: 2rem;
+    color: var(--primary-dark);
+}
+
+/* Tab Styles - Premium Integrated */
+.materi-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
     border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
 }
 
-.inner-tab-switcher::-webkit-scrollbar {
-    display: none;
-}
-
-.inner-tab-btn {
-    background: transparent;
+.materi-tab-btn {
+    background: none;
     border: none;
-    color: var(--text-muted);
+    padding: 0.75rem 1.25rem;
     font-weight: 700;
-    font-size: 0.95rem;
-    padding: 0.75rem 0.25rem;
+    color: var(--text-muted);
     cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    border-bottom: 3px solid transparent;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    white-space: nowrap;
+    gap: 8px;
 }
 
-.inner-tab-btn.active {
+.materi-tab-btn.active {
     color: var(--primary);
-    border-bottom-color: var(--accent-gold);
+    background: var(--grad-premium);
 }
 
-.inner-tab-btn i {
-    font-size: 1.1rem;
-}
-
-.inner-tab-content {
-    /* display: none; Managed by React */
-    background: rgba(248, 250, 252, 0.8);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-    min-height: 250px;
-    animation: fadeIn 0.4s ease;
-    border: 1px solid var(--border-color);
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Content Lists */
-.info-list {
+/* List Styling Luxury */
+.materi-list {
     list-style: none;
     padding: 0;
     margin: 0;
+    flex-grow: 1;
 }
 
-.info-item {
+.materi-li {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 1.25rem;
-    font-size: 1.05rem;
-    line-height: 1.5;
-    color: var(--text-main);
-}
-
-.info-item i {
-    color: var(--accent-gold);
-    margin-top: 0.25rem;
-    font-size: 1.2rem;
-}
-
-.status-alert {
-    background: var(--accent-gold-light);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem 1.5rem;
-    margin-top: 2rem;
-    color: var(--primary-dark);
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
     font-size: 0.95rem;
-    line-height: 1.6;
-    border: 1px solid rgba(197, 160, 89, 0.3);
-    font-weight: 500;
 }
 
-.no-exam-text {
-    text-align: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
+.materi-li i {
+    color: var(--gold-main);
+    margin-top: 4px;
+    font-size: 1rem;
+}
+
+/* Highlight Indicator */
+.age-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold-light);
+    color: var(--gold-deep);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
     font-weight: 700;
-    padding: 3rem 0;
-    color: var(--primary);
+    margin-top: auto;
 }
 
-/* Category Labels */
-.materi-section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    color: var(--primary-dark);
-    margin: 4rem 0 2rem;
-    padding-left: 1.5rem;
-    border-left: 6px solid var(--accent-gold);
-}
+/* RESPONSIVE */
+@media (max-width: 992px) {
 
-/* Grid Layouts */
-.grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-}
-
-.grid-2 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-}
-
-@media (max-width: 1200px) {
-    .grid-3 {
-        grid-template-columns: repeat(2, 1fr);
+    .materi-item-med,
+    .materi-item-small {
+        grid-column: span 12;
     }
 }
 
 @media (max-width: 768px) {
-    .materi-hero {
-        padding: 8rem 1.5rem 4rem;
+    .materi-grid {
+        margin-top: -2rem;
+        gap: 1.25rem;
     }
 
-    .grid-3,
-    .grid-2 {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    .class-card {
-        border-radius: 25px;
-        padding: 1rem;
-    }
-
-    .class-card-header h3 {
-        font-size: 1.1rem;
-    }
-
-    .inner-tab-btn {
-        font-size: 0.85rem;
-        gap: 0.5rem;
-    }
-
-    .materi-section-title {
-        font-size: 1.8rem;
+    .glass-card-materi {
+        padding: 1.5rem;
     }
 }

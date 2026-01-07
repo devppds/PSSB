@@ -139,17 +139,49 @@
     margin-top: auto;
 }
 
+/* Tab Animation */
+.tab-content-anim {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* RESPONSIVE */
 @media (max-width: 992px) {
+    .materi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 Columns on Tablet */
+    }
 
     .materi-item-med,
     .materi-item-small {
-        grid-column: span 12;
+        grid-column: span 1;
+        /* reset span */
+    }
+
+    .materi-item-large {
+        grid-column: span 2;
+    }
+
+    .materi-category-header {
+        grid-column: span 2;
     }
 }
 
 @media (max-width: 768px) {
     .materi-grid {
+        display: flex;
+        flex-direction: column;
         margin-top: -2rem;
         gap: 1.25rem;
     }

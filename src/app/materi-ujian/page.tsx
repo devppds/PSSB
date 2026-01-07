@@ -322,7 +322,7 @@ export default function MateriUjianPage() {
 
                 <BentoMateriCard
                     title="MIU - KELAS I ULA"
-                    size="materi-item-med"
+                    size="materi-item-large"
                     materi={<div style={{ textAlign: 'center', padding: '1.5rem', color: 'var(--text-muted)' }}>Pendaftaran Tanpa Ujian Seleksi</div>}
                     kurikulum={<div style={{ textAlign: 'center', padding: '1.5rem', color: 'var(--text-muted)' }}>Kurikulum Standar MIU Lirboyo</div>}
                 />

@@ -2,7 +2,8 @@
 
 .materi-grid {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    /* Prevent content blowout */
     grid-auto-rows: min-content;
     gap: 1.5rem;
     max-width: 1280px;
@@ -76,30 +77,57 @@
 /* Tab Styles - Premium Integrated */
 .materi-tabs {
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    /* Allow wrapping */
+    gap: 0.5rem;
+    /* Tighter gap */
     margin-bottom: 1.5rem;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.5rem;
 }
 
 .materi-tab-btn {
-    background: none;
+    flex: 1;
+    /* Distribute space */
+    background: rgba(37, 99, 235, 0.05);
+    /* Slight tint background */
     border: none;
-    padding: 0.75rem 1.25rem;
+    padding: 0.6rem 1rem;
+    /* Reduced padding */
     font-weight: 700;
     color: var(--text-muted);
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 8px;
     transition: all 0.3s;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    /* Center content */
+    gap: 6px;
+    white-space: nowrap;
+    /* Prevent word break usually */
+}
+
+.materi-tab-btn:hover {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
 }
 
 .materi-tab-btn.active {
-    color: var(--primary);
+    color: white;
     background: var(--grad-premium);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+    /* Add shadow to active */
+}
+
+/* Make text wrap on very small buttons */
+@media (max-width: 1200px) {
+    .materi-tab-btn {
+        flex-basis: 100%;
+        /* Full width on smaller/cramped screens */
+        justify-content: flex-start;
+    }
 }
 
 /* List Styling Luxury */

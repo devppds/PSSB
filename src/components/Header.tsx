@@ -51,9 +51,7 @@ export default function Header() {
                         </Link>
                     </nav>
 
-                    <div className="header-date-display" id="header-date-display">
-                        <span id="date-masehi"></span> | <span id="date-hijri"></span>
-                    </div>
+
                 </div>
             </div>
 
@@ -79,10 +77,7 @@ export default function Header() {
                             Daftar Online
                         </Link>
                     </nav>
-                    <div className="mobile-calendar">
-                        <p id="mobile-date-masehi"></p>
-                        <p id="mobile-date-hijri"></p>
-                    </div>
+
                 </div>
             </div>
         </>

@@ -19,6 +19,7 @@ export default function AppleAdminPage() {
     const [selectedSantri, setSelectedSantri] = useState<any>(null);
     const [toasts, setToasts] = useState<any[]>([]);
     const [confirmDialog, setConfirmDialog] = useState<any>(null);
+    const [galleryModal, setGalleryModal] = useState<{ isOpen: boolean, item: any }>({ isOpen: false, item: null });
 
     const showToast = (title: string, message: string, type: 'success' | 'error' | 'info' = 'success') => {
         const id = Date.now();
@@ -130,7 +131,12 @@ export default function AppleAdminPage() {
 
     const handleSaveGlobal = async (slug: string) => {
         setSaving(true);
-        const items = globalContent.filter(i => i.section_slug === slug);
+        // Filter items for this slug. For new items (string IDs), we map id to null so DB autocreates.
+        const items = globalContent.filter(i => i.section_slug === slug).map(i => ({
+            ...i,
+            id: typeof i.id === 'string' ? null : i.id
+        }));
+
         try {
             await fetch("/api/content/update-global", {
                 method: "POST",
@@ -138,8 +144,74 @@ export default function AppleAdminPage() {
                 body: JSON.stringify({ items })
             });
             showToast("Data Disimpan", `Bagian ${slug} berhasil diperbarui.`);
+            fetchData(); // Refresh to get real IDs
         } catch (err) { showToast("Gagal", "Gagal memperbarui konten.", "error"); }
         finally { setSaving(false); }
+    };
+
+    const handleAddGlobalItem = (slug: string) => {
+        const newItem = {
+            id: 'new-' + Date.now(),
+            section_slug: slug,
+            label: 'Item Baru',
+            icon: 'fa-circle',
+            order_index: globalContent.filter(i => i.section_slug === slug).length + 1
+        };
+        setGlobalContent([...globalContent, newItem]);
+    };
+
+    const handleDeleteGlobalItem = async (id: any) => {
+        // If it's a new item (string ID), just remove from state
+        if (typeof id === 'string') {
+            setGlobalContent(prev => prev.filter(i => i.id !== id));
+            return;
+        }
+
+        confirmAction("Hapus Item?", "Item akan dihapus permanen.", async () => {
+            try {
+                const res = await fetch("/api/content/update-global", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id })
+                });
+                if (res.ok) {
+                    showToast("Terhapus", "Item berhasil dihapus.", "success");
+                    setGlobalContent(prev => prev.filter(i => i.id !== id));
+                }
+            } catch (e) { showToast("Error", "Gagal menghapus item.", "error"); }
+        });
+    };
+
+    // Gallery Handlers
+    const handleSaveGalleryItem = async () => {
+        try {
+            setSaving(true);
+            const res = await fetch('/api/content/gallery', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(galleryModal.item)
+            });
+            if (res.ok) {
+                showToast("Sukses", "Media berhasil disimpan.", "success");
+                setGalleryModal({ isOpen: false, item: null });
+                fetchData();
+            }
+        } catch (e) { showToast("Error", "Gagal menyimpan media.", "error"); }
+        finally { setSaving(false); }
+    };
+
+    const handleDeleteGalleryItem = (id: number) => {
+        confirmAction("Hapus Media?", "Media ini akan dihapus permanen.", async () => {
+            try {
+                await fetch('/api/content/gallery', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+                showToast("Terhapus", "Media berhasil dihapus.", "success");
+                setGallery(prev => prev.filter(p => p.id !== id));
+            } catch (e) { showToast("Error", "Gagal menghapus media.", "error"); }
+        });
     };
 
     const handleUpdateSantriStatus = async (id: number, status: string, catatan: string) => {
@@ -509,12 +581,23 @@ export default function AppleAdminPage() {
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <button onClick={() => handleSaveGlobal(item.section_slug)} className="apple-btn-primary" style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '8px' }}>Sinkron</button>
+                                                                <div style={{ display: 'flex', gap: '8px' }}>
+                                                                    <button onClick={() => handleSaveGlobal(item.section_slug)} className="apple-btn-primary" style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '8px' }}>Save</button>
+                                                                    <button onClick={() => handleDeleteGlobalItem(item.id)} className="apple-btn-secondary" style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '8px', color: '#ff3b30', background: 'rgba(255, 59, 48, 0.1)' }}><i className="fas fa-trash"></i></button>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     ))}
                                             </tbody>
                                         </table>
+                                    </div>
+                                    <div style={{ padding: '20px', borderTop: '1px solid rgba(0,0,0,0.05)', display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Tambah Item Baru:</span>
+                                        {['program-unggulan', 'program-tambahan', 'ekskul', 'misi', 'alur-pendaftaran'].map(slug => (
+                                            <button key={slug} onClick={() => handleAddGlobalItem(slug)} className="apple-badge badge-blue" style={{ border: 'none', cursor: 'pointer' }}>
+                                                + {slug.replace(/-/g, ' ')}
+                                            </button>
+                                        ))}
                                     </div>
                                 </div>
                             )}
@@ -524,8 +607,15 @@ export default function AppleAdminPage() {
                                     <h2 style={{ marginBottom: '20px' }}>Media Vault</h2>
                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
                                         {Array.isArray(gallery) && gallery.map((item, idx) => (
-                                            <div key={item.id || idx} className="apple-card" style={{ padding: '10px', margin: 0 }}>
-                                                <div style={{ width: '100%', height: '120px', borderRadius: '10px', overflow: 'hidden', marginBottom: '10px', background: '#eee' }}>
+                                            <div key={item.id || idx} className="apple-card" style={{ padding: '10px', margin: 0, position: 'relative' }}>
+                                                <button
+                                                    onClick={() => handleDeleteGalleryItem(item.id)}
+                                                    style={{ position: 'absolute', top: '5px', right: '5px', background: '#ff3b30', color: 'white', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer', zIndex: 10 }}>
+                                                    &times;
+                                                </button>
+                                                <div
+                                                    onClick={() => setGalleryModal({ isOpen: true, item })}
+                                                    style={{ width: '100%', height: '120px', borderRadius: '10px', overflow: 'hidden', marginBottom: '10px', background: '#eee', cursor: 'pointer' }}>
                                                     {item.image_url ? (
                                                         <img src={item.image_url} alt={item.title || "Gallery Item"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                                     ) : (
@@ -536,7 +626,10 @@ export default function AppleAdminPage() {
                                                 <div style={{ fontSize: '0.7rem', color: 'var(--apple-text-secondary)' }}>Index: {item.order_index}</div>
                                             </div>
                                         ))}
-                                        <div className="apple-card" style={{ padding: '10px', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed #ddd', cursor: 'pointer', minHeight: '180px' }}>
+                                        <div
+                                            onClick={() => setGalleryModal({ isOpen: true, item: { category: 'Kegiatan Santri', image_url: '', order_index: gallery.length + 1 } })}
+                                            className="apple-card"
+                                            style={{ padding: '10px', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed #ddd', cursor: 'pointer', minHeight: '180px' }}>
                                             <i className="fas fa-plus fa-2x" style={{ color: '#ddd' }}></i>
                                         </div>
                                     </div>
@@ -692,6 +785,35 @@ export default function AppleAdminPage() {
                     </div>
                 ))}
             </div>
+
+            {/* Gallery Modal */}
+            {galleryModal.isOpen && (
+                <div className="apple-modal-overlay" onClick={() => setGalleryModal({ isOpen: false, item: null })}>
+                    <div className="apple-confirm-card" style={{ maxWidth: '500px' }} onClick={e => e.stopPropagation()}>
+                        <div className="apple-confirm-title">Media Item</div>
+                        <div style={{ marginBottom: '20px' }}>
+                            <label className="apple-label">Judul / Caption</label>
+                            <input className="apple-input" value={galleryModal.item.title || ''} onChange={e => setGalleryModal({ ...galleryModal, item: { ...galleryModal.item, title: e.target.value } })} placeholder="Judul gambar..." />
+                        </div>
+                        <div style={{ marginBottom: '20px' }}>
+                            <label className="apple-label">Kategori</label>
+                            <input className="apple-input" value={galleryModal.item.category || ''} onChange={e => setGalleryModal({ ...galleryModal, item: { ...galleryModal.item, category: e.target.value } })} placeholder="Contoh: Kegiatan, Asrama, dll" />
+                        </div>
+                        <div style={{ marginBottom: '20px' }}>
+                            <label className="apple-label">URL Gambar</label>
+                            <input className="apple-input" value={galleryModal.item.image_url || ''} onChange={e => setGalleryModal({ ...galleryModal, item: { ...galleryModal.item, image_url: e.target.value } })} placeholder="https://..." />
+                        </div>
+                        <div style={{ marginBottom: '20px' }}>
+                            <label className="apple-label">Urutan</label>
+                            <input type="number" className="apple-input" value={galleryModal.item.order_index || 0} onChange={e => setGalleryModal({ ...galleryModal, item: { ...galleryModal.item, order_index: parseInt(e.target.value) } })} />
+                        </div>
+                        <div className="apple-confirm-btns">
+                            <button className="apple-confirm-btn btn-danger" style={{ background: 'var(--apple-blue)', color: 'white' }} onClick={handleSaveGalleryItem}>Simpan</button>
+                            <button className="apple-confirm-btn btn-secondary" onClick={() => setGalleryModal({ isOpen: false, item: null })}>Batal</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Apple Style Confirm Modal */}
             {

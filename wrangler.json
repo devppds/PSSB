@@ -1,0 +1,25 @@
+{
+    "name": "pssb-ds",
+    "main": ".open-next/worker.js",
+    "compatibility_date": "2024-09-23",
+    "compatibility_flags": [
+        "nodejs_compat"
+    ],
+    "assets": {
+        "binding": "ASSETS",
+        "directory": ".open-next/assets"
+    },
+    "d1_databases": [
+        {
+            "binding": "DB",
+            "database_name": "pendaftaran",
+            "database_id": "2a0d47f6-e32c-47c0-adc9-332cab4ca1cf"
+        }
+    ],
+    "kv_namespaces": [
+        {
+            "binding": "NEXT_CACHE_WORKERS_KV",
+            "id": "add72733183b4763b0c5ef1e9051c96c"
+        }
+    ]
+}

@@ -10,9 +10,10 @@ INSERT INTO global_content (section_slug, label, description, icon, order_index)
 -- 2. Programs Additional (Section: program-tambahan)
 DELETE FROM global_content WHERE section_slug = 'program-tambahan';
 INSERT INTO global_content (section_slug, label, description, icon, order_index) VALUES 
-('program-tambahan', 'Takhossus Arab (Nahwu Shorof)', 'Pendalaman tata bahasa Arab intensif.', 'fa-language', 1),
-('program-tambahan', 'Pengajian Bandongan/Kilatan', 'Metode klasikal pembacaan kitab oleh Masyayikh.', 'fa-microphone-alt', 2),
-('program-tambahan', 'Bahtsul Masa''il Kubro', 'Forum musyawarah antar santri se-Jawa.', 'fa-users', 3);
+('program-tambahan', 'Pengajian Bandongan/Kilatan', 'Metode klasikal pembacaan kitab oleh Masyayikh.', 'fa-book-reader', 1),
+('program-tambahan', 'Bahtsul Masa''il Kubro', 'Forum musyawarah antar santri se-Jawa.', 'fa-users', 2),
+('program-tambahan', 'Takhossus Arab (Nahwu Shorof)', 'Pendalaman tata bahasa Arab intensif.', 'fa-spell-check', 3),
+('program-tambahan', 'Ziaroh Wali & Ulama', 'Kegiatan spiritual tahunan santri.', 'fa-praying-hands', 4);
 
 -- 3. Misi (Section: misi)
 DELETE FROM global_content WHERE section_slug = 'misi';

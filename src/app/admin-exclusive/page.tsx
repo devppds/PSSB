@@ -221,7 +221,10 @@ export default function AppleAdminPage() {
                         {activeTab === 'content' && (
                             <div className="apple-card" style={{ padding: '0', overflow: 'hidden' }}>
                                 <div style={{ padding: '24px', borderBottom: '1px solid rgba(0,0,0,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <h2 style={{ fontSize: '1.4rem', fontWeight: 700 }}>Content Blocks</h2>
+                                    <div>
+                                        <h2 style={{ fontSize: '1.4rem', fontWeight: 700 }}>Content Blocks</h2>
+                                        <p style={{ fontSize: '0.85rem', color: 'var(--apple-text-secondary)', marginTop: '4px' }}>Manage icons and descriptions for list sections.</p>
+                                    </div>
                                 </div>
                                 <div className="apple-table-container">
                                     <table className="apple-table">
@@ -229,30 +232,46 @@ export default function AppleAdminPage() {
                                             <tr>
                                                 <th style={{ paddingLeft: '24px' }}>Section</th>
                                                 <th>Content Label</th>
-                                                <th>Indicator</th>
+                                                <th>Icon Class</th>
+                                                <th style={{ textAlign: 'center' }}>Preview</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {globalContent.map((item, idx) => (
-                                                <tr key={item.id || idx}>
-                                                    <td style={{ paddingLeft: '24px' }}>
-                                                        <span className="apple-badge badge-gray">{item.section_slug}</span>
-                                                    </td>
-                                                    <td>
-                                                        <input
-                                                            className="apple-input"
-                                                            style={{ padding: '8px 12px', fontSize: '0.9rem', width: 'auto', minWidth: '200px' }}
-                                                            value={item.label}
-                                                            onChange={(e) => handleUpdateGlobalItem(item.id, 'label', e.target.value)}
-                                                        />
-                                                    </td>
-                                                    <td><i className={item.icon} style={{ color: 'var(--apple-blue)', fontSize: '1.2rem' }}></i></td>
-                                                    <td>
-                                                        <button onClick={() => handleSaveGlobal(item.section_slug)} className="apple-btn-primary" style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '8px' }}>Update</button>
-                                                    </td>
-                                                </tr>
-                                            ))}
+                                            {globalContent
+                                                .filter(item => !item.section_slug.includes('pembayaran') && !item.section_slug.includes('biaya'))
+                                                .map((item, idx) => (
+                                                    <tr key={item.id || idx}>
+                                                        <td style={{ paddingLeft: '24px' }}>
+                                                            <span className="apple-badge badge-gray" style={{ fontSize: '0.7rem' }}>{item.section_slug}</span>
+                                                        </td>
+                                                        <td>
+                                                            <input
+                                                                className="apple-input"
+                                                                style={{ padding: '8px 12px', fontSize: '0.9rem', width: '250px' }}
+                                                                value={item.label}
+                                                                onChange={(e) => handleUpdateGlobalItem(item.id, 'label', e.target.value)}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <input
+                                                                className="apple-input"
+                                                                style={{ padding: '8px 12px', fontSize: '0.9rem', width: '180px', fontFamily: 'monospace' }}
+                                                                value={item.icon || ""}
+                                                                placeholder="fas fa-star"
+                                                                onChange={(e) => handleUpdateGlobalItem(item.id, 'icon', e.target.value)}
+                                                            />
+                                                        </td>
+                                                        <td style={{ textAlign: 'center' }}>
+                                                            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
+                                                                <i className={item.icon || "fas fa-question"} style={{ color: 'var(--apple-blue)', fontSize: '1.1rem' }}></i>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button onClick={() => handleSaveGlobal(item.section_slug)} className="apple-btn-primary" style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '8px' }}>Update Section</button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
                                         </tbody>
                                     </table>
                                 </div>

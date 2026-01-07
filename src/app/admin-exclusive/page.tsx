@@ -425,8 +425,33 @@ export default function AppleAdminPage() {
                                                             <input className="apple-input" style={{ padding: '8px 12px', fontSize: '0.9rem', width: '150px' }} value={item.icon || ""} onChange={(e) => handleUpdateGlobalItem(item.id, 'icon', e.target.value)} />
                                                         </td>
                                                         <td style={{ textAlign: 'center' }}>
-                                                            <div style={{ width: '35px', height: '35px', borderRadius: '8px', background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
-                                                                <i className={item.icon || "fas fa-circle"} style={{ color: 'var(--apple-blue)' }}></i>
+                                                            <div style={{
+                                                                width: '45px',
+                                                                height: '45px',
+                                                                borderRadius: '12px',
+                                                                background: 'white',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                margin: '0 auto',
+                                                                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                                                                border: '1px solid rgba(0,0,0,0.03)'
+                                                            }}>
+                                                                <i
+                                                                    className={(() => {
+                                                                        if (!item.icon) return "fa-solid fa-circle";
+                                                                        let icon = item.icon.trim();
+                                                                        if (icon.includes(' ')) return icon; // Full classes provided
+                                                                        if (!icon.startsWith('fa-')) icon = 'fa-' + icon;
+
+                                                                        // Check for brands
+                                                                        const brands = ['whatsapp', 'facebook', 'instagram', 'twitter', 'youtube', 'github', 'google', 'apple'];
+                                                                        const isBrand = brands.some(b => icon.includes(b));
+
+                                                                        return `${isBrand ? 'fa-brands' : 'fa-solid'} ${icon}`;
+                                                                    })()}
+                                                                    style={{ color: 'var(--apple-blue)', fontSize: '1.2rem' }}
+                                                                ></i>
                                                             </div>
                                                         </td>
                                                         <td>

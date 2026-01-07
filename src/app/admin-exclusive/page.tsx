@@ -554,25 +554,45 @@ export default function AppleAdminPage() {
                                         <textarea className="apple-input" placeholder="System Subtitle" rows={2} value={settings.hero_subtitle || ""} onChange={(e) => setSettings({ ...settings, hero_subtitle: e.target.value })} />
                                     </div>
 
-                                    <div style={{ marginTop: '30px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
-                                        <label className="apple-label">Profil & Identitas</label>
-                                        <div className="apple-input-group">
-                                            <textarea className="apple-input" placeholder="Sejarah Singkat / Tentang Kami" rows={4} value={settings.about_history || ""} onChange={(e) => setSettings({ ...settings, about_history: e.target.value })} />
-                                        </div>
-                                        <div className="apple-input-group">
-                                            <textarea className="apple-input" placeholder="Visi Pondok" rows={3} value={settings.visi_text || ""} onChange={(e) => setSettings({ ...settings, visi_text: e.target.value })} />
-                                        </div>
-                                        <div className="apple-input-group">
-                                            <input className="apple-input" placeholder="URL Video Profil (YouTube/Cloudinary)" value={settings.video_url || ""} onChange={(e) => setSettings({ ...settings, video_url: e.target.value })} />
-                                        </div>
-                                    </div>
-
-                                    {/* TIMELINE MANAGEMENT SECTION */}
+                                    {/* TIMELINE / SEJARAH & PROFIL MANAGEMENT */}
                                     <div style={{ marginTop: '40px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                                            <h3 className="apple-label" style={{ fontSize: '1.1rem', margin: 0 }}>Timeline / Sejarah Detail</h3>
+                                            <div>
+                                                <h3 className="apple-label" style={{ fontSize: '1.1rem', margin: 0 }}>Sejarah & Profil</h3>
+                                                <p style={{ fontSize: '0.8rem', color: 'var(--apple-text-secondary)', marginTop: '4px' }}>Timeline peristiwa penting dan video profil lembaga</p>
+                                            </div>
                                             <button className="apple-badge badge-blue" style={{ border: 'none', cursor: 'pointer' }} onClick={handleAddTimeline}>+ Tambah Peristiwa</button>
                                         </div>
+
+                                        {/* Video URL Section */}
+                                        <div style={{ marginBottom: '20px', padding: '15px', background: '#f5f5f7', borderRadius: '12px' }}>
+                                            <label className="apple-label" style={{ fontSize: '0.85rem' }}>URL Video Profil</label>
+                                            <input
+                                                className="apple-input"
+                                                placeholder="https://www.youtube-nocookie.com/embed/..."
+                                                value={settings.video_url || ""}
+                                                onChange={(e) => setSettings({ ...settings, video_url: e.target.value })}
+                                                style={{ marginTop: '8px' }}
+                                            />
+                                            <p style={{ fontSize: '0.7rem', color: 'var(--apple-text-secondary)', marginTop: '6px' }}>
+                                                Video ini akan ditampilkan di halaman utama setelah timeline sejarah
+                                            </p>
+                                        </div>
+
+                                        {/* Visi Text */}
+                                        <div style={{ marginBottom: '20px', padding: '15px', background: '#f5f5f7', borderRadius: '12px' }}>
+                                            <label className="apple-label" style={{ fontSize: '0.85rem' }}>Visi Pondok</label>
+                                            <textarea
+                                                className="apple-input"
+                                                placeholder="Mencetak insan bertaqwa..."
+                                                rows={2}
+                                                value={settings.visi_text || ""}
+                                                onChange={(e) => setSettings({ ...settings, visi_text: e.target.value })}
+                                                style={{ marginTop: '8px' }}
+                                            />
+                                        </div>
+
+                                        {/* Timeline Table */}
                                         <div className="apple-table-container">
                                             <table className="apple-table">
                                                 <thead>

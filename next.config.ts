@@ -1,10 +1,11 @@
 import type { NextConfig } from "next";
-import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare/cloudflare-context";
-
-// initOpenNextCloudflareForDev();
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ['async_hooks', 'fs', 'path', 'node:async_hooks', 'node:fs', 'node:path', 'node:dns', 'node:net'],
+  // Use serverExternalPackages to avoid bundling Node.js built-ins in the edge bundle
+  serverExternalPackages: [
+    'async_hooks', 'fs', 'path', 'url', 'crypto', 'buffer', 'events', 'stream', 'util',
+    'dns', 'net', 'tls', 'http', 'https', 'zlib', 'vm', 'os', 'child_process'
+  ],
   eslint: {
     ignoreDuringBuilds: true,
   },

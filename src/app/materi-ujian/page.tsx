@@ -226,7 +226,7 @@ export default function MateriUjianPage() {
                 <BentoMateriCard
                     title="MHM - ALIYAH"
                     age="15 Tahun"
-                    size="materi-item-full"
+                    size="materi-item-large"
                     materi={
                         <ul className="materi-list" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                             <li className="materi-li"><i className="fas fa-pen-fancy"></i> Tulis: Nahwu (Nadzom Al-‘Amrithi)</li>
@@ -251,7 +251,7 @@ export default function MateriUjianPage() {
 
                 <BentoMateriCard
                     title="MHM - I'DADIYAH"
-                    size="materi-item-full"
+                    size="materi-item-large"
                     materi={<div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>Program Persiapan / Tanpa Ujian</div>}
                     kurikulum={
                         <ul className="materi-list" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Pendaftar - PPDS Lirboyo</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon"
+        href="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png">
+
+    <!-- Main Style (For Header/Footer) -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Fonts & Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            /* Blue-900 */
+            --secondary: #1e40af;
+            /* Blue-800 */
+            --accent: #d4af37;
+            /* Gold */
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER ADJUSTMENT FOR ADMIN PAGE */
+        .header-top-row {
+            background: white;
+            border-bottom: 2px solid var(--accent);
+            position: relative;
+            z-index: 999;
+        }
+
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .header-logo-img {
+            height: 60px;
+            width: auto;
+        }
+
+        .header-status-badge span {
+            font-weight: bold;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            border: none;
+            background: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .header-status-badge {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
+        /* LOGIN OVERLAY */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 58, 138, 0.95);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .login-box {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--accent);
+        }
+
+        .login-box img {
+            width: 80px;
+            margin-bottom: 1rem;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .login-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* MAIN CONTENT */
+        #main-content {
+            display: none;
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent);
+        }
+
+        .header-title h1 {
+            color: var(--primary);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+        }
+
+        .refresh-btn {
+            background: var(--bg-light);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* TABLE STYLES */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        th,
+        td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #aaa;
+        }
+
+        /* Footer Adjustments */
+        .footer-wrapper {
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SECURITY GATE -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <img src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png" alt="Logo">
+            <h2 style="color: var(--primary); margin-bottom: 10px;">Akses Terbatas</h2>
+            <p style="font-size: 0.9rem; color: #666;">Halaman Khusus Admin PPDS Lirboyo</p>
+
+            <input type="password" id="access-code" class="login-input" placeholder="Masukkan Kode Akses">
+            <button onclick="checkAccess()" class="login-btn">BUKA DATA</button>
+            <p id="error-msg" style="color: red; margin-top: 10px; display: none; font-size: 0.9rem;">Kode Salah!</p>
+        </div>
+    </div>
+
+    <!-- HEADER (REQUESTED) -->
+    <!-- Content hidden by default, shown after login -->
+    <div id="page-wrapper" style="display:none; flex-direction:column; min-height:100vh;">
+
+        <header>
+            <div class="header-top-row">
+                <div class="header-inner">
+                    <div class="header-logo-section">
+                        <a href="/" class="header-logo-link">
+                            <img src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596060/header_prrubf.png"
+                                alt="Logo" class="header-logo-img">
+                        </a>
+                    </div>
+
+                    <div class="header-status-badge">
+                        <span id="ta-info">TA. 1446 - 1447 H. / 2025 - 2026 M.</span>
+                    </div>
+
+                    <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN DASHBOARD -->
+        <div id="main-content">
+            <div class="header-bar">
+                <div class="header-title">
+                    <h1>Data Santri Baru 2026</h1>
+                    <p style="color: #64748b; font-size: 0.9rem;">Real-time database monitoring</p>
+                </div>
+                <button onclick="loadData()" class="refresh-btn">
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table id="santri-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>ID Reg</th>
+                            <th>Nama Lengkap</th>
+                            <th>L/P</th>
+                            <th>Jenjang</th>
+                            <th>Asal Kota</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Data here -->
+                    </tbody>
+                </table>
+                <div id="loading-indicator" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Mengambil data...
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER (IMPORTED) -->
+        <div class="footer-wrapper">
+            <div class="footer-content">
+                <div class="footer-main">
+                    <div class="footer-brand-section">
+                        <div class="footer-pssb-logo">
+                            <div class="logo-logos">
+                                <img src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png"
+                                    alt="Darussalam Logo">
+                            </div>
+                            <div class="logo-text">
+                                <h2 class="footer-pssb-title">PPDS Lirboyo</h2>
+                                <p class="footer-pssb-subtitle">Pondok Pesantren Darussalam</p>
+                            </div>
+                        </div>
+                        <p class="footer-pssb-desc">
+                            Berkhidmat untuk umat, mencetak kader ulama yang berakhlakul karimah dan berwawasan luas.
+                            Mencetak insan bertaqwa, berakhlak Al Qur'an dan As Sunnah.
+                        </p>
+                        <div class="footer-pssb-social">
+                            <a href="https://www.instagram.com/pp.darussalamlirboyo/" target="_blank"><i
+                                    class="fab fa-instagram"></i></a>
+                            <a href="https://www.tiktok.com/@bumidarussalam" target="_blank"><i
+                                    class="fab fa-tiktok"></i></a>
+                            <a href="https://www.youtube.com/@bumidarussalamlirboyo5149" target="_blank"><i
+                                    class="fab fa-youtube"></i></a>
+                            <a href="https://wa.me/6285809111996" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="footer-contact-section">
+                        <h3 class="footer-pssb-section-title"><i class="fas fa-phone-volume"></i> Hubungi Kami</h3>
+                        <ul class="footer-pssb-contact-list">
+                            <li><i class="fas fa-mosque"></i><span>Pondok Pesantren Darussalam</span></li>
+                            <li><i class="fas fa-map-marker-alt"></i><span>Jl. H. Winarto No.40, Campurejo<br>Kec.
+                                    Mojoroto, Kediri, Jawa Timur</span></li>
+                            <li><i class="fas fa-phone-alt"></i><a href="tel:+62354778176">(0354) 778176</a></li>
+                            <li><i class="fas fa-envelope"></i><a
+                                    href="mailto:ppdslirboyo@gmail.com">ppdslirboyo@gmail.com</a></li>
+                            <li><i class="fas fa-globe"></i><a href="https://lirboyo.id/" target="_blank">lirboyo.id</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links-section">
+                        <h3 class="footer-pssb-section-title"><i class="fas fa-compass"></i> Navigasi</h3>
+                        <ul class="footer-pssb-links-list">
+                            <li><a href="/"><i class="fas fa-home"></i> Beranda</a></li>
+                            <li><a href="/#profil"><i class="fas fa-info-circle"></i> Profil Pesantren</a></li>
+                            <li><a href="/#program"><i class="fas fa-star"></i> Program Unggulan</a></li>
+                            <li><a href="materi-ujian"><i class="fas fa-book"></i> Materi Ujian</a></li>
+                            <li><a href="informasi"><i class="fas fa-bell"></i> Informasi Pendaftaran</a></li>
+                            <li><a href="ppdb"><i class="fas fa-user-plus"></i> Daftar Online</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-legal">
+            <div class="footer-legal-content">
+                <p>
+                    <i class="far fa-copyright"></i>
+                    <span id="year"></span>
+                    <a href="data-santri" style="color:inherit; text-decoration:none;"><strong>PPDS Lirboyo</strong></a>
+                    - All Rights Reserved.
+                </p>
+                <a href="https://wa.me/6285171542025" target="_blank" class="dev-link">
+                    <i class="fas fa-code"></i> Developed by Secretary - Cyber PPDS
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- DETAIL MODAL -->
+    <div id="detail-modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; justify-content:center; align-items:center;">
+        <div
+            style="background:white; width:90%; max-width:800px; max-height:90vh; overflow-y:auto; border-radius:15px; padding:2rem; position:relative; animation: slideUp 0.3s ease;">
+            <button onclick="closeModal()"
+                style="position:absolute; top:15px; right:15px; border:none; background:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            <h2
+                style="color:var(--primary); border-bottom:2px solid var(--accent); padding-bottom:10px; margin-bottom:20px;">
+                Detail Data Santri</h2>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // Simple Client-Side Security
+        function checkAccess() {
+            const code = document.getElementById('access-code').value;
+            // HARDCODED PASSWORD
+            if (code === "sekretary25") {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('page-wrapper').style.display = 'flex'; // Show Header/Main/Footer wrapper
+                document.getElementById('main-content').style.display = 'block';
+                loadData();
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+                document.getElementById('access-code').style.border = '1px solid red';
+            }
+        }
+        document.getElementById('access-code').addEventListener('keypress', function (e) { if (e.key === 'Enter') checkAccess(); });
+
+        let allData = []; // Store data locally for modal view
+
+        async function loadData() {
+            const tbody = document.getElementById('table-body');
+            const loader = document.getElementById('loading-indicator');
+            tbody.innerHTML = ''; loader.style.display = 'block';
+
+            try {
+                const apiUrl = '/.netlify/functions/get_santri';
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error("Gagal mengambil data.");
+
+                const data = await response.json();
+                allData = data; // Save for modal usage
+
+                loader.style.display = 'none';
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Belum ada data pendaftar.</td></tr>'; return;
+                }
+
+                data.forEach((item, index) => {
+                    const row = document.createElement('tr');
+
+                    const fullName = `${item.nama_depan || ''} ${item.nama_belakang || ''}`.trim();
+
+                    let dateDisplay = '-';
+                    if (item.created_at) {
+                        dateDisplay = new Date(item.created_at).toLocaleDateString('id-ID', {
+                            day: 'numeric', month: 'short', year: 'numeric'
+                        });
+                    }
+
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td style="font-size:0.9rem; color:#666;">#${item.id}</td>
+                        <td style="font-weight:600; color:var(--primary);">${fullName}</td>
+                        <td>${item.jenis_kelamin || '-'}</td>
+                        <td><span style="color:var(--secondary); font-weight:500">${item.jenjang_kelas || '-'}</span></td>
+                        <td>${item.alamat_kota || '-'}</td>
+                        <td><span class="badge badge-pending">Menunggu</span></td>
+                        <td>
+                            <div style="display:flex; gap:5px;">
+                                <button onclick="viewDetail(${index})" title="Lihat Detail" style="background:#3b82f6; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button onclick="verifyItem(${item.id})" title="Verifikasi & Pindah DB" style="background:#10b981; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button onclick="deleteItem(${item.id})" title="Hapus Data" style="background:#ef4444; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error(error);
+                loader.style.display = 'none';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Gagal mengambil data. Pastikan backend di-restart.</td></tr>';
+            }
+        }
+
+        function viewDetail(index) {
+            const item = allData[index];
+            const content = document.getElementById('modal-content');
+
+            const field = (label, val) => `
+                <div style="margin-bottom:8px; display:flex; border-bottom:1px solid #eee; padding-bottom:5px;">
+                    <strong style="width:180px; color:#1e3a8a;">${label}</strong>
+                    <span style="flex:1; color:#333;">: ${val || '-'}</span>
+                </div>`;
+
+            content.innerHTML = `
+                <h3 style="color:#d4af37; margin:15px 0 10px; border-bottom:1px solid #d4af37;">Data Pribadi</h3>
+                ${field('Nama Lengkap', `${item.nama_depan} ${item.nama_belakang}`)}
+                ${field('NIK', item.nik)}
+                ${field('NISN', item.nisn)}
+                ${field('Tempat/Tgl Lahir', `${item.tempat_lahir}, ${item.tanggal_lahir}`)}
+                ${field('Jenis Kelamin', item.jenis_kelamin)}
+                ${field('Agama', item.agama)}
+                ${field('Jenjang Dituju', item.jenjang_kelas)}
+
+                <h3 style="color:#d4af37; margin:20px 0 10px; border-bottom:1px solid #d4af37;">Data Orang Tua</h3>
+                ${field('Nama Ayah', `${item.nama_ayah_depan} ${item.nama_ayah_belakang}`)}
+                ${field('Pekerjaan Ayah', item.pekerjaan_ayah)}
+                ${field('No. HP Ayah', item.no_hp_ayah)}
+                <br>
+                ${field('Nama Ibu', `${item.nama_ibu_depan} ${item.nama_ibu_belakang}`)}
+                ${field('No. HP Ibu', item.no_hp_ibu)}
+
+                <h3 style="color:#d4af37; margin:20px 0 10px; border-bottom:1px solid #d4af37;">Alamat</h3>
+                ${field('Jalan', item.alamat_jalan)}
+                ${field('Kota/Kab', item.alamat_kota)}
+
+                <h3 style="color:#d4af37; margin:20px 0 10px; border-bottom:1px solid #d4af37;">Berkas</h3>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                   ${item.foto_santri ? `<a href="${item.foto_santri}" target="_blank" style="padding:8px 15px; background:#1e3a8a; color:white; border-radius:5px; text-decoration:none;">Foto Santri</a>` : ''}
+                   ${item.scan_kk ? `<a href="${item.scan_kk}" target="_blank" style="padding:8px 15px; background:#1e3a8a; color:white; border-radius:5px; text-decoration:none;">Scan KK</a>` : ''}
+                   ${item.scan_ijazah ? `<a href="${item.scan_ijazah}" target="_blank" style="padding:8px 15px; background:#1e3a8a; color:white; border-radius:5px; text-decoration:none;">Ijazah</a>` : ''}
+                </div>
+            `;
+
+            document.getElementById('detail-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('detail-modal').style.display = 'none';
+        }
+
+        async function verifyItem(id) {
+            if (!confirm("Konfirmasi: Apakah data santri ini sudah valid dan akan dipindahkan ke Database Pusat?")) return;
+
+            try {
+                const res = await fetch('/.netlify/functions/manage_santri', {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'verify', id: id })
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    alert(result.message);
+                    loadData();
+                } else {
+                    alert("Gagal: " + (result.error || "Unknown Error"));
+                }
+            } catch (e) { alert("Error koneksi"); }
+        }
+
+        async function deleteItem(id) {
+            if (!confirm("PERINGATAN: Hapus data ini?")) return;
+
+            try {
+                const res = await fetch('/.netlify/functions/manage_santri', {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'delete', id: id })
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    alert("Data dihapus.");
+                    loadData();
+                } else {
+                    alert("Gagal: " + result.error);
+                }
+            } catch (e) { alert("Error koneksi"); }
+        }
+
+        // Auto set year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

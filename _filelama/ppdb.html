@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pendaftaran Santri Baru - PPDS Lirboyo</title>
+
+	<!-- Fonts & Icons -->
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="icon" type="image/png"
+		href="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png">
+
+	<!-- Site & Form CSS -->
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/ppdb-form.css">
+
+	<!-- jsPDF Library for Auto-generated Registration Card -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body data-page="ppdb">
+	<!-- HEADER LOADER -->
+	<header class="header-wrapper" id="header-placeholder"></header>
+
+	<div class="section-wrapper">
+		<div class="ppdb-hero">
+			<h1>Pendaftaran Santri</h1>
+			<p>Bergabunglah dengan keluarga besar Pondok Pesantren Darussalam Lirboyo</p>
+		</div>
+
+		<div class="zf-templateWidth">
+			<form action='/api/submit_registration' name='form' method='POST' accept-charset='UTF-8'
+				enctype='multipart/form-data' id='form'>
+
+
+				<div class="zf-templateWrapper">
+					<!-- Form Header -->
+					<ul class="zf-tempHeadBdr">
+						<li class="zf-tempHeadContBdr">
+							<h2 class="zf-frmTitle">Formulir Pendaftaran</h2>
+							<p class="zf-frmDesc">Tahun Ajaran 2026-2027</p>
+						</li>
+					</ul>
+
+					<div class="zf-subContWrap zf-topAlign">
+						<!-- SECTION 1: DATA PRIBADI -->
+						<div class="form-section-card">
+							<div class="section-header">
+								<div class="section-icon"><i class="fas fa-user-graduate"></i></div>
+								<h3>Data Pribadi Calon Santri</h3>
+							</div>
+
+							<div class="zf-tempFrmWrapper zf-name zf-namelarge">
+								<label class="zf-labelName">Nama Lengkap <em class="zf-important">*</em></label>
+								<div class="zf-tempContDiv zf-twoType">
+									<div class="zf-nameWrapper">
+										<span><input type="text" maxlength="255" name="Name_First"
+												placeholder="Nama Depan" /></span>
+										<span><input type="text" maxlength="255" name="Name_Last"
+												placeholder="Nama Belakang" /></span>
+									</div>
+									<p id="Name_error" class="zf-errorMessage" style="display:none;">Harap isi nama
+										lengkap</p>
+								</div>
+							</div>
+
+							<div class="custom-grid">
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">NIK Santri <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<input type="text" name="Number" value="" maxlength="18" fieldType=3
+											placeholder="Sesuai Kartu Keluarga" />
+										<p id="Number_error" class="zf-errorMessage" style="display: none;">NIK tidak
+											valid</p>
+									</div>
+								</div>
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">No. Kartu Keluarga <em
+											class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<input type="text" name="Number1" value="" maxlength="18" fieldType=3
+											placeholder="16 Digit No. KK" />
+										<p id="Number1_error" class="zf-errorMessage" style="display: none;">No. KK
+											tidak valid</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="custom-grid">
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">NISN <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<input type="text" name="Number2" value="" maxlength="18" fieldType=3
+											placeholder="Nomor Induk Sekolah Nasional" />
+										<p id="Number2_error" class="zf-errorMessage" style="display: none;">NISN tidak
+											valid</p>
+									</div>
+								</div>
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Jenis Kelamin <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<select class="zf-form-sBox" name="Dropdown">
+											<option selected="true" value="-Select-">Pilih Jenis Kelamin</option>
+											<option value="Laki-Laki">Laki-Laki</option>
+											<option value="Perempuan">Perempuan</option>
+										</select>
+										<p id="Dropdown_error" class="zf-errorMessage" style="display:none;">Pilih jenis
+											kelamin</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="custom-grid">
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Tempat Lahir <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<input type="text" name="SingleLine2" value="" maxlength="255" fieldType=1
+											placeholder="Kota Kelahiran" />
+										<p id="SingleLine2_error" class="zf-errorMessage" style="display: none;">Wajib
+											diisi</p>
+									</div>
+								</div>
+								<div class="zf-tempFrmWrapper zf-date">
+									<label class="zf-labelName">Tanggal Lahir <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<input type="date" name="Date" value="" />
+										<p id="Date_error" class="zf-errorMessage" style="display: none;">Wajib diisi
+										</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="custom-grid">
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Agama <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<select class="zf-form-sBox" name="Dropdown2"
+											onchange="toggleOtherField(this, 'other_agama_div')">
+											<option selected="true" value="-Select-">Pilih Agama</option>
+											<option value="Islam">Islam</option>
+											<option value="Protestan">Protestan</option>
+											<option value="Katolik">Katolik</option>
+											<option value="Hindu">Hindu</option>
+											<option value="Buddha">Buddha</option>
+											<option value="Konghucu">Konghucu</option>
+											<option value="Lainnya">Lainnya</option>
+										</select>
+										<div id="other_agama_div" style="display:none; margin-top: 1rem;">
+											<label class="zf-labelName">Sebutkan Agama <em
+													class="zf-important">*</em></label>
+											<input type="text" name="other_agama" placeholder="Tulis agama lainnya..."
+												class="form-input" style="height: 45px !important;">
+										</div>
+										<p id="Dropdown2_error" class="zf-errorMessage" style="display:none;">Pilih
+											agama</p>
+									</div>
+								</div>
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Pendidikan Terakhir <em
+											class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<select class="zf-form-sBox" name="Dropdown1">
+											<option selected="true" value="-Select-">Pilih Pendidikan Terakhir</option>
+											<option value="SD/MI">SD/MI</option>
+											<option value="SMP/MTS">SMP/MTS</option>
+											<option value="SMA/MA">SMA/MA</option>
+										</select>
+										<p id="Dropdown1_error" class="zf-errorMessage" style="display:none;">Pilih
+											pendidikan terakhir</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- SECTION 2: MINAT & TUJUAN -->
+						<div class="form-section-card">
+							<div class="section-header">
+								<div class="section-icon"><i class="fas fa-school"></i></div>
+								<h3>Jenjang & Minat</h3>
+							</div>
+							<div class="zf-tempFrmWrapper zf-large">
+								<label class="zf-labelName">Akan Masuk Kelas <em class="zf-important">*</em></label>
+								<div class="zf-tempContDiv">
+									<select class="zf-form-sBox" name="Dropdown3">
+										<option selected="true" value="-Select-">Pilih Jenjang/Kelas</option>
+										<optgroup label="MIU (Santri Sekolah Formal)">
+											<option value="I Ula">I Ula</option>
+											<option value="II Ula">II Ula</option>
+											<option value="III Ula">III Ula</option>
+											<option value="I Wustho">I Wustho</option>
+											<option value="I Ulya">I Ulya</option>
+										</optgroup>
+										<optgroup label="MHM (Santri Salaf)">
+											<option value="V Ibtida'iyyah">V Ibtida'iyyah</option>
+											<option value="VI Ibtida'iyyah">VI Ibtida'iyyah</option>
+											<option value="I Tsanawiyyah">I Tsanawiyyah</option>
+											<option value="I Aliyyah">I Aliyyah</option>
+											<option value="I Ma'had Aly">I Ma'had Aly</option>
+											<option value="II Ma'had Aly">II Ma'had Aly</option>
+										</optgroup>
+									</select>
+									<p id="Dropdown3_error" class="zf-errorMessage" style="display:none;">Pilih jenjang
+										pendidikan</p>
+									<p class="zf-instruction"><i class="fas fa-info-circle"></i> <a
+											href="materi-ujian.html"
+											style="color: #3b82f6; text-decoration: underline;">Lihat Materi Ujian</a>
+									</p>
+								</div>
+							</div>
+							<div class="custom-grid">
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Hobi <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<input type="text" name="SingleLine" value="" maxlength="255" fieldType=1
+											placeholder="Kegemaran" />
+										<p id="SingleLine_error" class="zf-errorMessage" style="display: none;">Wajib
+											diisi</p>
+									</div>
+								</div>
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Cita-Cita <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<input type="text" name="SingleLine1" value="" maxlength="255" fieldType=1
+											placeholder="Tujuan Masa Depan" />
+										<p id="SingleLine1_error" class="zf-errorMessage" style="display: none;">Wajib
+											diisi</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- SECTION 3: DATA ORANG TUA / WALI -->
+						<div class="form-section-card">
+							<div class="section-header">
+								<div class="section-icon"><i class="fas fa-users"></i></div>
+								<h3>Data Orang Tua / Wali</h3>
+							</div>
+
+							<!-- Ayah -->
+							<div class="zf-tempFrmWrapper zf-name zf-namelarge">
+								<label class="zf-labelName">Nama Lengkap Ayah/Wali <em
+										class="zf-important">*</em></label>
+								<div class="zf-tempContDiv zf-twoType">
+									<div class="zf-nameWrapper">
+										<span><input type="text" maxlength="255" name="Name1_First"
+												placeholder="Nama Depan" /></span>
+										<span><input type="text" maxlength="255" name="Name1_Last"
+												placeholder="Nama Belakang" /></span>
+									</div>
+									<p id="Name1_error" class="zf-errorMessage" style="display:none;">Harap isi nama
+										ayah</p>
+								</div>
+							</div>
+
+							<div class="custom-grid">
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">NIK Ayah <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<input type="text" name="Number3" value="" maxlength="18" fieldType=3
+											placeholder="16 Digit NIK Ayah" />
+										<p id="Number3_error" class="zf-errorMessage" style="display: none;">NIK tidak
+											valid</p>
+									</div>
+								</div>
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Nomor HP/WA <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv zf-phonefld">
+										<input type="text" name="PhoneNumber_countrycode" maxlength="20" value=""
+											fieldType="11" id="international_PhoneNumber_countrycode"
+											placeholder="+62" />
+										<p id="PhoneNumber_error" class="zf-errorMessage" style="display:none;">Format
+											nomor tidak valid</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="custom-grid">
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Pendidikan Ayah <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<select class="zf-form-sBox" name="Dropdown8"
+											onchange="toggleOtherField(this, 'other_pendidikan_ayah_div')">
+											<option selected="true" value="-Select-">Pilih Pendidikan</option>
+											<option value="SD/MI">SD/MI</option>
+											<option value="SMP/MTS">SMP/MTS</option>
+											<option value="SMA/MA">SMA/MA</option>
+											<option value="S1 (Sarjana)">S1 (Sarjana)</option>
+											<option value="S2 (Magister)">S2 (Magister)</option>
+											<option value="S3 (Doctor)">S3 (Doctor)</option>
+											<option value="Lainnya">Lainnya</option>
+										</select>
+										<div id="other_pendidikan_ayah_div" style="display:none; margin-top: 1rem;">
+											<label class="zf-labelName">Sebutkan Pendidikan <em
+													class="zf-important">*</em></label>
+											<input type="text" name="other_pendidikan_ayah"
+												placeholder="Tulis pendidikan lainnya..." class="form-input"
+												style="height: 45px !important;">
+										</div>
+										<p id="Dropdown8_error" class="zf-errorMessage" style="display:none;">Pilih
+											pendidikan ayah</p>
+									</div>
+								</div>
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Pekerjaan Ayah <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<select class="zf-form-sBox" name="Dropdown4"
+											onchange="toggleOtherField(this, 'other_pekerjaan_ayah_div')">
+											<option selected="true" value="-Select-">Pilih Pekerjaan</option>
+											<option value="Wiraswasta">Wiraswasta</option>
+											<option value="Karyawan Swasta">Karyawan Swasta</option>
+											<option value="Pegawai Negeri Sipil">Pegawai Negeri Sipil</option>
+											<option value="Lainnya">Lainnya</option>
+										</select>
+										<div id="other_pekerjaan_ayah_div" style="display:none; margin-top: 1rem;">
+											<label class="zf-labelName">Sebutkan Pekerjaan Ayah <em
+													class="zf-important">*</em></label>
+											<input type="text" name="other_pekerjaan_ayah"
+												placeholder="Tulis pekerjaan lainnya..." class="form-input"
+												style="height: 45px !important;">
+										</div>
+										<p id="Dropdown4_error" class="zf-errorMessage" style="display:none;">Pilih
+											pekerjaan ayah</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="zf-tempFrmWrapper zf-large">
+								<label class="zf-labelName">Penghasilan Ayah/Wali <em
+										class="zf-important">*</em></label>
+								<div class="zf-tempContDiv">
+									<select class="zf-form-sBox" name="Dropdown6">
+										<option selected="true" value="-Select-">Pilih Rentang Penghasilan</option>
+										<option value="&lt; Rp 3.000.000">&lt; Rp 3.000.000</option>
+										<option value="Rp 3.000.000 - Rp 5.000.000">Rp 3.000.000 - Rp 5.000.000</option>
+										<option value="Rp 5.000.000 - Rp 7.000.000">Rp 5.000.000 - Rp 7.000.000</option>
+										<option value="Rp 7.000.000 - Rp 10.000.000">Rp 7.000.000 - Rp 10.000.000
+										</option>
+										<option value="&gt; Rp 10.000.000">&gt; Rp 10.000.000</option>
+									</select>
+									<p id="Dropdown6_error" class="zf-errorMessage" style="display:none;">Pilih
+										penghasilan ayah</p>
+								</div>
+							</div>
+
+							<hr style="border: none; border-top: 1px solid #f1f5f9; margin: 2rem 0;">
+
+							<!-- Ibu -->
+							<div class="zf-tempFrmWrapper zf-name zf-namelarge">
+								<label class="zf-labelName">Nama Lengkap Ibu <em class="zf-important">*</em></label>
+								<div class="zf-tempContDiv zf-twoType">
+									<div class="zf-nameWrapper">
+										<span><input type="text" maxlength="255" name="Name2_First"
+												placeholder="Nama Depan" /></span>
+										<span><input type="text" maxlength="255" name="Name2_Last"
+												placeholder="Nama Belakang" /></span>
+									</div>
+									<p id="Name2_error" class="zf-errorMessage" style="display:none;">Harap isi nama ibu
+									</p>
+								</div>
+							</div>
+
+							<div class="custom-grid">
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">NIK Ibu <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<input type="text" name="Number4" value="" maxlength="18" fieldType=3
+											placeholder="16 Digit NIK Ibu" />
+										<p id="Number4_error" class="zf-errorMessage" style="display: none;">NIK tidak
+											valid</p>
+									</div>
+								</div>
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Nomor HP/WA Ibu <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv zf-phonefld">
+										<input type="text" name="PhoneNumber1_countrycode" maxlength="20" value=""
+											fieldType="11" id="international_PhoneNumber1_countrycode"
+											placeholder="+62" />
+										<p id="PhoneNumber1_error" class="zf-errorMessage" style="display:none;">Format
+											nomor tidak valid</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="custom-grid">
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Pendidikan Ibu <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<select class="zf-form-sBox" name="Dropdown9"
+											onchange="toggleOtherField(this, 'other_pendidikan_ibu_div')">
+											<option selected="true" value="-Select-">Pilih Pendidikan</option>
+											<option value="SD/MI">SD/MI</option>
+											<option value="SMP/MTS">SMP/MTS</option>
+											<option value="SMA/MA">SMA/MA</option>
+											<option value="S1 (Sarjana)">S1 (Sarjana)</option>
+											<option value="S2 (Magister)">S2 (Magister)</option>
+											<option value="S3 (Doctor)">S3 (Doctor)</option>
+											<option value="Lainnya">Lainnya</option>
+										</select>
+										<div id="other_pendidikan_ibu_div" style="display:none; margin-top: 1rem;">
+											<label class="zf-labelName">Sebutkan Pendidikan <em
+													class="zf-important">*</em></label>
+											<input type="text" name="other_pendidikan_ibu"
+												placeholder="Tulis pendidikan lainnya..." class="form-input"
+												style="height: 45px !important;">
+										</div>
+										<p id="Dropdown9_error" class="zf-errorMessage" style="display:none;">Pilih
+											pendidikan ibu</p>
+									</div>
+								</div>
+								<div class="zf-tempFrmWrapper zf-large">
+									<label class="zf-labelName">Pekerjaan Ibu <em class="zf-important">*</em></label>
+									<div class="zf-tempContDiv">
+										<select class="zf-form-sBox" name="Dropdown5"
+											onchange="toggleOtherField(this, 'other_pekerjaan_ibu_div')">
+											<option selected="true" value="-Select-">Pilih Pekerjaan</option>
+											<option value="Rumah Tangga">Rumah Tangga</option>
+											<option value="Wiraswasta">Wiraswasta</option>
+											<option value="Karyawan Swasta">Karyawan Swasta</option>
+											<option value="Pegawai Negeri Sipil">Pegawai Negeri Sipil</option>
+											<option value="Lainnya">Lainnya</option>
+										</select>
+										<div id="other_pekerjaan_ibu_div" style="display:none; margin-top: 1rem;">
+											<label class="zf-labelName">Sebutkan Pekerjaan Ibu <em
+													class="zf-important">*</em></label>
+											<input type="text" name="other_pekerjaan_ibu"
+												placeholder="Tulis pekerjaan lainnya..." class="form-input"
+												style="height: 45px !important;">
+										</div>
+										<p id="Dropdown5_error" class="zf-errorMessage" style="display:none;">Pilih
+											pekerjaan ibu</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="zf-tempFrmWrapper zf-large">
+								<label class="zf-labelName">Penghasilan Ibu <em class="zf-important">*</em></label>
+								<div class="zf-tempContDiv">
+									<select class="zf-form-sBox" name="Dropdown7">
+										<option selected="true" value="-Select-">Pilih Rentang Penghasilan</option>
+										<option value="&lt; Rp 3.000.000">&lt; Rp 3.000.000</option>
+										<option value="Rp 3.000.000 - Rp 5.000.000">Rp 3.000.000 - Rp 5.000.000</option>
+										<option value="Rp 5.000.000 - Rp 7.000.000">Rp 5.000.000 - Rp 7.000.000</option>
+										<option value="Rp 7.000.000 - Rp 10.000.000">Rp 7.000.000 - Rp 10.000.000
+										</option>
+										<option value="&gt; Rp 10.000.000">&gt; Rp 10.000.000</option>
+									</select>
+									<p id="Dropdown7_error" class="zf-errorMessage" style="display:none;">Pilih
+										penghasilan ibu</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- SECTION 4: ALAMAT LENGKAP -->
+						<div class="form-section-card">
+							<div class="section-header">
+								<div class="section-icon"><i class="fas fa-map-marker-alt"></i></div>
+								<h3>Alamat Lengkap Domisili</h3>
+							</div>
+
+							<div id="Address1" class="zf-tempFrmWrapper zf-address zf-addrlarge">
+								<div class="zf-tempContDiv zf-address">
+									<div class="zf-addrCont">
+										<div class="zf-tempFrmWrapper zf-addrmedium">
+											<label class="zf-labelName">Jalan / Desa / RT & RW <em
+													class="zf-important">*</em></label>
+											<input type="text" maxlength="255" name="Address1_AddressLine1"
+												checktype="c1" placeholder="Nama Jalan, Nama Desa/Dusun, RT/RW" />
+										</div>
+
+										<div class="custom-grid" style="margin-top: 1rem;">
+											<div>
+												<label class="zf-labelName">Provinsi <em
+														class="zf-important">*</em></label>
+												<select class="zf-form-sBox" name="Address1_Region" id="propinsi">
+													<option value="-Select-">Pilih Provinsi</option>
+												</select>
+											</div>
+											<div>
+												<label class="zf-labelName">Kota/Kabupaten <em
+														class="zf-important">*</em></label>
+												<select class="zf-form-sBox" name="Address1_City" id="kota">
+													<option value="-Select-">Pilih Kota/Kabupaten</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="custom-grid" style="margin-top: 1rem;">
+											<div>
+												<label class="zf-labelName">Kecamatan <em
+														class="zf-important">*</em></label>
+												<select class="zf-form-sBox" name="Address1_AddressLine2"
+													id="kecamatan">
+													<option value="-Select-">Pilih Kecamatan</option>
+												</select>
+											</div>
+											<div>
+												<label class="zf-labelName">Desa/Kelurahan <em
+														class="zf-important">*</em></label>
+												<select class="zf-form-sBox" name="Address1_Village" id="kelurahan">
+													<option value="-Select-">Pilih Desa/Kelurahan</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="custom-grid" style="margin-top: 1rem;">
+											<div>
+												<label class="zf-labelName">Kode Pos <em
+														class="zf-important">*</em></label>
+												<input type="text" maxlength="255" name="Address1_ZipCode" id="kodepos"
+													placeholder="Kode Pos" readonly style="background: #f1f5f9;" />
+											</div>
+											<div>
+												<label class="zf-labelName">Negara <em
+														class="zf-important">*</em></label>
+												<select class="zf-form-sBox" name="Address1_Country">
+													<option value="-Select-">-Pilih Negara-</option>
+													<option selected>Indonesia</option>
+												</select>
+											</div>
+										</div>
+
+										<p id="Address1_error" class="zf-errorMessage" style="display:none;">Lengkapi
+											alamat di atas</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- SECTION 5: BERKAS PENDUKUNG -->
+						<div class="form-section-card">
+							<div class="section-header">
+								<div class="section-icon"><i class="fas fa-file-alt"></i></div>
+								<h3>Berkas Pendukung</h3>
+							</div>
+
+							<div class="custom-grid">
+								<div class="zf-tempFrmWrapper">
+									<label class="zf-labelName">Foto Santri <em class="zf-important">*</em></label>
+									<div class="file-upload-container">
+										<input type="file" name="FileUpload" accept="image/*" />
+										<p id="FileUpload_error" class="zf-errorMessage" style="display: none;">Wajib
+											mengunggah foto</p>
+										<p class="zf-instruction">- Berbaju putih & Berkerah<br>- Memakai kopyah Hitam
+										</p>
+									</div>
+								</div>
+								<div class="zf-tempFrmWrapper">
+									<label class="zf-labelName">Scan Kartu Keluarga <em
+											class="zf-important">*</em></label>
+									<div class="file-upload-container">
+										<input type="file" name="FileUpload1" accept="image/*,application/pdf" />
+										<p id="FileUpload1_error" class="zf-errorMessage" style="display: none;">Wajib
+											mengunggah Scan KK</p>
+										<p class="zf-instruction">Terlihat Jelas, Tidak Blur</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="zf-tempFrmWrapper" style="margin-top: 1.5rem;">
+								<label class="zf-labelName">Scan Ijazah Terakhir <em class="zf-important">*</em></label>
+								<div class="file-upload-container">
+									<input type="file" name="FileUpload2" accept="image/*,application/pdf" />
+									<p id="FileUpload2_error" class="zf-errorMessage" style="display: none;">Wajib
+										mengunggah Scan Ijazah</p>
+									<p class="zf-instruction">Terlihat Jelas, Tidak Blur</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Footer / Submit -->
+					<ul>
+						<li class="zf-fmFooter">
+							<button class="zf-submitColor">Kirim Pendaftaran</button>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- FOOTER -->
+	<footer id="footer-placeholder"></footer>
+
+	<!-- Scripts -->
+	<script src="js/load-components.js"></script>
+	<script src="js/form-submit.js"></script>
+	<script type="text/javascript">
+		// Logic for 'Other' / 'Lainnya' choices
+		function toggleOtherField(selectObj, otherDivId) {
+			var otherDiv = document.getElementById(otherDivId);
+			if (!otherDiv) return;
+			var otherInput = otherDiv.querySelector('input');
+			if (selectObj.value === "Lainnya") {
+				otherDiv.style.display = "block";
+				if (otherInput) otherInput.focus();
+			} else {
+				otherDiv.style.display = "none";
+				if (otherInput) otherInput.value = "";
+			}
+		}
+	</script>
+</body>
+
+</html>

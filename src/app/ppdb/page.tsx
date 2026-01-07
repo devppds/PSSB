@@ -172,9 +172,6 @@ export default function PPDBPage() {
             {/* HERO SECTION */}
             <header className="ppdb-header">
                 <div className="header-content">
-                    <Link href="/" className="back-link">
-                        <i className="fas fa-arrow-left"></i> Kembali
-                    </Link>
                     <h1>Pendaftaran Santri Baru</h1>
                     <p>Lengkapi formulir pendaftaran TA 2026-2027</p>
                 </div>

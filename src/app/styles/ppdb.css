@@ -28,45 +28,36 @@ body {
 
 /* HEADER SECTION */
 .ppdb-header {
-    background: linear-gradient(135deg, var(--ppdb-primary) 0%, #1e3a8a 100%);
+    background: linear-gradient(rgba(30, 64, 175, 0.92), rgba(30, 64, 175, 0.95)), url('https://www.transparenttextures.com/patterns/cubes.png'), #1e40af;
     color: white;
-    padding: 6rem 2rem 10rem;
+    padding: 8rem 2rem 12rem;
     text-align: center;
     position: relative;
-    clip-path: ellipse(150% 100% at 50% 0%);
+    border-bottom: 4px solid var(--ppdb-accent);
 }
 
 .header-content {
     max-width: 800px;
     margin: 0 auto;
-}
-
-.back-link {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    font-size: 0.9rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    transition: all 0.2s;
-}
-
-.back-link:hover {
-    color: white;
-    transform: translateX(-4px);
+    position: relative;
+    z-index: 5;
 }
 
 .ppdb-header h1 {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 800;
     margin-bottom: 1rem;
     letter-spacing: -0.02em;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .ppdb-header p {
-    font-size: 1.1rem;
-    opacity: 0.9;
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 /* MAIN CONTENT */

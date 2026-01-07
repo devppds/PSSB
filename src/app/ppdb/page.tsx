@@ -102,7 +102,7 @@ export default function PPDBPage() {
         }
     }, [selectedDistrict]);
 
-    const handleRegionChange = (e: ChangeEvent<HTMLSelectElement>, type: 'prov' | 'reg' | 'dis' | 'vil') => {
+    const handleRegionChange = async (e: ChangeEvent<HTMLSelectElement>, type: 'prov' | 'reg' | 'dis' | 'vil') => {
         const { value, options, selectedIndex } = e.target;
         const label = options[selectedIndex].text;
 
@@ -118,6 +118,24 @@ export default function PPDBPage() {
         } else if (type === 'vil') {
             setSelectedVillage(value);
             setFormData((prev: any) => ({ ...prev, Address1_Village: label }));
+
+            // Fetch Postal Code automatically
+            try {
+                const districtName = formData.Address1_AddressLine2 || "";
+                const response = await fetch(`https://kodepos.vercel.app/search/?q=${label}`);
+                const data = await response.json();
+                if (data && data.data && data.data.length > 0) {
+                    // Try to find the exact match for district if possible, else take first
+                    const match = data.data.find((item: any) =>
+                        item.subdistrict.toLowerCase().includes(districtName.toLowerCase()) ||
+                        item.urban.toLowerCase() === label.toLowerCase()
+                    ) || data.data[0];
+
+                    setFormData((prev: any) => ({ ...prev, Address1_ZipCode: match.postalcode }));
+                }
+            } catch (err) {
+                console.error("Gagal ambil kode pos", err);
+            }
         }
     };
 
@@ -519,7 +537,14 @@ export default function PPDBPage() {
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
                                 <label>Kode Pos</label>
-                                <input type="text" name="Address1_ZipCode" placeholder="Kode Pos" onChange={handleInputChange} />
+                                <input
+                                    type="text"
+                                    name="Address1_ZipCode"
+                                    placeholder="Otomatis terisi..."
+                                    value={formData.Address1_ZipCode || ""}
+                                    readOnly
+                                    style={{ backgroundColor: '#f1f5f9', cursor: 'not-allowed' }}
+                                />
                             </div>
                             <div className="input-luxury">
                                 <label>Negara</label>

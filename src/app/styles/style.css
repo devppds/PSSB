@@ -170,17 +170,9 @@ h6 {
 }
 
 .text-gradient {
-    color: var(--primary) !important;
-    display: inline;
-}
-
-@supports (-webkit-background-clip: text) or (background-clip: text) {
-    .text-gradient {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        -webkit-background-clip: text !important;
-        background-clip: text !important;
-        -webkit-text-fill-color: transparent !important;
-    }
+    color: #2563eb !important;
+    /* Force solid blue */
+    display: inline-block;
 }
 
 /* ===== HEADER REBORN (IMAGE MATCH) ===== */
@@ -500,7 +492,19 @@ h6 {
     margin-bottom: 1.5rem;
     letter-spacing: -0.04em;
     line-height: 1.1;
-    animation: fadeUp 0.8s ease-out backwards;
+    /* Removed animation temporarily for debugging */
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .hero-subtitle {

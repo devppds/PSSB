@@ -297,29 +297,42 @@ export default function AppleAdminPage() {
                     ) : (
                         <>
                             {activeTab === 'dashboard' && (
-                                <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
-                                    <div className="apple-card">
-                                        <h3 style={{ marginBottom: '20px', fontWeight: 700 }}>Statistik Pendaftaran</h3>
+                                <div className="grid-dashboard" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+                                    <div className="apple-card" style={{ gridColumn: 'span 2' }}>
+                                        <h3 style={{ marginBottom: '20px', fontWeight: 700, fontSize: '1.2rem' }}>Statistik Pendaftaran</h3>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <div>
-                                                <div style={{ fontSize: '2.5rem', fontWeight: 800 }}>{registrations.length}</div>
-                                                <div style={{ color: 'var(--apple-text-secondary)', fontSize: '0.9rem' }}>Total Pendaftar</div>
+                                                <div style={{ fontSize: '3.5rem', fontWeight: 800, color: 'var(--apple-blue)' }}>{registrations.length}</div>
+                                                <div style={{ color: 'var(--apple-text-secondary)', fontSize: '1rem', fontWeight: 500 }}>Total Pendaftar</div>
                                             </div>
-                                            <div style={{ textAlign: 'right' }}>
-                                                <div style={{ color: '#34c759', fontWeight: 700 }}>{registrations.filter(r => r.status === 'Terverifikasi').length} Terverifikasi</div>
-                                                <div style={{ color: '#ff9500', fontWeight: 700 }}>{registrations.filter(r => r.status === 'Pending').length} Pending</div>
+                                            <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                                <div className="apple-badge success" style={{ background: '#eafaf1', color: '#34c759', padding: '8px 16px', borderRadius: '12px', fontWeight: 700 }}>{registrations.filter(r => r.status === 'Terverifikasi').length} Terverifikasi</div>
+                                                <div className="apple-badge warning" style={{ background: '#fff9e6', color: '#ff9500', padding: '8px 16px', borderRadius: '12px', fontWeight: 700 }}>{registrations.filter(r => r.status === 'Pending').length} Pending</div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="apple-card" style={{ background: 'var(--apple-blue)', color: 'white' }}>
-                                        <h3 style={{ marginBottom: '15px', fontWeight: 700 }}>Integritas Sistem</h3>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                                            <i className="fas fa-shield-alt fa-2x"></i>
-                                            <div>
-                                                <div style={{ fontWeight: 700, fontSize: '1.2rem' }}>Semua Sistem Normal</div>
-                                                <div style={{ opacity: 0.8, fontSize: '0.85rem' }}>Cloudflare D1 + KV + Galeri</div>
+                                    <div className="apple-card" style={{ background: 'linear-gradient(135deg, #007aff 0%, #0056b3 100%)', color: 'white', gridColumn: 'span 2' }}>
+                                        <h3 style={{ marginBottom: '15px', fontWeight: 700, fontSize: '1.2rem' }}>Integritas Sistem</h3>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginTop: '10px' }}>
+                                            <div style={{ width: '60px', height: '60px', borderRadius: '18px', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                <i className="fas fa-shield-alt fa-2x"></i>
                                             </div>
+                                            <div>
+                                                <div style={{ fontWeight: 800, fontSize: '1.5rem' }}>Semua Sistem Normal</div>
+                                                <div style={{ opacity: 0.9, fontSize: '0.9rem' }}>Database Cloudflare D1 + KV Storage + Media Hub</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="apple-card" style={{ gridColumn: 'span 4' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                                            <h3 style={{ fontWeight: 700 }}>Aktivitas Terakhir</h3>
+                                            <button className="apple-btn-secondary" style={{ padding: '8px 16px', background: '#f5f5f7', border: 'none', borderRadius: '10px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}>Lihat Semua</button>
+                                        </div>
+                                        <div style={{ color: 'var(--apple-text-secondary)', textAlign: 'center', padding: '40px 0' }}>
+                                            <i className="fas fa-history fa-2x" style={{ marginBottom: '15px', opacity: 0.2 }}></i>
+                                            <p>Belum ada aktivitas pendaftaran baru dalam 24 jam terakhir.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -515,21 +528,30 @@ export default function AppleAdminPage() {
 
                             {activeTab === 'curriculum' && (
                                 <div className="apple-card">
-                                    <h2 style={{ marginBottom: '20px' }}>Pusat Kurikulum</h2>
-                                    <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '30px' }}>Manajemen materi ujian masuk dan bahan ajar.</p>
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-                                        <div className="apple-card" style={{ background: '#f5f5f7', border: 'none' }}>
-                                            <i className="fas fa-book-open fa-2x" style={{ color: 'var(--apple-blue)', marginBottom: '15px' }}></i>
-                                            <h4 style={{ fontWeight: 700 }}>Madrasah Diniyah</h4>
-                                            <p style={{ fontSize: '0.8rem', opacity: 0.7 }}>Kelola materi Ula, Wustho, dan Ulya.</p>
+                                    <div style={{ marginBottom: '40px' }}>
+                                        <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '8px' }}>Pusat Kurikulum</h2>
+                                        <p style={{ color: 'var(--apple-text-secondary)' }}>Manajemen materi ujian masuk dan bahan ajar setiap jenjang.</p>
+                                    </div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '24px' }}>
+                                        <div className="apple-card" style={{ background: '#f5f5f7', border: 'none', cursor: 'pointer' }}>
+                                            <div style={{ width: '60px', height: '60px', borderRadius: '18px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                                                <i className="fas fa-book-open fa-2x" style={{ color: 'var(--apple-blue)' }}></i>
+                                            </div>
+                                            <h4 style={{ fontWeight: 800, fontSize: '1.3rem', marginBottom: '8px' }}>Madrasah Diniyah</h4>
+                                            <p style={{ fontSize: '0.9rem', color: 'var(--apple-text-secondary)', marginBottom: '20px' }}>Kelola materi Ula, Wustho, dan Ulya secara mendetail.</p>
+                                            <button className="apple-btn-primary" style={{ padding: '10px 20px', fontSize: '0.85rem' }}>Buka Modul</button>
                                         </div>
-                                        <div className="apple-card" style={{ background: '#f5f5f7', border: 'none' }}>
-                                            <i className="fas fa-quran fa-2x" style={{ color: '#34c759', marginBottom: '15px' }}></i>
-                                            <h4 style={{ fontWeight: 700 }}>Tahfidz Program</h4>
-                                            <p style={{ fontSize: '0.8rem', opacity: 0.7 }}>Manage Qur'an testing requirements.</p>
+                                        <div className="apple-card" style={{ background: '#f5f5f7', border: 'none', cursor: 'pointer' }}>
+                                            <div style={{ width: '60px', height: '60px', borderRadius: '18px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                                                <i className="fas fa-quran fa-2x" style={{ color: '#34c759' }}></i>
+                                            </div>
+                                            <h4 style={{ fontWeight: 800, fontSize: '1.3rem', marginBottom: '8px' }}>Tahfidz Program</h4>
+                                            <p style={{ fontSize: '0.9rem', color: 'var(--apple-text-secondary)', marginBottom: '20px' }}>Pengaturan target setoran dan kategori hafalan.</p>
+                                            <button className="apple-btn-primary" style={{ padding: '10px 20px', fontSize: '0.85rem', background: '#34c759' }}>Buka Modul</button>
                                         </div>
-                                        <div className="apple-card" style={{ background: '#f5f5f7', border: '2px dashed #ddd', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <span style={{ color: '#999', fontSize: '0.9rem' }}>+ Add New Category</span>
+                                        <div className="apple-card" style={{ border: '2px dashed #ddd', background: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '220px', opacity: 0.6 }}>
+                                            <i className="fas fa-plus fa-2x" style={{ marginBottom: '15px' }}></i>
+                                            <p style={{ fontWeight: 600 }}>Tambah Kategori</p>
                                         </div>
                                     </div>
                                 </div>

@@ -13,6 +13,8 @@ export default function AppleAdminPage() {
     const [registrations, setRegistrations] = useState<any[]>([]);
     const [gallery, setGallery] = useState<any[]>([]);
     const [timeline, setTimeline] = useState<any[]>([]);
+    const [curriculum, setCurriculum] = useState<{ categories: any[], items: any[], contents: any[] }>({ categories: [], items: [], contents: [] });
+    const [selectedCategory, setSelectedCategory] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [authLoading, setAuthLoading] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -93,13 +95,15 @@ export default function AppleAdminPage() {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const [contentRes, santriRes] = await Promise.all([
+            const [contentRes, santriRes, curriculumRes] = await Promise.all([
                 fetch("/api/content/all"),
-                fetch("/api/get-santri")
+                fetch("/api/get-santri"),
+                fetch("/api/curriculum")
             ]);
 
             const contentData = await contentRes.json();
             const santriData = await santriRes.json();
+            const curriculumData = await curriculumRes.json();
 
             setSettings(contentData.settings || {});
             const flattened = Object.values(contentData.content || {}).flat() as any[];
@@ -107,6 +111,7 @@ export default function AppleAdminPage() {
             setGallery(contentData.gallery_list || []);
             setTimeline(contentData.timeline || []);
             setRegistrations(santriData || []);
+            setCurriculum(curriculumData || { categories: [], items: [], contents: [] });
         } catch (err) {
             console.error(err);
         } finally {
@@ -264,6 +269,108 @@ export default function AppleAdminPage() {
             content: '',
             image_url: ''
         }]);
+    };
+
+    // Curriculum Handlers
+    const handleSaveCurriculum = async (type: 'category' | 'item' | 'content', data: any) => {
+        setSaving(true);
+        try {
+            await fetch('/api/curriculum', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type, data })
+            });
+            showToast("Sukses", "Data kurikulum disimpan.", "success");
+            fetchData();
+        } catch (e) {
+            showToast("Error", "Gagal menyimpan kurikulum.", "error");
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleDeleteCurriculum = (type: 'category' | 'item' | 'content', id: any) => {
+        if (typeof id === 'string' && id.startsWith('new-')) {
+            if (type === 'category') {
+                setCurriculum(prev => ({ ...prev, categories: prev.categories.filter(c => c.id !== id) }));
+            } else if (type === 'item') {
+                setCurriculum(prev => ({ ...prev, items: prev.items.filter(i => i.id !== id) }));
+            } else {
+                setCurriculum(prev => ({ ...prev, contents: prev.contents.filter(c => c.id !== id) }));
+            }
+            return;
+        }
+        confirmAction("Hapus Data?", "Data ini akan dihapus permanen.", async () => {
+            try {
+                await fetch('/api/curriculum', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type, id })
+                });
+                showToast("Terhapus", "Data berhasil dihapus.", "success");
+                fetchData();
+            } catch (e) {
+                showToast("Error", "Gagal menghapus.", "error");
+            }
+        });
+    };
+
+    const handleAddCategory = () => {
+        setCurriculum(prev => ({
+            ...prev,
+            categories: [...prev.categories, {
+                id: 'new-' + Date.now(),
+                name: 'Kategori Baru',
+                order_index: prev.categories.length + 1
+            }]
+        }));
+    };
+
+    const handleAddItem = (categoryId: any) => {
+        setCurriculum(prev => ({
+            ...prev,
+            items: [...prev.items, {
+                id: 'new-' + Date.now(),
+                category_id: categoryId,
+                title: 'Tingkatan Baru',
+                age: '',
+                size: 'materi-item-med',
+                order_index: prev.items.filter(i => i.category_id === categoryId).length + 1
+            }]
+        }));
+    };
+
+    const handleAddContent = (itemId: any) => {
+        setCurriculum(prev => ({
+            ...prev,
+            contents: [...prev.contents, {
+                id: 'new-' + Date.now(),
+                item_id: itemId,
+                section_type: 'kurikulum',
+                icon_type: 'check',
+                label: 'Materi Baru',
+                order_index: prev.contents.filter(c => c.item_id === itemId).length + 1
+            }]
+        }));
+    };
+
+    const handleUpdateCurriculum = (type: 'category' | 'item' | 'content', id: any, field: string, value: any) => {
+        if (type === 'category') {
+            setCurriculum(prev => ({
+                ...prev,
+                categories: prev.categories.map(c => c.id === id ? { ...c, [field]: value } : c)
+            }));
+        } else if (type === 'item') {
+            setCurriculum(prev => ({
+                ...prev,
+                items: prev.items.map(i => i.id === id ? { ...i, [field]: value } : i)
+            }));
+        } else {
+            setCurriculum(prev => ({
+                ...prev,
+                contents: prev.contents.map(c => c.id === id ? { ...c, [field]: value } : c)
+            }));
+        }
     };
 
     const handleUpdateSantriStatus = async (id: number, status: string, catatan: string) => {
@@ -797,57 +904,139 @@ export default function AppleAdminPage() {
                             )}
 
                             {activeTab === 'curriculum' && (
-                                <div className="apple-card">
-                                    <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-                                        <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 30px', boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)' }}>
-                                            <i className="fas fa-graduation-cap fa-3x" style={{ color: 'white' }}></i>
+                                <div>
+                                    <div className="apple-card" style={{ marginBottom: '30px' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <div>
+                                                <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '8px' }}>Manajemen Kurikulum</h2>
+                                                <p style={{ color: 'var(--apple-text-secondary)' }}>Kelola kategori, tingkatan, dan materi ujian untuk setiap jenjang</p>
+                                            </div>
+                                            <button className="apple-badge badge-blue" style={{ border: 'none', cursor: 'pointer' }} onClick={handleAddCategory}>
+                                                + Tambah Kategori
+                                            </button>
                                         </div>
-                                        <h2 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '15px' }}>Manajemen Kurikulum</h2>
-                                        <p style={{ fontSize: '1.1rem', color: 'var(--apple-text-secondary)', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px' }}>
-                                            Kelola materi ujian masuk, kurikulum kitab salaf, dan batas usia minimal santri untuk setiap jenjang pendidikan.
-                                        </p>
-
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', maxWidth: '900px', margin: '0 auto 40px' }}>
-                                            <div style={{ padding: '25px', background: '#f5f5f7', borderRadius: '15px', textAlign: 'left' }}>
-                                                <i className="fas fa-book-open" style={{ fontSize: '2rem', color: 'var(--apple-blue)', marginBottom: '15px' }}></i>
-                                                <h4 style={{ fontWeight: 700, marginBottom: '8px' }}>Madrasah Hidayatul Mubtadi'in (MHM)</h4>
-                                                <p style={{ fontSize: '0.85rem', color: 'var(--apple-text-secondary)' }}>9 tingkatan dari I Ibtidaiyah hingga Aliyah</p>
-                                            </div>
-                                            <div style={{ padding: '25px', background: '#f5f5f7', borderRadius: '15px', textAlign: 'left' }}>
-                                                <i className="fas fa-mosque" style={{ fontSize: '2rem', color: '#34c759', marginBottom: '15px' }}></i>
-                                                <h4 style={{ fontWeight: 700, marginBottom: '8px' }}>Ma'had Aly Lirboyo</h4>
-                                                <p style={{ fontSize: '0.85rem', color: 'var(--apple-text-secondary)' }}>Marhalah Ula & Tsaniyah</p>
-                                            </div>
-                                            <div style={{ padding: '25px', background: '#f5f5f7', borderRadius: '15px', textAlign: 'left' }}>
-                                                <i className="fas fa-quran" style={{ fontSize: '2rem', color: '#ff9500', marginBottom: '15px' }}></i>
-                                                <h4 style={{ fontWeight: 700, marginBottom: '8px' }}>Madrasah Ihya' Ulumiddin (MIU)</h4>
-                                                <p style={{ fontSize: '0.85rem', color: 'var(--apple-text-secondary)' }}>6 tingkatan Ula, Wustho, dan Ulya</p>
-                                            </div>
-                                        </div>
-
-                                        <a
-                                            href="/informasi"
-                                            target="_blank"
-                                            className="apple-btn-primary"
-                                            style={{
-                                                padding: '15px 40px',
-                                                fontSize: '1rem',
-                                                display: 'inline-flex',
-                                                alignItems: 'center',
-                                                gap: '10px',
-                                                textDecoration: 'none',
-                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
-                                            }}
-                                        >
-                                            <i className="fas fa-external-link-alt"></i>
-                                            Buka Halaman Materi Ujian
-                                        </a>
-
-                                        <p style={{ fontSize: '0.85rem', color: 'var(--apple-text-secondary)', marginTop: '20px' }}>
-                                            <i className="fas fa-info-circle"></i> Halaman ini memiliki editor lengkap untuk mengelola kategori, tingkatan, dan detail materi ujian.
-                                        </p>
                                     </div>
+
+                                    {curriculum.categories.map((category, catIdx) => (
+                                        <div key={category.id} className="apple-card" style={{ marginBottom: '20px' }}>
+                                            {/* Category Header */}
+                                            <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginBottom: '20px', paddingBottom: '15px', borderBottom: '1px solid #eee' }}>
+                                                <div style={{ flex: 1 }}>
+                                                    <input
+                                                        className="apple-input"
+                                                        value={category.name || ''}
+                                                        onChange={e => handleUpdateCurriculum('category', category.id, 'name', e.target.value)}
+                                                        placeholder="Nama Kategori..."
+                                                        style={{ fontSize: '1.2rem', fontWeight: 700, padding: '10px 15px' }}
+                                                    />
+                                                </div>
+                                                <button
+                                                    className="apple-btn-primary"
+                                                    style={{ padding: '8px 16px', fontSize: '0.85rem' }}
+                                                    onClick={() => handleSaveCurriculum('category', category)}
+                                                >
+                                                    Simpan Kategori
+                                                </button>
+                                                <button
+                                                    className="apple-badge badge-blue"
+                                                    style={{ border: 'none', cursor: 'pointer' }}
+                                                    onClick={() => handleAddItem(category.id)}
+                                                >
+                                                    + Tingkatan
+                                                </button>
+                                                <button
+                                                    className="apple-btn-secondary"
+                                                    style={{ padding: '8px 12px', fontSize: '0.85rem', color: '#ff3b30', background: 'rgba(255, 59, 48, 0.1)' }}
+                                                    onClick={() => handleDeleteCurriculum('category', category.id)}
+                                                >
+                                                    <i className="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+
+                                            {/* Items for this Category */}
+                                            {curriculum.items.filter(item => item.category_id === category.id).map((item, itemIdx) => (
+                                                <div key={item.id} style={{ marginBottom: '20px', padding: '20px', background: '#f5f5f7', borderRadius: '12px' }}>
+                                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '15px' }}>
+                                                        <input
+                                                            className="apple-input"
+                                                            value={item.title || ''}
+                                                            onChange={e => handleUpdateCurriculum('item', item.id, 'title', e.target.value)}
+                                                            placeholder="Nama Tingkatan..."
+                                                            style={{ flex: 2, fontWeight: 600 }}
+                                                        />
+                                                        <input
+                                                            className="apple-input"
+                                                            value={item.age || ''}
+                                                            onChange={e => handleUpdateCurriculum('item', item.id, 'age', e.target.value)}
+                                                            placeholder="Usia (opsional)"
+                                                            style={{ flex: 1 }}
+                                                        />
+                                                        <button
+                                                            className="apple-btn-primary"
+                                                            style={{ padding: '6px 12px', fontSize: '0.75rem', whiteSpace: 'nowrap' }}
+                                                            onClick={() => handleSaveCurriculum('item', item)}
+                                                        >
+                                                            Simpan
+                                                        </button>
+                                                        <button
+                                                            className="apple-badge badge-blue"
+                                                            style={{ border: 'none', cursor: 'pointer', fontSize: '0.7rem' }}
+                                                            onClick={() => handleAddContent(item.id)}
+                                                        >
+                                                            + Materi
+                                                        </button>
+                                                        <button
+                                                            className="apple-btn-secondary"
+                                                            style={{ padding: '6px 10px', fontSize: '0.75rem', color: '#ff3b30', background: 'rgba(255, 59, 48, 0.1)' }}
+                                                            onClick={() => handleDeleteCurriculum('item', item.id)}
+                                                        >
+                                                            <i className="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+
+                                                    {/* Contents for this Item */}
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                                        {curriculum.contents.filter(content => content.item_id === item.id).map((content, contentIdx) => (
+                                                            <div key={content.id} style={{ display: 'flex', gap: '8px', alignItems: 'center', padding: '10px', background: 'white', borderRadius: '8px' }}>
+                                                                <span style={{ fontSize: '0.8rem', color: 'var(--apple-text-secondary)', minWidth: '20px' }}>{contentIdx + 1}.</span>
+                                                                <select
+                                                                    className="apple-input"
+                                                                    value={content.icon_type || 'check'}
+                                                                    onChange={e => handleUpdateCurriculum('content', content.id, 'icon_type', e.target.value)}
+                                                                    style={{ width: '100px', padding: '6px', fontSize: '0.8rem' }}
+                                                                >
+                                                                    <option value="check">✓ Check</option>
+                                                                    <option value="edit">✎ Edit</option>
+                                                                    <option value="cap">🎓 Cap</option>
+                                                                </select>
+                                                                <input
+                                                                    className="apple-input"
+                                                                    value={content.label || ''}
+                                                                    onChange={e => handleUpdateCurriculum('content', content.id, 'label', e.target.value)}
+                                                                    placeholder="Nama materi..."
+                                                                    style={{ flex: 1, padding: '6px 10px', fontSize: '0.85rem' }}
+                                                                />
+                                                                <button
+                                                                    className="apple-btn-primary"
+                                                                    style={{ padding: '4px 10px', fontSize: '0.7rem' }}
+                                                                    onClick={() => handleSaveCurriculum('content', content)}
+                                                                >
+                                                                    Simpan
+                                                                </button>
+                                                                <button
+                                                                    className="apple-btn-secondary"
+                                                                    style={{ padding: '4px 8px', fontSize: '0.7rem', color: '#ff3b30', background: 'rgba(255, 59, 48, 0.1)' }}
+                                                                    onClick={() => handleDeleteCurriculum('content', content.id)}
+                                                                >
+                                                                    <i className="fas fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ))}
                                 </div>
                             )}
 

@@ -1,5 +1,47 @@
 /* Modern Luxury Styling for Materi & Kurikulum Page */
 
+/* HERO SECTION STYLES (Missing Previously) */
+.info-hero-section {
+    padding: 8rem 1.5rem 6rem;
+    text-align: center;
+    background: radial-gradient(circle at center top, rgba(37, 99, 235, 0.05) 0%, transparent 60%);
+    position: relative;
+    overflow: hidden;
+}
+
+.ornament-icon {
+    display: inline-block;
+    font-size: 3rem;
+    color: var(--gold-main);
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+    filter: drop-shadow(0 4px 6px rgba(217, 119, 6, 0.2));
+}
+
+.page-hero-title {
+    font-family: var(--font-playfair), serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.page-hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.text-dark {
+    color: var(--text-main);
+}
+
+.text-primary {
+    color: var(--primary);
+}
+
 .materi-grid {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));

@@ -124,22 +124,22 @@ export default function AppleAdminPage() {
                             style={{ width: '80px', height: 'auto', margin: '0 auto' }}
                         />
                     </div>
-                    <h2 style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '0.5rem' }}>Management Portal</h2>
-                    <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '2rem' }}>Authenticate to access system controls.</p>
+                    <h2 style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '0.5rem' }}>Portal Manajemen</h2>
+                    <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '2rem' }}>Autentikasi untuk mengakses kontrol sistem.</p>
                     <input
                         type="password"
                         className="apple-input"
-                        placeholder="System Password"
+                        placeholder="Kata Sandi Sistem"
                         value={passwordInput}
                         onChange={(e) => setPasswordInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && passwordInput === 'sekretary25' && setIsLoggedIn(true)}
                         style={{ marginBottom: '1.2rem', textAlign: 'center' }}
                     />
                     <button className="apple-btn-primary" style={{ width: '100%' }} onClick={() => passwordInput === 'sekretary25' && setIsLoggedIn(true)}>
-                        Unlock System
+                        Masuk Sistem
                     </button>
                     <div style={{ marginTop: '2rem', fontSize: '0.75rem', color: 'var(--apple-text-secondary)' }}>
-                        <i className="fas fa-lock"></i> Secured Layer Active
+                        <i className="fas fa-lock"></i> Koneksi Terenkripsi Aktif
                     </div>
                 </div>
             </div>
@@ -161,34 +161,34 @@ export default function AppleAdminPage() {
 
                 <nav style={{ flex: 1 }}>
                     <a href="#" className={`apple-nav-item ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}>
-                        <i className="fas fa-chart-pie"></i> <span className="apple-nav-text">Overview</span>
+                        <i className="fas fa-chart-pie"></i> <span className="apple-nav-text">Ringkasan</span>
                     </a>
                     <a href="#" className={`apple-nav-item ${activeTab === 'registrations' ? 'active' : ''}`} onClick={() => setActiveTab('registrations')}>
-                        <i className="fas fa-users"></i> <span className="apple-nav-text">Registrar</span>
+                        <i className="fas fa-users"></i> <span className="apple-nav-text">Data Santri</span>
                     </a>
                     <a href="#" className={`apple-nav-item ${activeTab === 'general' ? 'active' : ''}`} onClick={() => setActiveTab('general')}>
-                        <i className="fas fa-cog"></i> <span className="apple-nav-text">Settings</span>
+                        <i className="fas fa-cog"></i> <span className="apple-nav-text">Pengaturan</span>
                     </a>
                     <a href="#" className={`apple-nav-item ${activeTab === 'content' ? 'active' : ''}`} onClick={() => setActiveTab('content')}>
-                        <i className="fas fa-feather"></i> <span className="apple-nav-text">Content</span>
+                        <i className="fas fa-feather"></i> <span className="apple-nav-text">Konten Web</span>
                     </a>
                     <a href="#" className={`apple-nav-item ${activeTab === 'curriculum' ? 'active' : ''}`} onClick={() => setActiveTab('curriculum')}>
-                        <i className="fas fa-graduation-cap"></i> <span className="apple-nav-text">Curriculum</span>
+                        <i className="fas fa-graduation-cap"></i> <span className="apple-nav-text">Kurikulum</span>
                     </a>
                     <a href="#" className={`apple-nav-item ${activeTab === 'gallery' ? 'active' : ''}`} onClick={() => setActiveTab('gallery')}>
-                        <i className="fas fa-images"></i> <span className="apple-nav-text">Media Hub</span>
+                        <i className="fas fa-images"></i> <span className="apple-nav-text">Galeri Media</span>
                     </a>
                     <a href="#" className={`apple-nav-item ${activeTab === 'finance' ? 'active' : ''}`} onClick={() => setActiveTab('finance')}>
-                        <i className="fas fa-credit-card"></i> <span className="apple-nav-text">Financial Hub</span>
+                        <i className="fas fa-credit-card"></i> <span className="apple-nav-text">Keuangan</span>
                     </a>
                 </nav>
 
                 <div style={{ borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '20px' }}>
                     <a href="/" className="apple-nav-item">
-                        <i className="fas fa-globe"></i> <span className="apple-nav-text">Public Site</span>
+                        <i className="fas fa-globe"></i> <span className="apple-nav-text">Lihat Situs Utama</span>
                     </a>
                     <button onClick={() => setIsLoggedIn(false)} className="apple-nav-item" style={{ width: '100%', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left' }}>
-                        <i className="fas fa-sign-out-alt"></i> <span className="apple-nav-text">Sign Out</span>
+                        <i className="fas fa-sign-out-alt"></i> <span className="apple-nav-text">Keluar</span>
                     </button>
                 </div>
             </aside>
@@ -197,8 +197,8 @@ export default function AppleAdminPage() {
             <main className="apple-main-content">
                 <header className="apple-header">
                     <div>
-                        <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '4px', fontWeight: 500, fontSize: '0.9rem' }}>Secure Admin Console</p>
-                        <h1 className="apple-title-large">System Control</h1>
+                        <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '4px', fontWeight: 500, fontSize: '0.9rem' }}>Konsol Admin Aman</p>
+                        <h1 className="apple-title-large">Kontrol Sistem</h1>
                     </div>
                     <div style={{ display: 'flex', gap: '10px' }}>
                         <button className="apple-btn-primary" style={{ background: 'white', color: 'black', border: '1px solid #ddd' }} onClick={fetchData}>
@@ -216,26 +216,26 @@ export default function AppleAdminPage() {
                         {activeTab === 'dashboard' && (
                             <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
                                 <div className="apple-card">
-                                    <h3 style={{ marginBottom: '20px', fontWeight: 700 }}>Registration Stats</h3>
+                                    <h3 style={{ marginBottom: '20px', fontWeight: 700 }}>Statistik Pendaftaran</h3>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div>
                                             <div style={{ fontSize: '2.5rem', fontWeight: 800 }}>{registrations.length}</div>
-                                            <div style={{ color: 'var(--apple-text-secondary)', fontSize: '0.9rem' }}>Total Applicants</div>
+                                            <div style={{ color: 'var(--apple-text-secondary)', fontSize: '0.9rem' }}>Total Pendaftar</div>
                                         </div>
                                         <div style={{ textAlign: 'right' }}>
-                                            <div style={{ color: '#34c759', fontWeight: 700 }}>{registrations.filter(r => r.status === 'Terverifikasi').length} Verified</div>
+                                            <div style={{ color: '#34c759', fontWeight: 700 }}>{registrations.filter(r => r.status === 'Terverifikasi').length} Terverifikasi</div>
                                             <div style={{ color: '#ff9500', fontWeight: 700 }}>{registrations.filter(r => r.status === 'Pending').length} Pending</div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="apple-card" style={{ background: 'var(--apple-blue)', color: 'white' }}>
-                                    <h3 style={{ marginBottom: '15px', fontWeight: 700 }}>System Integrity</h3>
+                                    <h3 style={{ marginBottom: '15px', fontWeight: 700 }}>Integritas Sistem</h3>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                                         <i className="fas fa-shield-alt fa-2x"></i>
                                         <div>
-                                            <div style={{ fontWeight: 700, fontSize: '1.2rem' }}>All Systems Nominal</div>
-                                            <div style={{ opacity: 0.8, fontSize: '0.85rem' }}>Cloudflare D1 + KV + Images</div>
+                                            <div style={{ fontWeight: 700, fontSize: '1.2rem' }}>Semua Sistem Normal</div>
+                                            <div style={{ opacity: 0.8, fontSize: '0.85rem' }}>Cloudflare D1 + KV + Galeri</div>
                                         </div>
                                     </div>
                                 </div>
@@ -245,11 +245,11 @@ export default function AppleAdminPage() {
                         {activeTab === 'registrations' && (
                             <div className="apple-card" style={{ padding: '0' }}>
                                 <div style={{ padding: '24px', borderBottom: '1px solid rgba(0,0,0,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <h2 style={{ fontSize: '1.4rem', fontWeight: 700 }}>Registrar Hub</h2>
+                                    <h2 style={{ fontSize: '1.4rem', fontWeight: 700 }}>Pusat Pendaftaran</h2>
                                     <input
                                         className="apple-input"
                                         style={{ width: '300px', padding: '10px 15px' }}
-                                        placeholder="Search by name or NIK..."
+                                        placeholder="Cari nama atau NIK..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                     />
@@ -258,11 +258,11 @@ export default function AppleAdminPage() {
                                     <table className="apple-table">
                                         <thead>
                                             <tr>
-                                                <th style={{ paddingLeft: '24px' }}>Name</th>
-                                                <th>Niche/Level</th>
-                                                <th>Origin</th>
+                                                <th style={{ paddingLeft: '24px' }}>Nama</th>
+                                                <th>Jenjang</th>
+                                                <th>Asal Kota</th>
                                                 <th>Status</th>
-                                                <th>Action</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -283,7 +283,7 @@ export default function AppleAdminPage() {
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        <button onClick={() => setSelectedSantri(s)} className="apple-btn-primary" style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '8px' }}>Manage</button>
+                                                        <button onClick={() => setSelectedSantri(s)} className="apple-btn-primary" style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '8px' }}>Kelola</button>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -296,29 +296,29 @@ export default function AppleAdminPage() {
                         {activeTab === 'general' && (
                             <div className="apple-card">
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px' }}>
-                                    <h2 style={{ fontSize: '1.6rem', fontWeight: 700 }}>System Configuration</h2>
+                                    <h2 style={{ fontSize: '1.6rem', fontWeight: 700 }}>Konfigurasi Sistem</h2>
                                     <button className="apple-btn-primary" onClick={handleSaveSettings} disabled={saving}>
-                                        {saving ? <i className="fas fa-spinner fa-spin"></i> : "Synchronize"}
+                                        {saving ? <i className="fas fa-spinner fa-spin"></i> : "Sinkronisasi"}
                                     </button>
                                 </div>
 
                                 <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginBottom: '30px' }}>
                                     <div>
-                                        <label className="apple-label">Institutional Contacts</label>
+                                        <label className="apple-label">Kontak Lembaga</label>
                                         <div className="apple-input-group">
-                                            <input className="apple-input" placeholder="WhatsApp Hub" value={settings.whatsapp_number || ""} onChange={(e) => setSettings({ ...settings, whatsapp_number: e.target.value })} />
+                                            <input className="apple-input" placeholder="WhatsApp Pusat" value={settings.whatsapp_number || ""} onChange={(e) => setSettings({ ...settings, whatsapp_number: e.target.value })} />
                                         </div>
                                         <div className="apple-input-group">
-                                            <input className="apple-input" placeholder="Academic Target" value={settings.ta_info || ""} onChange={(e) => setSettings({ ...settings, ta_info: e.target.value })} />
+                                            <input className="apple-input" placeholder="Target Akademik" value={settings.ta_info || ""} onChange={(e) => setSettings({ ...settings, ta_info: e.target.value })} />
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="apple-label">Search Engine Optimization (SEO)</label>
+                                        <label className="apple-label">Optimasi Mesin Pencari (SEO)</label>
                                         <div className="apple-input-group">
-                                            <input className="apple-input" placeholder="Global Meta Title" value={settings.meta_title || ""} onChange={(e) => setSettings({ ...settings, meta_title: e.target.value })} />
+                                            <input className="apple-input" placeholder="Judul Meta Global" value={settings.meta_title || ""} onChange={(e) => setSettings({ ...settings, meta_title: e.target.value })} />
                                         </div>
                                         <div className="apple-input-group">
-                                            <textarea className="apple-input" placeholder="Meta Description" rows={2} value={settings.meta_description || ""} onChange={(e) => setSettings({ ...settings, meta_description: e.target.value })} />
+                                            <textarea className="apple-input" placeholder="Deskripsi Meta" rows={2} value={settings.meta_description || ""} onChange={(e) => setSettings({ ...settings, meta_description: e.target.value })} />
                                         </div>
                                     </div>
                                 </div>
@@ -340,8 +340,8 @@ export default function AppleAdminPage() {
                             <div className="apple-card" style={{ padding: '0', overflow: 'hidden' }}>
                                 <div style={{ padding: '24px', borderBottom: '1px solid rgba(0,0,0,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div>
-                                        <h2 style={{ fontSize: '1.4rem', fontWeight: 700 }}>Dynamic Assets</h2>
-                                        <p style={{ fontSize: '0.85rem', color: 'var(--apple-text-secondary)', marginTop: '4px' }}>Global list items and descriptors.</p>
+                                        <h2 style={{ fontSize: '1.4rem', fontWeight: 700 }}>Aset Dinamis</h2>
+                                        <p style={{ fontSize: '0.85rem', color: 'var(--apple-text-secondary)', marginTop: '4px' }}>Kelola daftar ikon dan deskripsi konten.</p>
                                     </div>
                                 </div>
                                 <div className="apple-table-container">
@@ -375,7 +375,7 @@ export default function AppleAdminPage() {
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <button onClick={() => handleSaveGlobal(item.section_slug)} className="apple-btn-primary" style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '8px' }}>Sync</button>
+                                                            <button onClick={() => handleSaveGlobal(item.section_slug)} className="apple-btn-primary" style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '8px' }}>Sinkron</button>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -407,13 +407,13 @@ export default function AppleAdminPage() {
 
                         {activeTab === 'curriculum' && (
                             <div className="apple-card">
-                                <h2 style={{ marginBottom: '20px' }}>Curriculum Center</h2>
-                                <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '30px' }}>Management of entrance exams and study materials.</p>
+                                <h2 style={{ marginBottom: '20px' }}>Pusat Kurikulum</h2>
+                                <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '30px' }}>Manajemen materi ujian masuk dan bahan ajar.</p>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
                                     <div className="apple-card" style={{ background: '#f5f5f7', border: 'none' }}>
                                         <i className="fas fa-book-open fa-2x" style={{ color: 'var(--apple-blue)', marginBottom: '15px' }}></i>
                                         <h4 style={{ fontWeight: 700 }}>Madrasah Diniyah</h4>
-                                        <p style={{ fontSize: '0.8rem', opacity: 0.7 }}>Manage Ula, Wustho, and Ulya materials.</p>
+                                        <p style={{ fontSize: '0.8rem', opacity: 0.7 }}>Kelola materi Ula, Wustho, dan Ulya.</p>
                                     </div>
                                     <div className="apple-card" style={{ background: '#f5f5f7', border: 'none' }}>
                                         <i className="fas fa-quran fa-2x" style={{ color: '#34c759', marginBottom: '15px' }}></i>
@@ -461,54 +461,54 @@ export default function AppleAdminPage() {
                         <div className="apple-card" style={{ width: '100%', maxWidth: '800px', maxHeight: '90vh', overflowY: 'auto', position: 'relative' }}>
                             <button onClick={() => setSelectedSantri(null)} style={{ position: 'absolute', top: '20px', right: '20px', border: 'none', background: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>&times;</button>
 
-                            <h2 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '5px' }}>Registration Summary</h2>
-                            <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '30px' }}>Review applicant credentials and verify files.</p>
+                            <h2 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '5px' }}>Ringkasan Pendaftaran</h2>
+                            <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '30px' }}>Review dokumen pendaftar dan lakukan verifikasi data.</p>
 
                             <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '40px' }}>
                                 <div>
                                     <section style={{ marginBottom: '30px' }}>
-                                        <h4 className="apple-label" style={{ color: 'var(--apple-blue)', borderBottom: '1px solid #eee', paddingBottom: '8px' }}>Personal Profile</h4>
-                                        <DetailRow label="Full Name" value={`${selectedSantri.nama_depan} ${selectedSantri.nama_belakang}`} />
+                                        <h4 className="apple-label" style={{ color: 'var(--apple-blue)', borderBottom: '1px solid #eee', paddingBottom: '8px' }}>Profil Pribadi</h4>
+                                        <DetailRow label="Nama Lengkap" value={`${selectedSantri.nama_depan} ${selectedSantri.nama_belakang}`} />
                                         <DetailRow label="NIK / NISN" value={`${selectedSantri.nik} / ${selectedSantri.nisn}`} />
-                                        <DetailRow label="Gender / Religion" value={`${selectedSantri.jenis_kelamin} / ${selectedSantri.agama}`} />
-                                        <DetailRow label="Origin" value={`${selectedSantri.alamat_kota}, ${selectedSantri.alamat_provinsi}`} />
+                                        <DetailRow label="Kelamin / Agama" value={`${selectedSantri.jenis_kelamin} / ${selectedSantri.agama}`} />
+                                        <DetailRow label="Asal" value={`${selectedSantri.alamat_kota}, ${selectedSantri.alamat_provinsi}`} />
                                     </section>
 
                                     <section>
-                                        <h4 className="apple-label" style={{ color: 'var(--apple-blue)', borderBottom: '1px solid #eee', paddingBottom: '8px' }}>Parental Info</h4>
-                                        <DetailRow label="Father" value={selectedSantri.nama_ayah_depan} />
-                                        <DetailRow label="Mother" value={selectedSantri.nama_ibu_depan} />
+                                        <h4 className="apple-label" style={{ color: 'var(--apple-blue)', borderBottom: '1px solid #eee', paddingBottom: '8px' }}>Info Orang Tua</h4>
+                                        <DetailRow label="Ayah" value={selectedSantri.nama_ayah_depan} />
+                                        <DetailRow label="Ibu" value={selectedSantri.nama_ibu_depan} />
                                     </section>
                                 </div>
 
                                 <div>
                                     <div className="apple-card" style={{ background: '#f5f5f7', border: 'none' }}>
-                                        <h4 className="apple-label">System Control</h4>
+                                        <h4 className="apple-label">Kontrol Sistem</h4>
                                         <div className="apple-input-group">
-                                            <label className="apple-label" style={{ fontSize: '0.65rem' }}>Update Status</label>
+                                            <label className="apple-label" style={{ fontSize: '0.65rem' }}>Perbarui Status</label>
                                             <select
                                                 className="apple-input"
                                                 style={{ fontSize: '0.9rem' }}
                                                 value={selectedSantri.status}
                                                 onChange={(e) => handleUpdateSantriStatus(selectedSantri.id, e.target.value, selectedSantri.catatan_admin)}
                                             >
-                                                <option value="Pending">Pending Audit</option>
-                                                <option value="Terverifikasi">Verified / Admitted</option>
-                                                <option value="Ditolak">Rejected</option>
+                                                <option value="Pending">Pending / Tinjau</option>
+                                                <option value="Terverifikasi">Diterima / Terverifikasi</option>
+                                                <option value="Ditolak">Ditolak</option>
                                             </select>
                                         </div>
                                         <div className="apple-input-group">
-                                            <label className="apple-label" style={{ fontSize: '0.65rem' }}>Admin Notes</label>
+                                            <label className="apple-label" style={{ fontSize: '0.65rem' }}>Catatan Admin</label>
                                             <textarea
                                                 className="apple-input"
                                                 rows={3}
-                                                placeholder="Enter review notes..."
+                                                placeholder="Masukkan catatan tinjauan..."
                                                 value={selectedSantri.catatan_admin || ""}
                                                 onChange={(e) => setSelectedSantri({ ...selectedSantri, catatan_admin: e.target.value })}
                                             />
                                         </div>
                                         <div style={{ display: 'flex', gap: '10px' }}>
-                                            <button className="apple-btn-primary" style={{ flex: 1 }} onClick={() => handleUpdateSantriStatus(selectedSantri.id, selectedSantri.status, selectedSantri.catatan_admin)}>Save</button>
+                                            <button className="apple-btn-primary" style={{ flex: 1 }} onClick={() => handleUpdateSantriStatus(selectedSantri.id, selectedSantri.status, selectedSantri.catatan_admin)}>Simpan</button>
                                             <button className="apple-btn-primary" style={{ background: '#ff3b30' }} onClick={() => handleDeleteSantri(selectedSantri.id)}><i className="fas fa-trash"></i></button>
                                         </div>
                                     </div>

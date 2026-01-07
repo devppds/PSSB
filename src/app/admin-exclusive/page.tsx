@@ -420,7 +420,7 @@ export default function AppleAdminPage() {
                                         <h4 style={{ fontWeight: 700 }}>Tahfidz Program</h4>
                                         <p style={{ fontSize: '0.8rem', opacity: 0.7 }}>Manage Qur'an testing requirements.</p>
                                     </div>
-                                    <div className="apple-card" style={{ background: '#f5f5f7', border: 'none', border: '2px dashed #ddd', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <div className="apple-card" style={{ background: '#f5f5f7', border: '2px dashed #ddd', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <span style={{ color: '#999', fontSize: '0.9rem' }}>+ Add New Category</span>
                                     </div>
                                 </div>

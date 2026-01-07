@@ -1,25 +1,26 @@
-export default function ProfilSejarah({ history }: { history?: string }) {
-    // Fallback texts from original HTML
-    const defaultHistory = `Pesantren yang biasa disebut dengan PPDS ini, terletak sekitar
-            500 M di selatan Pondok Pesantren Lirboyo induk. PPDS diasuh
-            langsung oleh KH. Ahmad Mahin Thoha, Pesantren ini menjadi
-            Unit Lirboyo tepat pada tanggal 8 Dzulhijah 1422 H. /20 Februari
-            2002 M. Pondok Pesantren Darussalam merupakan pendidikan
-            non-formal yang masih mempertahankan kurikulum kesalafan
-            di era modernisasi ini. Selain khusus mempelajari kitab - kitab
-            salaf, para santri juga diberikan kesempatan untuk merangkap
-            pendidikan formal (SD/MI, SMP/MTs, SMA/SMK dan Perguruan
-            Tinggi) di luar Pondok. Bagi santri yang merangkap pendidikan
-            formal, dibuatkan wadah tersendiri dengan nama “Madrasah
-            Ihya Ulumiddin” untuk menunjang pembelajaran Ilmu Agama.`;
+export default function ProfilSejarah({ history, timeline }: { history?: string, timeline?: any[] }) {
+    // If we have DB timeline items, use them. Otherwise fallback to these defaults.
+    // However, the user wants the DB to be THE source.
+    // We kept the hardcoded strings inside the component before, but now we should prefer the timeline prop.
 
-    const masaKiniText = `Sistem pendidkan yang ada di Pondok Pesantren Lirboyo
-            Darussalam pada dasarnya dibagi menjadi dua kategori.
-            Pertama, bagi santri yang tidak merangkap pendidikan formal
-            wajib mengikuti pendidikan di MHM(Madrasah Hidayatul
-            Mubtadiin). Kedua, bagi santri yang merangkap pendidikan
-            formal wajib mengikuti pendidikan di MIU (madrasah Ihya'
-            Ulumiddin).`;
+    const fallbackTimeline = [
+        {
+            year: '2002',
+            date_label: '20 Februari 2002',
+            title: 'Pendirian Pondok',
+            content: history || `Pesantren yang biasa disebut dengan PPDS ini, terletak sekitar 500 M di selatan Pondok Pesantren Lirboyo induk. PPDS diasuh langsung oleh KH. Ahmad Mahin Thoha, Pesantren ini menjadi Unit Lirboyo tepat pada tanggal 8 Dzulhijah 1422 H. /20 Februari 2002 M.`,
+            image_url: 'https://res.cloudinary.com/dceamfy3n/image/upload/v1766596062/romo-yai_jgcrqg.webp'
+        },
+        {
+            year: '2025',
+            date_label: 'Masa Kini',
+            title: 'Pendidikan Modern',
+            content: `Sistem pendidkan yang ada di Pondok Pesantren Lirboyo Darussalam pada dasarnya dibagi menjadi dua kategori. Pertama, bagi santri yang tidak merangkap pendidikan formal wajib mengikuti pendidikan di MHM(Madrasah Hidayatul Mubtadiin). Kedua, bagi santri yang merangkap pendidikan formal wajib mengikuti pendidikan di MIU (madrasah Ihya' Ulumiddin).`,
+            image_url: 'https://res.cloudinary.com/dceamfy3n/image/upload/v1766596058/gus-amin_yiymmz.webp'
+        }
+    ];
+
+    const items = (timeline && timeline.length > 0) ? timeline : fallbackTimeline;
 
     return (
         <section className="section-wrapper" style={{ background: "#f8fafc", position: "relative" }} id="profil">
@@ -34,37 +35,25 @@ export default function ProfilSejarah({ history }: { history?: string }) {
             <div className="timeline-wrapper">
                 <div className="timeline-line"></div>
 
-                {/* Item 1: Pendirian (Use dynamic history if available, else default) */}
-                <div className="timeline-item reveal fade-left" data-animate="true" data-year="2002">
-                    <div className="timeline-dot"></div>
-                    <div className="timeline-content">
-                        <span>20 Februari 2002</span>
-                        <h3>Pendirian Pondok</h3>
-                        <p style={{ color: "var(--text-muted)", whiteSpace: "pre-line", textAlign: "justify" }}>
-                            {history || defaultHistory}
-                        </p>
+                {items.map((item, idx) => (
+                    <div key={idx} className={`timeline-item reveal ${idx % 2 === 0 ? 'fade-left' : 'fade-right'}`} data-animate="true" data-year={item.year}>
+                        <div className="timeline-dot"></div>
+                        <div className="timeline-content">
+                            <span>{item.date_label}</span>
+                            <h3>{item.title}</h3>
+                            <p style={{ color: "var(--text-muted)", whiteSpace: "pre-line", textAlign: "justify" }}>
+                                {item.content}
+                            </p>
+                        </div>
+                        <div className="timeline-image-container">
+                            {item.image_url ? (
+                                <img src={item.image_url} alt={item.title} />
+                            ) : (
+                                <div style={{ width: '100%', height: '100%', background: '#ddd' }}></div>
+                            )}
+                        </div>
                     </div>
-                    <div className="timeline-image-container">
-                        {/* Romo Yai Image */}
-                        <img src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596062/romo-yai_jgcrqg.webp" alt="Foto Romo Yai" />
-                    </div>
-                </div>
-
-                {/* Item 2: Masa Kini (Hardcoded for now as it's separate from the main history text block in CMS) */}
-                <div className="timeline-item reveal fade-right" data-animate="true" data-year="2025">
-                    <div className="timeline-dot"></div>
-                    <div className="timeline-content">
-                        <span>Masa Kini</span>
-                        <h3>Pendidikan Modern</h3>
-                        <p style={{ color: "var(--text-muted)", textAlign: "justify" }}>
-                            {masaKiniText}
-                        </p>
-                    </div>
-                    <div className="timeline-image-container">
-                        {/* Gus Amin Image */}
-                        <img src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596058/gus-amin_yiymmz.webp" alt="Foto Gus Amin" />
-                    </div>
-                </div>
+                ))}
             </div>
         </section>
     );

@@ -64,10 +64,24 @@ CREATE TABLE IF NOT EXISTS site_gallery (
     category TEXT NOT NULL, -- e.g., 'Bahtsul Masail', 'Kitab Kuning'
     image_url TEXT NOT NULL,
     order_index INTEGER DEFAULT 0,
+    category TEXT NOT NULL, -- e.g., 'Bahtsul Masail', 'Kitab Kuning'
+    image_url TEXT NOT NULL,
+    order_index INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- 5. Data Pendaftar (Santri)
+-- 5. Timeline History
+CREATE TABLE IF NOT EXISTS timeline_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    year TEXT,
+    date_label TEXT,
+    title TEXT,
+    content TEXT,
+    image_url TEXT,
+    order_index INTEGER DEFAULT 0
+);
+
+-- 6. Data Pendaftar (Santri)
 CREATE TABLE IF NOT EXISTS santri_pendaftar (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     -- Identitas Pribadi

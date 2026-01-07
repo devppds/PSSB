@@ -14,10 +14,11 @@ export async function GET(req: NextRequest) {
         }
 
         // Fetch everything in parallel
-        const [settingsRes, globalContentRes, galleryRes] = await Promise.all([
+        const [settingsRes, globalContentRes, galleryRes, timelineRes] = await Promise.all([
             env.DB.prepare('SELECT key, value FROM site_settings').all(),
             env.DB.prepare('SELECT * FROM global_content ORDER BY order_index ASC').all(),
-            env.DB.prepare('SELECT * FROM site_gallery ORDER BY order_index ASC').all()
+            env.DB.prepare('SELECT * FROM site_gallery ORDER BY order_index ASC').all(),
+            env.DB.prepare('SELECT * FROM timeline_items ORDER BY order_index ASC').all()
         ]);
 
         const settings = settingsRes.results.reduce((acc: any, item: any) => {
@@ -43,7 +44,8 @@ export async function GET(req: NextRequest) {
             settings,
             content,
             gallery,
-            gallery_list: galleryRes.results
+            gallery_list: galleryRes.results,
+            timeline: timelineRes.results
         });
     } catch (error: any) {
         console.error('Fetch All Content Error:', error);

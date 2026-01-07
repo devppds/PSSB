@@ -61,7 +61,7 @@ export default function HomeClient() {
         <>
             <Hero settings={data?.settings} />
             <VisiMisi text={data?.settings?.visi_text} list={data?.content?.misi} />
-            <ProfilSejarah history={data?.settings?.about_history} />
+            <ProfilSejarah history={data?.settings?.about_history} timeline={data?.timeline} />
             <VideoProfil url={data?.settings?.video_url} />
             <ProgramUnggulan onOpenGallery={openGallery} list={data?.content?.['program-unggulan']} />
             <ProgramTambahan onOpenGallery={openGallery} list={data?.content?.['program-tambahan']} />

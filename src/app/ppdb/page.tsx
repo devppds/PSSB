@@ -9,10 +9,18 @@ interface Region {
     name: string;
 }
 
+const STEPS = [
+    { id: 1, title: "Data Santri", icon: "fa-user-graduate" },
+    { id: 2, title: "Pendidikan", icon: "fa-school" },
+    { id: 3, title: "Orang Tua", icon: "fa-users" },
+    { id: 4, title: "Alamat", icon: "fa-map-marker-alt" },
+    { id: 5, title: "Berkas", icon: "fa-file-upload" }
+];
+
 export default function PPDBPage() {
+    const [currentStep, setCurrentStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState<any>({});
-    const [errors, setErrors] = useState<any>({});
 
     // Validasi Field "Lainnya"
     const [otherFields, setOtherFields] = useState({
@@ -49,11 +57,11 @@ export default function PPDBPage() {
                 .then(res => res.json())
                 .then(data => setRegencies(data))
                 .catch(err => console.error("Gagal ambil kabupaten", err));
+        } else {
             setRegencies([]);
-            setDistricts([]);
-            setVillages([]);
-            setFormData((prev: any) => ({ ...prev, Address1_City: "", Address1_AddressLine2: "", Address1_Region: "" })); // Reset related fields
         }
+        setDistricts([]);
+        setVillages([]);
     }, [selectedProvince]);
 
     // 3. Fetch Districts (Kecamatan) when Regency changes
@@ -63,10 +71,10 @@ export default function PPDBPage() {
                 .then(res => res.json())
                 .then(data => setDistricts(data))
                 .catch(err => console.error("Gagal ambil kecamatan", err));
+        } else {
             setDistricts([]);
-            setVillages([]);
-            setFormData((prev: any) => ({ ...prev, Address1_AddressLine2: "" }));
         }
+        setVillages([]);
     }, [selectedRegency]);
 
     // 4. Fetch Villages (Desa/Kelurahan) when District changes
@@ -76,6 +84,7 @@ export default function PPDBPage() {
                 .then(res => res.json())
                 .then(data => setVillages(data))
                 .catch(err => console.error("Gagal ambil desa", err));
+        } else {
             setVillages([]);
         }
     }, [selectedDistrict]);
@@ -93,11 +102,9 @@ export default function PPDBPage() {
             setFormData((prev: any) => ({ ...prev, Address1_City: label }));
         } else if (type === 'dis') {
             setSelectedDistrict(value);
-            setFormData((prev: any) => ({ ...prev, Address1_AddressLine2: label })); // Using AddressLine2 for Kecamatan
+            setFormData((prev: any) => ({ ...prev, Address1_AddressLine2: label }));
         } else if (type === 'vil') {
             setSelectedVillage(value);
-            // Desa/Kelurahan kita gabung ke detail jalan atau field khusus jika ada. 
-            // Disini kita masukkan ke variable sementara atau gabung ke alamat baris 1.
             setFormData((prev: any) => ({ ...prev, Address1_Village: label }));
         }
     };
@@ -121,407 +128,410 @@ export default function PPDBPage() {
         }
     };
 
+    const nextStep = () => {
+        setCurrentStep(prev => Math.min(prev + 1, STEPS.length));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const prevStep = () => {
+        setCurrentStep(prev => Math.max(prev - 1, 1));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        // Validasi Simple
-        console.log("Submitting Data:", formData);
 
-        // Mock success
-        setTimeout(() => {
+        const uploadData = new FormData();
+        Object.keys(formData).forEach(key => {
+            uploadData.append(key, formData[key]);
+        });
+
+        try {
+            const response = await fetch('/api/submit-registration', {
+                method: 'POST',
+                body: uploadData,
+            });
+
+            if (response.ok) {
+                alert("Pendaftaran Berhasil Dikirim!");
+                window.location.href = "/";
+            } else {
+                alert("Terjadi kesalahan saat mengirim data.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Terjadi kesalahan jaringan.");
+        } finally {
             setIsLoading(false);
-            alert("Pendaftaran Berhasil Dikirim! (Data Wilayah: " + formData.Address1_Region + ", " + formData.Address1_City + ")");
-        }, 2000);
+        }
     };
 
     return (
-        <>
-            <div className="section-wrapper">
-                <div className="ppdb-hero">
-                    <Link href="/" style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        marginBottom: '1.5rem',
-                        color: 'var(--ppdb-secondary)',
-                        fontWeight: 600,
-                        fontSize: '0.9rem',
-                        textDecoration: 'none'
-                    }}>
-                        <i className="fas fa-arrow-left"></i> Kembali ke Beranda
+        <div className="ppdb-container">
+            {/* HERO SECTION */}
+            <header className="ppdb-header">
+                <div className="header-content">
+                    <Link href="/" className="back-link">
+                        <i className="fas fa-arrow-left"></i> Kembali
                     </Link>
-                    <h1>Pendaftaran Santri</h1>
-                    <p>Bergabunglah dengan keluarga besar Pondok Pesantren Darussalam Lirboyo</p>
+                    <h1>Pendaftaran Santri Baru</h1>
+                    <p>Lengkapi formulir pendaftaran TA 2026-2027</p>
+                </div>
+            </header>
+
+            <main className="ppdb-main">
+                {/* PROGRESS TRACKER */}
+                <div className="stepper">
+                    {STEPS.map((step) => (
+                        <div key={step.id} className={`step-item ${currentStep === step.id ? 'active' : ''} ${currentStep > step.id ? 'completed' : ''}`}>
+                            <div className="step-circle">
+                                {currentStep > step.id ? <i className="fas fa-check"></i> : <i className={`fas ${step.icon}`}></i>}
+                            </div>
+                            <span className="step-label">{step.title}</span>
+                            {step.id < STEPS.length && <div className="step-line"></div>}
+                        </div>
+                    ))}
                 </div>
 
-                <div className="zf-templateWidth">
-                    <form onSubmit={handleSubmit} className="zf-templateWrapper">
-
-                        {/* Form Header */}
-                        <div className="zf-tempHeadContBdr">
-                            <h2 className="zf-frmTitle">Formulir Pendaftaran</h2>
-                            <p className="zf-frmDesc">Tahun Ajaran 2026-2027</p>
+                {/* FORM CONTENT */}
+                <form onSubmit={handleSubmit} className="ppdb-form-card">
+                    {/* STEP 1: DATA PRIBADI */}
+                    <div className={`step-content ${currentStep === 1 ? 'show' : 'hide'}`}>
+                        <div className="step-header">
+                            <h2><i className="fas fa-user-graduate"></i> Data Pribadi Santri</h2>
+                            <p>Informasi dasar calon santri sesuai identitas resmi.</p>
                         </div>
 
-                        <div className="zf-subContWrap zf-topAlign">
-                            {/* SECTION 1: DATA PRIBADI */}
-                            <div className="form-section-card">
-                                <div className="section-header">
-                                    <div className="section-icon"><i className="fas fa-user-graduate"></i></div>
-                                    <h3>Data Pribadi Calon Santri</h3>
-                                </div>
-
-                                <div className="zf-tempFrmWrapper">
-                                    <label className="zf-labelName">Nama Lengkap <em className="zf-important">*</em></label>
-                                    <div className="zf-nameWrapper">
-                                        <input type="text" name="Name_First" placeholder="Nama Depan" onChange={handleInputChange} required />
-                                        <input type="text" name="Name_Last" placeholder="Nama Belakang" onChange={handleInputChange} required />
-                                    </div>
-                                </div>
-
-                                <div className="custom-grid">
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">NIK Santri <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <input type="text" name="Number" maxLength={18} placeholder="Sesuai Kartu Keluarga" onChange={handleInputChange} required />
-                                        </div>
-                                    </div>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">No. Kartu Keluarga <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <input type="text" name="Number1" maxLength={18} placeholder="16 Digit No. KK" onChange={handleInputChange} required />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="custom-grid">
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">NISN <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <input type="text" name="Number2" maxLength={18} placeholder="Nomor Induk Sekolah Nasional" onChange={handleInputChange} required />
-                                        </div>
-                                    </div>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Jenis Kelamin <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <select className="zf-form-sBox" name="Dropdown" onChange={handleInputChange} required>
-                                                <option value="">Pilih Jenis Kelamin</option>
-                                                <option value="Laki-Laki">Laki-Laki</option>
-                                                <option value="Perempuan">Perempuan</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="custom-grid">
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Tempat Lahir <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <input type="text" name="SingleLine2" placeholder="Kota Kelahiran" onChange={handleInputChange} required />
-                                        </div>
-                                    </div>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Tanggal Lahir <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <input type="date" name="Date" onChange={handleInputChange} required />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="custom-grid">
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Agama <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <select className="zf-form-sBox" name="Dropdown2" onChange={handleInputChange} required>
-                                                <option value="">Pilih Agama</option>
-                                                <option value="Islam">Islam</option>
-                                                <option value="Protestan">Protestan</option>
-                                                <option value="Katolik">Katolik</option>
-                                                <option value="Hindu">Hindu</option>
-                                                <option value="Buddha">Buddha</option>
-                                                <option value="Konghucu">Konghucu</option>
-                                                <option value="Lainnya">Lainnya</option>
-                                            </select>
-                                            {otherFields.agama && (
-                                                <div style={{ marginTop: "1rem" }}>
-                                                    <input type="text" name="other_agama" placeholder="Sebutkan Agama" onChange={handleInputChange} />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Pendidikan Terakhir <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <select className="zf-form-sBox" name="Dropdown1" onChange={handleInputChange} required>
-                                                <option value="">Pilih Pendidikan Terakhir</option>
-                                                <option value="SD/MI">SD/MI</option>
-                                                <option value="SMP/MTS">SMP/MTS</option>
-                                                <option value="SMA/MA">SMA/MA</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div className="form-grid">
+                            <div className="input-group">
+                                <label>Nama Depan *</label>
+                                <input type="text" name="Name_First" placeholder="Contoh: Ahmad" onChange={handleInputChange} required />
                             </div>
-
-                            {/* SECTION 2: MINAT & TUJUAN */}
-                            <div className="form-section-card">
-                                <div className="section-header">
-                                    <div className="section-icon"><i className="fas fa-school"></i></div>
-                                    <h3>Jenjang & Minat</h3>
-                                </div>
-                                <div className="zf-tempFrmWrapper">
-                                    <label className="zf-labelName">Akan Masuk Kelas <em className="zf-important">*</em></label>
-                                    <div className="zf-tempContDiv">
-                                        <select className="zf-form-sBox" name="Dropdown3" onChange={handleInputChange} required>
-                                            <option value="">Pilih Jenjang/Kelas</option>
-                                            <optgroup label="MIU (Santri Sekolah Formal)">
-                                                <option value="I Ula">I Ula</option>
-                                                <option value="II Ula">II Ula</option>
-                                                <option value="III Ula">III Ula</option>
-                                                <option value="I Wustho">I Wustho</option>
-                                                <option value="I Ulya">I Ulya</option>
-                                            </optgroup>
-                                            <optgroup label="MHM (Santri Salaf)">
-                                                <option value="V Ibtida'iyyah">V Ibtida'iyyah</option>
-                                                <option value="VI Ibtida'iyyah">VI Ibtida'iyyah</option>
-                                                <option value="I Tsanawiyyah">I Tsanawiyyah</option>
-                                                <option value="I Aliyyah">I Aliyyah</option>
-                                                <option value="I Ma'had Aly">I Ma'had Aly</option>
-                                                <option value="II Ma'had Aly">II Ma'had Aly</option>
-                                            </optgroup>
-                                        </select>
-                                        <p className="zf-instruction"><i className="fas fa-info-circle"></i> <Link href="/materi-ujian" style={{ color: "#3b82f6", textDecoration: "underline" }}>Lihat Materi Ujian</Link>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="custom-grid">
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Hobi <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <input type="text" name="SingleLine" placeholder="Kegemaran" onChange={handleInputChange} required />
-                                        </div>
-                                    </div>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Cita-Cita <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <input type="text" name="SingleLine1" placeholder="Tujuan Masa Depan" onChange={handleInputChange} required />
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="input-group">
+                                <label>Nama Belakang *</label>
+                                <input type="text" name="Name_Last" placeholder="Contoh: Fauzi" onChange={handleInputChange} required />
                             </div>
-
-                            {/* SECTION 3: DATA ORANG TUA / WALI */}
-                            <div className="form-section-card">
-                                <div className="section-header">
-                                    <div className="section-icon"><i className="fas fa-users"></i></div>
-                                    <h3>Data Orang Tua / Wali</h3>
-                                </div>
-
-                                {/* Ayah */}
-                                <div className="zf-tempFrmWrapper">
-                                    <label className="zf-labelName">Nama Lengkap Ayah/Wali <em className="zf-important">*</em></label>
-                                    <div className="zf-nameWrapper">
-                                        <input type="text" name="Name1_First" placeholder="Nama Depan" onChange={handleInputChange} required />
-                                        <input type="text" name="Name1_Last" placeholder="Nama Belakang" onChange={handleInputChange} required />
-                                    </div>
-                                </div>
-
-                                <div className="custom-grid">
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">NIK Ayah <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <input type="text" name="Number3" maxLength={18} placeholder="16 Digit NIK Ayah" onChange={handleInputChange} required />
-                                        </div>
-                                    </div>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Nomor HP/WA <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <input type="text" name="PhoneNumber_countrycode" placeholder="+62" onChange={handleInputChange} required />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="custom-grid">
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Pendidikan Ayah <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <select className="zf-form-sBox" name="Dropdown8" onChange={handleInputChange} required>
-                                                <option value="">Pilih Pendidikan</option>
-                                                <option value="SD/MI">SD/MI</option>
-                                                <option value="SMP/MTS">SMP/MTS</option>
-                                                <option value="SMA/MA">SMA/MA</option>
-                                                <option value="S1 (Sarjana)">S1 (Sarjana)</option>
-                                                <option value="S2 (Magister)">S2 (Magister)</option>
-                                                <option value="S3 (Doctor)">S3 (Doctor)</option>
-                                                <option value="Lainnya">Lainnya</option>
-                                            </select>
-                                            {otherFields.pendidikanAyah && (
-                                                <div style={{ marginTop: "1rem" }}>
-                                                    <input type="text" name="other_pendidikan_ayah" placeholder="Sebutkan Pendidikan" onChange={handleInputChange} />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Pekerjaan Ayah <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <select className="zf-form-sBox" name="Dropdown4" onChange={handleInputChange} required>
-                                                <option value="">Pilih Pekerjaan</option>
-                                                <option value="Wiraswasta">Wiraswasta</option>
-                                                <option value="Karyawan Swasta">Karyawan Swasta</option>
-                                                <option value="Pegawai Negeri Sipil">Pegawai Negeri Sipil</option>
-                                                <option value="Lainnya">Lainnya</option>
-                                            </select>
-                                            {otherFields.pekerjaanAyah && (
-                                                <div style={{ marginTop: "1rem" }}>
-                                                    <input type="text" name="other_pekerjaan_ayah" placeholder="Sebutkan Pekerjaan" onChange={handleInputChange} />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="zf-tempFrmWrapper">
-                                    <label className="zf-labelName">Penghasilan Ayah/Wali <em className="zf-important">*</em></label>
-                                    <div className="zf-tempContDiv">
-                                        <select className="zf-form-sBox" name="Dropdown6" onChange={handleInputChange} required>
-                                            <option value="">Pilih Rentang Penghasilan</option>
-                                            <option value="< Rp 3.000.000">&lt; Rp 3.000.000</option>
-                                            <option value="Rp 3.000.000 - Rp 5.000.000">Rp 3.000.000 - Rp 5.000.000</option>
-                                            <option value="Rp 5.000.000 - Rp 7.000.000">Rp 5.000.000 - Rp 7.000.000</option>
-                                            <option value="Rp 7.000.000 - Rp 10.000.000">Rp 7.000.000 - Rp 10.000.000</option>
-                                            <option value="> Rp 10.000.000">&gt; Rp 10.000.000</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <hr style={{ border: "none", borderTop: "1px solid #f1f5f9", margin: "2rem 0" }} />
-
-                                {/* Ibu */}
-                                <div className="zf-tempFrmWrapper">
-                                    <label className="zf-labelName">Nama Lengkap Ibu <em className="zf-important">*</em></label>
-                                    <div className="zf-nameWrapper">
-                                        <input type="text" name="Name2_First" placeholder="Nama Depan" onChange={handleInputChange} required />
-                                        <input type="text" name="Name2_Last" placeholder="Nama Belakang" onChange={handleInputChange} required />
-                                    </div>
-                                </div>
-
-                                <div className="custom-grid">
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">NIK Ibu <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <input type="text" name="Number4" maxLength={18} placeholder="16 Digit NIK Ibu" onChange={handleInputChange} required />
-                                        </div>
-                                    </div>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Nomor HP/WA Ibu <em className="zf-important">*</em></label>
-                                        <div className="zf-tempContDiv">
-                                            <input type="text" name="PhoneNumber1_countrycode" placeholder="+62" onChange={handleInputChange} required />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* SECTION 4: ALAMAT LENGKAP - UPDATED WITH AUTOFILL */}
-                            <div className="form-section-card">
-                                <div className="section-header">
-                                    <div className="section-icon"><i className="fas fa-map-marker-alt"></i></div>
-                                    <h3>Alamat Lengkap Domisili</h3>
-                                </div>
-
-                                <div className="custom-grid">
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Provinsi <em className="zf-important">*</em></label>
-                                        <select className="zf-form-sBox" value={selectedProvince} onChange={(e) => handleRegionChange(e, 'prov')} required>
-                                            <option value="">Pilih Provinsi</option>
-                                            {provinces.map(prov => (
-                                                <option key={prov.id} value={prov.id}>{prov.name}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Kota/Kabupaten <em className="zf-important">*</em></label>
-                                        <select className="zf-form-sBox" value={selectedRegency} onChange={(e) => handleRegionChange(e, 'reg')} disabled={!selectedProvince} required>
-                                            <option value="">{selectedProvince ? "Pilih Kota/Kab" : "Pilih Provinsi Dulu"}</option>
-                                            {regencies.map(reg => (
-                                                <option key={reg.id} value={reg.id}>{reg.name}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div className="custom-grid" style={{ marginTop: "1rem" }}>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Kecamatan <em className="zf-important">*</em></label>
-                                        <select className="zf-form-sBox" value={selectedDistrict} onChange={(e) => handleRegionChange(e, 'dis')} disabled={!selectedRegency} required>
-                                            <option value="">{selectedRegency ? "Pilih Kecamatan" : "Pilih Kota/Kab Dulu"}</option>
-                                            {districts.map(dis => (
-                                                <option key={dis.id} value={dis.id}>{dis.name}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Desa/Kelurahan <em className="zf-important">*</em></label>
-                                        <select className="zf-form-sBox" value={selectedVillage} onChange={(e) => handleRegionChange(e, 'vil')} disabled={!selectedDistrict} required>
-                                            <option value="">{selectedDistrict ? "Pilih Desa/Kelurahan" : "Pilih Kecamatan Dulu"}</option>
-                                            {villages.map(vil => (
-                                                <option key={vil.id} value={vil.id}>{vil.name}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div className="custom-grid" style={{ marginTop: "1rem" }}>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Kode Pos (Otomatis/Manual)</label>
-                                        {/* Catatan: API Emsifa tidak selalu return kode pos, jadi user tetap bisa edit */}
-                                        <input type="text" name="Address1_ZipCode" placeholder="Kode Pos" onChange={handleInputChange} />
-                                    </div>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Jalan / RT & RW <em className="zf-important">*</em></label>
-                                        <input type="text" name="Address1_AddressLine1" placeholder="Nama Jalan, No. Rumah, RT/RW" onChange={handleInputChange} required />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* SECTION 5: BERKAS PENDUKUNG */}
-                            <div className="form-section-card">
-                                <div className="section-header">
-                                    <div className="section-icon"><i className="fas fa-file-alt"></i></div>
-                                    <h3>Berkas Pendukung</h3>
-                                </div>
-                                <div className="custom-grid">
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Foto Santri <em className="zf-important">*</em></label>
-                                        <div className="file-upload-container">
-                                            <input type="file" name="FileUpload" accept="image/*" onChange={handleFileChange} style={{ opacity: 0, position: "absolute", inset: 0, width: "100%", height: "100%", cursor: "pointer" }} required />
-                                            <p>{formData.FileUpload ? formData.FileUpload.name : "Klik untuk unggah foto"}</p>
-                                            <p className="zf-instruction">- Berbaju putih & Berkerah<br />- Memakai kopyah Hitam</p>
-                                        </div>
-                                    </div>
-                                    <div className="zf-tempFrmWrapper">
-                                        <label className="zf-labelName">Scan KK <em className="zf-important">*</em></label>
-                                        <div className="file-upload-container">
-                                            <input type="file" name="FileUpload1" accept="image/*, application/pdf" onChange={handleFileChange} style={{ opacity: 0, position: "absolute", inset: 0, width: "100%", height: "100%", cursor: "pointer" }} required />
-                                            <p>{formData.FileUpload1 ? formData.FileUpload1.name : "Klik untuk unggah KK"}</p>
-                                            <p className="zf-instruction">Terlihat Jelas, Tidak Blur</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
 
-                        <div className="zf-fmFooter">
-                            <button type="submit" className="zf-submitColor" disabled={isLoading}>
-                                {isLoading ? <i className="fas fa-spinner fa-spin"></i> : "Kirim Pendaftaran"}
+                        <div className="form-grid">
+                            <div className="input-group">
+                                <label>NIK Santri *</label>
+                                <input type="text" name="Number" maxLength={16} placeholder="16 Digit NIK" onChange={handleInputChange} required />
+                            </div>
+                            <div className="input-group">
+                                <label>No. Kartu Keluarga *</label>
+                                <input type="text" name="Number1" maxLength={16} placeholder="16 Digit No. KK" onChange={handleInputChange} required />
+                            </div>
+                        </div>
+
+                        <div className="form-grid">
+                            <div className="input-group">
+                                <label>NISN *</label>
+                                <input type="text" name="Number2" maxLength={10} placeholder="10 Digit NISN" onChange={handleInputChange} required />
+                            </div>
+                            <div className="input-group">
+                                <label>Jenis Kelamin *</label>
+                                <select name="Dropdown" onChange={handleInputChange} required>
+                                    <option value="">Pilih...</option>
+                                    <option value="Laki-Laki">Laki-Laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="form-grid">
+                            <div className="input-group">
+                                <label>Tempat Lahir *</label>
+                                <input type="text" name="SingleLine2" placeholder="Kota Kelahiran" onChange={handleInputChange} required />
+                            </div>
+                            <div className="input-group">
+                                <label>Tanggal Lahir *</label>
+                                <input type="date" name="Date" onChange={handleInputChange} required />
+                            </div>
+                        </div>
+
+                        <div className="form-grid">
+                            <div className="input-group">
+                                <label>Agama *</label>
+                                <select name="Dropdown2" onChange={handleInputChange} required>
+                                    <option value="">Pilih Agama</option>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Protestan">Protestan</option>
+                                    <option value="Katolik">Katolik</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Buddha">Buddha</option>
+                                    <option value="Konghucu">Konghucu</option>
+                                    <option value="Lainnya">Lainnya</option>
+                                </select>
+                                {otherFields.agama && (
+                                    <input type="text" name="other_agama" placeholder="Sebutkan Agama" className="mt-2" onChange={handleInputChange} />
+                                )}
+                            </div>
+                            <div className="input-group">
+                                <label>Pendidikan Terakhir *</label>
+                                <select name="Dropdown1" onChange={handleInputChange} required>
+                                    <option value="">Pilih...</option>
+                                    <option value="SD/MI">SD/MI</option>
+                                    <option value="SMP/MTS">SMP/MTS</option>
+                                    <option value="SMA/MA">SMA/MA</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* STEP 2: JENJANG & MINAT */}
+                    <div className={`step-content ${currentStep === 2 ? 'show' : 'hide'}`}>
+                        <div className="step-header">
+                            <h2><i className="fas fa-school"></i> Jenjang & Minat</h2>
+                            <p>Pilih jenjang pendidikan yang ingin diikuti di Lirboyo.</p>
+                        </div>
+
+                        <div className="input-group">
+                            <label>Akan Masuk Kelas *</label>
+                            <select name="Dropdown3" onChange={handleInputChange} required>
+                                <option value="">Pilih Jenjang/Kelas</option>
+                                <optgroup label="MIU (Santri Sekolah Formal)">
+                                    <option value="I Ula">I Ula</option>
+                                    <option value="II Ula">II Ula</option>
+                                    <option value="III Ula">III Ula</option>
+                                    <option value="I Wustho">I Wustho</option>
+                                    <option value="I Ulya">I Ulya</option>
+                                </optgroup>
+                                <optgroup label="MHM (Santri Salaf)">
+                                    <option value="V Ibtida'iyyah">V Ibtida'iyyah</option>
+                                    <option value="VI Ibtida'iyyah">VI Ibtida'iyyah</option>
+                                    <option value="I Tsanawiyyah">I Tsanawiyyah</option>
+                                    <option value="I Aliyyah">I Aliyyah</option>
+                                    <option value="I Ma'had Aly">I Ma'had Aly</option>
+                                    <option value="II Ma'had Aly">II Ma'had Aly</option>
+                                </optgroup>
+                            </select>
+                            <span className="hint-text"><i className="fas fa-info-circle"></i> <Link href="/materi-ujian" target="_blank">Lihat rincian materi ujian</Link></span>
+                        </div>
+
+                        <div className="form-grid">
+                            <div className="input-group">
+                                <label>Hobi *</label>
+                                <input type="text" name="SingleLine" placeholder="Kegemaran" onChange={handleInputChange} required />
+                            </div>
+                            <div className="input-group">
+                                <label>Cita-Cita *</label>
+                                <input type="text" name="SingleLine1" placeholder="Tujuan Masa Depan" onChange={handleInputChange} required />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* STEP 3: DATA ORANG TUA */}
+                    <div className={`step-content ${currentStep === 3 ? 'show' : 'hide'}`}>
+                        <div className="step-header">
+                            <h2><i className="fas fa-users"></i> Data Orang Tua</h2>
+                            <p>Informasi Ayah dan Ibu atau Wali santri.</p>
+                        </div>
+
+                        {/* DATA AYAH */}
+                        <div className="sub-section">
+                            <h3>Informasi Ayah / Wali</h3>
+                            <div className="form-grid">
+                                <div className="input-group">
+                                    <label>Nama Depan Ayah *</label>
+                                    <input type="text" name="Name1_First" onChange={handleInputChange} required />
+                                </div>
+                                <div className="input-group">
+                                    <label>Nama Belakang Ayah *</label>
+                                    <input type="text" name="Name1_Last" onChange={handleInputChange} required />
+                                </div>
+                            </div>
+                            <div className="form-grid">
+                                <div className="input-group">
+                                    <label>NIK Ayah *</label>
+                                    <input type="text" name="Number3" maxLength={16} onChange={handleInputChange} required />
+                                </div>
+                                <div className="input-group">
+                                    <label>No. HP / WA *</label>
+                                    <input type="text" name="PhoneNumber_countrycode" placeholder="08xx..." onChange={handleInputChange} required />
+                                </div>
+                            </div>
+                            <div className="form-grid">
+                                <div className="input-group">
+                                    <label>Pendidikan Ayah *</label>
+                                    <select name="Dropdown8" onChange={handleInputChange} required>
+                                        <option value="">Pilih...</option>
+                                        <option value="SD/MI">SD/MI</option>
+                                        <option value="SMP/MTS">SMP/MTS</option>
+                                        <option value="SMA/MA">SMA/MA</option>
+                                        <option value="S1 (Sarjana)">S1 (Sarjana)</option>
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select>
+                                    {otherFields.pendidikanAyah && <input type="text" name="other_pendidikan_ayah" className="mt-2" placeholder="Sebutkan..." onChange={handleInputChange} />}
+                                </div>
+                                <div className="input-group">
+                                    <label>Pekerjaan Ayah *</label>
+                                    <select name="Dropdown4" onChange={handleInputChange} required>
+                                        <option value="">Pilih...</option>
+                                        <option value="Wiraswasta">Wiraswasta</option>
+                                        <option value="Petani">Petani</option>
+                                        <option value="PNS">PNS</option>
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select>
+                                    {otherFields.pekerjaanAyah && <input type="text" name="other_pekerjaan_ayah" className="mt-2" placeholder="Sebutkan..." onChange={handleInputChange} />}
+                                </div>
+                            </div>
+                            <div className="input-group">
+                                <label>Penghasilan Bulanan *</label>
+                                <select name="Dropdown6" onChange={handleInputChange} required>
+                                    <option value="">Pilih Rentang...</option>
+                                    <option value="< Rp 2.000.000">&lt; Rp 2.000.000</option>
+                                    <option value="Rp 2jt - 5jt">Rp 3.000.000 - Rp 5.000.000</option>
+                                    <option value="> Rp 5.000.000">&gt; Rp 5.000.000</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr className="divider" />
+
+                        {/* DATA IBU */}
+                        <div className="sub-section">
+                            <h3>Informasi Ibu</h3>
+                            <div className="form-grid">
+                                <div className="input-group">
+                                    <label>Nama Depan Ibu *</label>
+                                    <input type="text" name="Name2_First" onChange={handleInputChange} required />
+                                </div>
+                                <div className="input-group">
+                                    <label>Nama Belakang Ibu *</label>
+                                    <input type="text" name="Name2_Last" onChange={handleInputChange} required />
+                                </div>
+                            </div>
+                            <div className="form-grid">
+                                <div className="input-group">
+                                    <label>NIK Ibu *</label>
+                                    <input type="text" name="Number4" maxLength={16} onChange={handleInputChange} required />
+                                </div>
+                                <div className="input-group">
+                                    <label>No. HP / WA Ibu *</label>
+                                    <input type="text" name="PhoneNumber1_countrycode" placeholder="08xx..." onChange={handleInputChange} required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* STEP 4: ALAMAT LENGKAP */}
+                    <div className={`step-content ${currentStep === 4 ? 'show' : 'hide'}`}>
+                        <div className="step-header">
+                            <h2><i className="fas fa-map-marker-alt"></i> Alamat Domisili</h2>
+                            <p>Tentukan lokasi tempat tinggal saat ini.</p>
+                        </div>
+
+                        <div className="form-grid">
+                            <div className="input-group">
+                                <label>Provinsi *</label>
+                                <select value={selectedProvince} onChange={(e) => handleRegionChange(e, 'prov')} required>
+                                    <option value="">Pilih Provinsi</option>
+                                    {provinces.map(prov => (
+                                        <option key={prov.id} value={prov.id}>{prov.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="input-group">
+                                <label>Kota / Kabupaten *</label>
+                                <select value={selectedRegency} onChange={(e) => handleRegionChange(e, 'reg')} disabled={!selectedProvince} required>
+                                    <option value="">Pilih...</option>
+                                    {regencies.map(reg => (
+                                        <option key={reg.id} value={reg.id}>{reg.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="form-grid">
+                            <div className="input-group">
+                                <label>Kecamatan *</label>
+                                <select value={selectedDistrict} onChange={(e) => handleRegionChange(e, 'dis')} disabled={!selectedRegency} required>
+                                    <option value="">Pilih...</option>
+                                    {districts.map(dis => (
+                                        <option key={dis.id} value={dis.id}>{dis.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="input-group">
+                                <label>Desa / Kelurahan *</label>
+                                <select value={selectedVillage} onChange={(e) => handleRegionChange(e, 'vil')} disabled={!selectedDistrict} required>
+                                    <option value="">Pilih...</option>
+                                    {villages.map(vil => (
+                                        <option key={vil.id} value={vil.id}>{vil.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="form-grid">
+                            <div className="input-group">
+                                <label>Jalan / Dusun / RT & RW *</label>
+                                <input type="text" name="Address1_AddressLine1" placeholder="Contoh: Jl. Lirboyo No. 1, RT 01 RW 02" onChange={handleInputChange} required />
+                            </div>
+                            <div className="input-group">
+                                <label>Kode Pos</label>
+                                <input type="text" name="Address1_ZipCode" placeholder="64xxx" onChange={handleInputChange} />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* STEP 5: BERKAS PENDUKUNG */}
+                    <div className={`step-content ${currentStep === 5 ? 'show' : 'hide'}`}>
+                        <div className="step-header">
+                            <h2><i className="fas fa-file-upload"></i> Berkas Pendukung</h2>
+                            <p>Unggah dokumen fisik calon santri (Foto, KK, Ijazah).</p>
+                        </div>
+
+                        <div className="upload-grid">
+                            <div className="upload-box">
+                                <label>Pas Foto Santri *</label>
+                                <div className="file-drop-area">
+                                    <input type="file" name="FileUpload" accept="image/*" onChange={handleFileChange} required />
+                                    <div className="file-info">
+                                        <i className="fas fa-camera"></i>
+                                        <span>{formData.FileUpload ? formData.FileUpload.name : "Klik untuk pilih foto"}</span>
+                                        <p>Baju putih, kopyah hitam, background polos</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="upload-box">
+                                <label>Scan Kartu Keluarga *</label>
+                                <div className="file-drop-area">
+                                    <input type="file" name="FileUpload1" accept="image/*,application/pdf" onChange={handleFileChange} required />
+                                    <div className="file-info">
+                                        <i className="fas fa-id-card"></i>
+                                        <span>{formData.FileUpload1 ? formData.FileUpload1.name : "Klik untuk pilih KK"}</span>
+                                        <p>Pastikan tulisan terbaca jelas</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* FORM FOOTER / NAVIGATION */}
+                    <div className="form-footer">
+                        {currentStep > 1 && (
+                            <button type="button" onClick={prevStep} className="btn-secondary">
+                                <i className="fas fa-chevron-left"></i> Sebelumnya
                             </button>
+                        )}
+                        <div style={{ marginLeft: 'auto' }}>
+                            {currentStep < STEPS.length ? (
+                                <button type="button" onClick={nextStep} className="btn-primary">
+                                    Lanjut <i className="fas fa-chevron-right"></i>
+                                </button>
+                            ) : (
+                                <button type="submit" className="btn-success" disabled={isLoading}>
+                                    {isLoading ? <><i className="fas fa-spinner fa-spin"></i> Memproses...</> : <>Kirim Pendaftaran <i className="fas fa-paper-plane"></i></>}
+                                </button>
+                            )}
                         </div>
-                    </form>
-                </div>
-            </div>
-        </>
+                    </div>
+                </form>
+            </main>
+        </div>
     );
 }

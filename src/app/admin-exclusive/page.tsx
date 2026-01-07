@@ -592,6 +592,48 @@ export default function AppleAdminPage() {
                                             />
                                         </div>
 
+                                        {/* Misi Management */}
+                                        <div style={{ marginBottom: '20px', padding: '15px', background: '#f5f5f7', borderRadius: '12px' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                                                <label className="apple-label" style={{ fontSize: '0.85rem', margin: 0 }}>Misi Pondok</label>
+                                                <button
+                                                    className="apple-badge badge-blue"
+                                                    style={{ border: 'none', cursor: 'pointer', fontSize: '0.7rem' }}
+                                                    onClick={() => handleAddGlobalItem('misi')}
+                                                >
+                                                    + Tambah Misi
+                                                </button>
+                                            </div>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                                {globalContent.filter(item => item.section_slug === 'misi').map((item, idx) => (
+                                                    <div key={item.id || idx} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                        <span style={{ fontSize: '0.8rem', color: 'var(--apple-text-secondary)', minWidth: '20px' }}>{idx + 1}.</span>
+                                                        <input
+                                                            className="apple-input"
+                                                            value={item.label || ''}
+                                                            onChange={e => handleUpdateGlobalItem(item.id, 'label', e.target.value)}
+                                                            placeholder="Tulis misi..."
+                                                            style={{ flex: 1, padding: '8px 12px', fontSize: '0.85rem' }}
+                                                        />
+                                                        <button
+                                                            onClick={() => handleSaveGlobal('misi')}
+                                                            className="apple-btn-primary"
+                                                            style={{ padding: '6px 12px', fontSize: '0.7rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
+                                                        >
+                                                            Simpan
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteGlobalItem(item.id)}
+                                                            className="apple-btn-secondary"
+                                                            style={{ padding: '6px 10px', fontSize: '0.7rem', borderRadius: '8px', color: '#ff3b30', background: 'rgba(255, 59, 48, 0.1)' }}
+                                                        >
+                                                            <i className="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
                                         {/* Timeline Table */}
                                         <div className="apple-table-container">
                                             <table className="apple-table">

@@ -4,48 +4,43 @@
 :root {
     /* Colors */
     --primary: #2563eb;
-    /* Blue 600 */
-    --primary-dark: #1e40af;
-    /* Blue 800 */
+    --primary-dark: #1e3a8a;
     --primary-light: #60a5fa;
-    /* Blue 400 */
     --accent: #f59e0b;
-    /* Amber 500 */
-    --accent-gold: #c5a059;
-    /* New Gold */
-    --accent-gold-light: #f3e5ab;
-    /* New Soft Gold */
+
+    /* Luxury Gold Palette */
+    --gold-deep: #b45309;
+    --gold-main: #d97706;
+    --gold-light: #fef3c7;
+    --gold-gradient: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #d97706 100%);
 
     --bg-body: #f8fafc;
-    /* Slate 50 */
     --bg-card: #ffffff;
-    --bg-glass: rgba(255, 255, 255, 0.9);
+    --bg-glass: rgba(255, 255, 255, 0.7);
+    --glass-blur: blur(12px);
+    --glass-border: rgba(255, 255, 255, 0.5);
 
-    --text-main: #1e293b;
-    /* Slate 800 */
-    --text-muted: #64748b;
-    /* Slate 500 */
-    --text-light: #cbd5e1;
-    /* Slate 300 */
+    --text-main: #0f172a;
+    /* Deeper slate for better contrast */
+    --text-muted: #475569;
+    --text-light: #94a3b8;
 
     --border-color: #e2e8f0;
-    /* Slate 200 */
 
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-glow: 0 0 20px rgba(30, 58, 138, 0.15);
+    /* High-End Shadows */
+    --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.04), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+    --shadow-gold: 0 10px 15px -3px rgba(217, 119, 6, 0.1);
 
     /* Radius */
     --radius-lg: 1rem;
     --radius-xl: 1.5rem;
+    --radius-2xl: 2rem;
 
     /* Smart Gradients */
-    --grad-midnight: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    --grad-dynamic: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-        var(--primary-dark);
+    --grad-premium: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    --grad-mesh: radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.1) 0, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(217, 119, 6, 0.05) 0, transparent 50%);
 }
 
 /* Global Reset & Base */

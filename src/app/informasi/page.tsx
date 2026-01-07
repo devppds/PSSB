@@ -5,16 +5,18 @@ import { useEffect } from "react";
 
 export default function InformasiPage() {
     useEffect(() => {
-        // Animation Logic
         const observerOptions = {
-            threshold: 0.05,
+            threshold: 0.1,
             rootMargin: "0px 0px -50px 0px"
         };
 
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+            entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+                    // Staggered delay implementation
+                    setTimeout(() => {
+                        entry.target.classList.add('active');
+                    }, index * 100);
                 } else {
                     entry.target.classList.remove('active');
                 }
@@ -27,124 +29,116 @@ export default function InformasiPage() {
     }, []);
 
     return (
-        <div>
-            {/* HERO SECTION */}
-            <section className="page-hero">
+        <div style={{ backgroundColor: 'var(--bg-body)' }}>
+            {/* LUXURY HERO SECTION */}
+            <section className="info-hero-section">
                 <div className="reveal fade-bottom">
+                    <span className="ornament-icon"><i className="fas fa-scroll"></i></span>
                     <h1 className="page-hero-title">
                         <span className="text-dark">Informasi</span> <span className="text-primary">Pendaftaran</span>
                     </h1>
                     <p className="page-hero-subtitle">
-                        Panduan resmi tata cara pendaftaran santri baru Pondok Pesantren Darussalam Lirboyo.
+                        Panduan resmi tata cara pendaftaran santri baru Pondok Pesantren Darussalam Lirboyo Tahun Pelajaran 2025/2026.
                     </p>
                 </div>
             </section>
 
-            {/* CONTENT SECTION */}
-            <div className="info-container">
+            {/* BENTO CONTENT GRID */}
+            <div className="bento-grid">
 
-                {/* INTRO CARD */}
-                <div className="info-card reveal fade-bottom">
-                    <p className="lead-text">
-                        Kini, teknologi dan media digital seakan menjadi barang yang wajib guna memenuhi berbagai kebutuhan.
-                        Oleh karenanya, <strong>Pondok Pesantren Darussalam Lirboyo</strong> menyediakan sebuah layanan digital untuk mempermudah wali santri ketika mendaftarkan putranya ke
-                        Pondok Pesantren Darussalam Lirboyo.
+                {/* 1. INTRO (LARGE) - Bento Style */}
+                <div className="glass-card bento-item-large reveal fade-bottom">
+                    <span className="gold-accent-text">Sambutan Pendaftaran</span>
+                    <h2 className="card-title-luxury">
+                        Digitalisasi Pesantren
+                    </h2>
+                    <p className="lead-text" style={{ fontSize: '1rem', color: 'var(--text-main)' }}>
+                        Kini, teknologi dan media digital menjadi sarana penting guna memenuhi berbagai kebutuhan.
+                        <strong> Pondok Pesantren Darussalam Lirboyo</strong> menghadirkan layanan digital untuk mempermudah pendaftaran dari mana saja.
                     </p>
-                    <p style={{ lineHeight: 1.8, color: "var(--text-muted)" }}>
-                        Kurikulum di lingkungan Pondok Pesantren Lirboyo lebih kompleks, tata administrasi lebih
-                        spesifik serta jumlah siswa yang menimba ilmu di Pondok Lirboyo semakin banyak dan berasal dari
-                        hampir seluruh daerah di Indonesia, bahkan ada yang berasal dari negara tetangga seperti Malaysia,
-                        Thailand dan negara ASEAN yang lain.
-                        <br /><br />
-                        Sehingga melihat realita yang demikian, Pondok Pesantren Darussalam Lirboyo mendukung program
-                        Digitalisasi Pesantren Lirboyo Induk Terkait Pendaftaran Santri Baru, yang mana memberikan wadah
-                        yang
-                        bisa memudahkan para pengembara ilmu itu untuk bisa mengakses pendidikan di Pondok Pesantren
-                        Darussalam (Khususnya) Lirboyo (Umumnya) meski harus dari jarak yang jauh dengan memanfaatkan
-                        perkembangan teknologi.
+                    <p style={{ lineHeight: 1.8, color: "var(--text-muted)", fontSize: '0.95rem' }}>
+                        Mengingat jumlah pendaftar yang terus meningkat dari seluruh penjuru nusantara hingga mancanegara, sistem online ini hadir sebagai solusi administrasi yang cepat, akurat, dan transparan bagi para calon pengembara ilmu.
                     </p>
                 </div>
 
-                {/* HOW TO REGISTER CARD */}
-                <div className="info-card reveal fade-bottom">
-                    <h2 style={{ marginBottom: "1.5rem", color: "var(--primary-dark)" }}><i className="fas fa-laptop-code"
-                        style={{ marginRight: "10px" }}></i> Cara Mendaftar di PSSB Online</h2>
-                    <p style={{ marginBottom: "2rem" }}>
-                        Untuk kenyamanan saat melakukan pendaftaran online, kami menganjurkan anda untuk menggunakan
-                        Aplikasi <strong>Google Chrome</strong>. Ikuti langkah-langkah di bawah ini dengan seksama.
+                {/* 2. STATS/HIGHLIGHT (SMALL) - Bento Style */}
+                <div className="glass-card bento-item-small reveal fade-bottom" style={{ background: 'var(--primary-dark)', color: 'white' }}>
+                    <span className="gold-accent-text" style={{ color: 'var(--accent)' }}>Target & Kuota</span>
+                    <h3 style={{ fontFamily: 'var(--font-playfair)', fontSize: '2.5rem', marginBottom: '1rem', color: 'white' }}>Global</h3>
+                    <p style={{ opacity: 0.9, fontSize: '0.9rem' }}>
+                        Menerima santri baru dari tingkat Ibtidaiyah hingga Tsanawiyah dengan kuota terbatas setiap tahunnya.
                     </p>
-
-                    <div className="step-list">
-                        <div className="step-item">
-                            <h4 style={{ color: "var(--primary-dark)" }}>Identitas & Data Pribadi</h4>
-                            <p style={{ fontSize: "0.95rem", color: "var(--text-muted)" }}>
-                                Memasukkan DATA PRIBADI sesuai dengan Kartu Keluarga (KK) dan menyertakan Pas Foto terbaru
-                                sesuai ketentuan.
-                            </p>
-
-                            {/* PHOTO REQUIREMENTS */}
-                            <div className="photo-requirements">
-                                <h5 style={{ marginBottom: "1rem", color: "var(--primary-dark)" }}><i className="fas fa-camera"></i> Ketentuan Foto yang Diunggah:</h5>
-                                <div className="requirement-list">
-                                    <div className="requirement-item"><i className="fas fa-check-circle"></i> Ukuran File Maksimal 5 MB</div>
-                                    <div className="requirement-item"><i className="fas fa-check-circle"></i> Ukuran foto 3x4</div>
-                                    <div className="requirement-item"><i className="fas fa-check-circle"></i> Foto Berwarna</div>
-                                    <div className="requirement-item"><i className="fas fa-check-circle"></i> Background BIRU POLOS</div>
-                                    <div className="requirement-item"><i className="fas fa-check-circle"></i> Baju Putih Polos Berkerah</div>
-                                    <div className="requirement-item"><i className="fas fa-check-circle"></i> Kopyah Hitam Polos</div>
-                                    <div className="requirement-item"><i className="fas fa-check-circle"></i> Rambut Pendek (Rapi)</div>
-                                </div>
-                            </div>
+                    <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                            <span>Ibtidaiyah</span>
+                            <strong>Sudah Dibuka</strong>
                         </div>
-
-                        <div className="step-item">
-                            <h4 style={{ color: "var(--primary-dark)" }}>Verifikasi Berkas</h4>
-                            <p style={{ fontSize: "0.95rem", color: "var(--text-muted)" }}>
-                                Unggah pindaian (scan) dokumen pendukung seperti Akta Kelahiran, Kartu Keluarga, dan Ijazah
-                                terakhir jika diperlukan.
-                            </p>
-                        </div>
-
-                        <div className="step-item">
-                            <h4 style={{ color: "var(--primary-dark)" }}>Penyelesaian & Verifikasi</h4>
-                            <p style={{ fontSize: "1rem", color: "var(--text-muted)" }}>
-                                Lakukan finalisasi data dan verifikasi
-                                fisik di Pondok Pesantren Darussalam Lirboyo.
-                            </p>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span>Tsanawiyah</span>
+                            <strong>Sudah Dibuka</strong>
                         </div>
                     </div>
                 </div>
 
-                {/* MENU FUNCTION CARD */}
-                <div className="info-card reveal fade-bottom">
-                    <h2 style={{ marginBottom: "1.5rem", color: "var(--primary-dark)" }}><i className="fas fa-th-large"
-                        style={{ marginRight: "10px" }}></i> Fungsi Menu PSSB Darussalam Lirboyo</h2>
+                {/* 3. STEPS (FULL) - Bento Style */}
+                <div className="glass-card bento-item-full reveal fade-bottom">
+                    <span className="gold-accent-text">Alur Pendaftaran</span>
+                    <h2 className="card-title-luxury">
+                        <i className="fas fa-project-diagram"></i> Tahapan Pendaftaran Online
+                    </h2>
 
-                    <div className="menu-function-grid">
-                        <div className="menu-item">
-                            <i className="fas fa-home"></i>
-                            <h4>Beranda</h4>
-                            <p>Berisi ringkasan informasi terbaru, selamat datang, dan pengumuman penting mengenai portal
-                                PSSB Darussalam Lirboyo.</p>
+                    <div className="bento-steps">
+                        <div className="bento-step-card">
+                            <div className="step-number-luxury">01</div>
+                            <h4 style={{ marginBottom: '10px', color: 'var(--primary-dark)' }}>Isi Data Diri</h4>
+                            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Mendaftarkan akun dan mengisi biodata lengkap sesuai KK dan dokumen resmi.</p>
                         </div>
-                        <div className="menu-item">
-                            <i className="fas fa-info-circle"></i>
-                            <h4>Informasi</h4>
-                            <p>Panduan lengkap, persyaratan dokumen, dan prosedur teknis pendaftaran santri baru MHM
-                                Lirboyo.</p>
+                        <div className="bento-step-card">
+                            <div className="step-number-luxury">02</div>
+                            <h4 style={{ marginBottom: '10px', color: 'var(--primary-dark)' }}>Unggah Berkas</h4>
+                            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Melampirkan pas foto, scan kartu keluarga, dan akta kelahiran.</p>
                         </div>
-                        <div className="menu-item">
-                            <i className="fas fa-folder-open"></i>
-                            <h4>Materi Ujian</h4>
-                            <p>Daftar lengkap materi ujian tulis dan lisan sesuai tingkatan kelas sebagai persiapan
-                                menghadapi seleksi.</p>
+                        <div className="bento-step-card">
+                            <div className="step-number-luxury">03</div>
+                            <h4 style={{ marginBottom: '10px', color: 'var(--primary-dark)' }}>Verifikasi</h4>
+                            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Proses validasi data oleh tim sekretariat dan penerbitan nomor ujian.</p>
                         </div>
-                        <div className="menu-item">
-                            <i className="fas fa-user-plus"></i>
-                            <h4>Daftar Online</h4>
-                            <p>Formulir elektronik mandiri untuk mengisi data, mengunggah berkas, dan memproses pendaftaran.
-                            </p>
-                        </div>
+                    </div>
+                </div>
+
+                {/* 4. PHOTO REQS (LARGE) */}
+                <div className="glass-card bento-item-large reveal fade-bottom">
+                    <span className="gold-accent-text">Persyaratan Visual</span>
+                    <h2 className="card-title-luxury">
+                        <i className="fas fa-camera-retro"></i> Ketentuan Foto Resmi
+                    </h2>
+                    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Mohon pastikan foto yang diunggah memenuhi kriteria berikut agar proses validasi lancar:</p>
+
+                    <div className="photo-grid-premium">
+                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Background Biru Polos</div>
+                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Baju Putih Berkerah</div>
+                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Kopyah Hitam Polos</div>
+                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Ukuran 3x4 (Maks 5MB)</div>
+                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Rambut Rapi (Pendek)</div>
+                        <div className="photo-badge"><i className="fas fa-check-circle"></i> Kualitas Gambar Jelas</div>
+                    </div>
+                </div>
+
+                {/* 5. QUICK MENU (SMALL) */}
+                <div className="glass-card bento-item-small reveal fade-bottom" style={{ background: 'var(--gold-gradient)', border: 'none' }}>
+                    <span className="gold-accent-text" style={{ color: 'rgba(255,255,255,0.8)' }}>Akses Cepat</span>
+                    <h3 style={{ color: 'white', fontFamily: 'var(--font-playfair)', fontSize: '1.5rem', marginBottom: '1.5rem' }}>Menu Portal</h3>
+
+                    <div style={{ display: 'grid', gap: '10px' }}>
+                        <a href="/" style={{ padding: '12px', background: 'rgba(255,255,255,0.2)', borderRadius: '10px', color: 'white', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <i className="fas fa-home"></i> Beranda
+                        </a>
+                        <a href="/materi-ujian" style={{ padding: '12px', background: 'rgba(255,255,255,0.2)', borderRadius: '10px', color: 'white', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <i className="fas fa-book"></i> Materi Ujian
+                        </a>
+                        <a href="/ppdb" style={{ padding: '12px', background: 'rgba(255,255,255,0.2)', borderRadius: '10px', color: 'white', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <i className="fas fa-user-plus"></i> Daftar Online
+                        </a>
                     </div>
                 </div>
 

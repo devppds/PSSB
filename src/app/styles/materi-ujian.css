@@ -2,7 +2,7 @@
 
 /* HERO SECTION STYLES (Missing Previously) */
 .info-hero-section {
-    padding: 8rem 1.5rem 6rem;
+    padding: 14rem 1.5rem 6rem;
     text-align: center;
     background: radial-gradient(circle at center top, rgba(37, 99, 235, 0.05) 0%, transparent 60%);
     position: relative;
@@ -258,5 +258,9 @@
 
     .glass-card-materi {
         padding: 1.5rem;
+    }
+
+    .info-hero-section {
+        padding: 10rem 1rem 4rem;
     }
 }

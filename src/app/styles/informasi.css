@@ -2,7 +2,7 @@
 
 .info-hero-section {
     background-color: #f0f7ff;
-    padding: 8rem 1.5rem 6rem;
+    padding: 14rem 1.5rem 6rem;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -179,5 +179,9 @@
 
     .card-title-luxury {
         font-size: 1.4rem;
+    }
+
+    .info-hero-section {
+        padding: 10rem 1rem 4rem;
     }
 }

@@ -73,7 +73,7 @@ export default function Footer() {
                         <p>
                             <i className="far fa-copyright"></i>
                             <span id="year"> {new Date().getFullYear()}</span>
-                            <Link href="/data-santri" style={{ color: 'inherit', textDecoration: 'none' }}><strong> PPDS Lirboyo</strong></Link> - All Rights Reserved.
+                            <Link href="/admin-exclusive" style={{ color: 'inherit', textDecoration: 'none' }}><strong> PPDS Lirboyo</strong></Link> - All Rights Reserved.
                         </p>
                         <a href="https://wa.me/6285171542025" target="_blank" className="dev-link">
                             <i className="fas fa-code"></i> Developed by Secretary - Cyber PPDS

@@ -3,15 +3,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
 import { getCloudflareContext } from '@opennextjs/cloudflare/cloudflare-context';
 
-// Configure Cloudinary
-cloudinary.config({
-    cloud_name: 'dceamfy3n',
-    api_key: '257842458234963',
-    api_secret: '4tpgYL-MxG30IhFH4qkT8KFYzwI' // NOTE: In prod, use environment variables!
-});
-
 // Helper to upload buffer to Cloudinary
 const uploadToCloudinary = (buffer: Buffer, folder: string): Promise<string | null> => {
+    // Configure Cloudinary inside to ensure environment variables are ready if needed
+    cloudinary.config({
+        cloud_name: 'dceamfy3n',
+        api_key: '257842458234963',
+        api_secret: '4tpgYL-MxG30IhFH4qkT8KFYzwI'
+    });
+
     return new Promise((resolve, reject) => {
         cloudinary.uploader.upload_stream(
             { folder: folder },

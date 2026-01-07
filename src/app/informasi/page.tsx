@@ -1,14 +1,33 @@
+"use client";
 
 import "@/app/styles/informasi.css";
-
-export const metadata = {
-    title: "Informasi Pendaftaran - PSSB Darussalam Lirboyo",
-    description: "Panduan lengkap cara pendaftaran santri baru di Madrasah Hidayatul Mubtadi'in Pondok Pesantren Lirboyo secara online.",
-};
+import { useEffect } from "react";
 
 export default function InformasiPage() {
+    useEffect(() => {
+        // Animation Logic
+        const observerOptions = {
+            threshold: 0.05,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                } else {
+                    entry.target.classList.remove('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    }, []);
+
     return (
-        <>
+        <div style={{ backgroundColor: '#f0f7ff' }}>
             {/* HERO SECTION */}
             <section className="info-hero">
                 <div className="reveal fade-bottom">
@@ -128,6 +147,6 @@ export default function InformasiPage() {
                 </div>
 
             </div>
-        </>
+        </div>
     );
 }

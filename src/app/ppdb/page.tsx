@@ -172,7 +172,9 @@ export default function PPDBPage() {
             {/* HERO SECTION */}
             <header className="ppdb-header">
                 <div className="header-content">
-                    <h1>Pendaftaran Santri Baru</h1>
+                    <h1 className="header-title">
+                        <span className="text-dark">Pendaftaran</span> <span className="text-primary">Santri Baru</span>
+                    </h1>
                     <p>Lengkapi formulir pendaftaran TA 2026-2027</p>
                 </div>
             </header>

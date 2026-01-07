@@ -102,7 +102,7 @@ export default function AppleAdminPage() {
             setSettings(contentData.settings || {});
             const flattened = Object.values(contentData.content || {}).flat() as any[];
             setGlobalContent(flattened);
-            setGallery(contentData.gallery || []);
+            setGallery(contentData.gallery_list || []);
             setRegistrations(santriData || []);
         } catch (err) {
             console.error(err);
@@ -510,16 +510,20 @@ export default function AppleAdminPage() {
                                 <div className="apple-card">
                                     <h2 style={{ marginBottom: '20px' }}>Media Vault</h2>
                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
-                                        {gallery.map(item => (
-                                            <div key={item.id} className="apple-card" style={{ padding: '10px', margin: 0 }}>
-                                                <div style={{ width: '100%', height: '120px', borderRadius: '10px', overflow: 'hidden', marginBottom: '10px' }}>
-                                                    <img src={item.image_url} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        {Array.isArray(gallery) && gallery.map((item, idx) => (
+                                            <div key={item.id || idx} className="apple-card" style={{ padding: '10px', margin: 0 }}>
+                                                <div style={{ width: '100%', height: '120px', borderRadius: '10px', overflow: 'hidden', marginBottom: '10px', background: '#eee' }}>
+                                                    {item.image_url ? (
+                                                        <img src={item.image_url} alt={item.title || "Gallery Item"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                    ) : (
+                                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}><i className="fas fa-image fa-2x" style={{ color: '#ccc' }}></i></div>
+                                                    )}
                                                 </div>
-                                                <div style={{ fontSize: '0.8rem', fontWeight: 600 }}>{item.category}</div>
+                                                <div style={{ fontSize: '0.8rem', fontWeight: 600 }}>{item.category || 'Uncategorized'}</div>
                                                 <div style={{ fontSize: '0.7rem', color: 'var(--apple-text-secondary)' }}>Index: {item.order_index}</div>
                                             </div>
                                         ))}
-                                        <div className="apple-card" style={{ padding: '10px', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed #ddd', cursor: 'pointer' }}>
+                                        <div className="apple-card" style={{ padding: '10px', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed #ddd', cursor: 'pointer', minHeight: '180px' }}>
                                             <i className="fas fa-plus fa-2x" style={{ color: '#ddd' }}></i>
                                         </div>
                                     </div>

@@ -42,7 +42,8 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({
             settings,
             content,
-            gallery
+            gallery,
+            gallery_list: galleryRes.results
         });
     } catch (error: any) {
         console.error('Fetch All Content Error:', error);

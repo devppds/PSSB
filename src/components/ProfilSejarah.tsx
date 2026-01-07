@@ -42,13 +42,12 @@ export default function ProfilSejarah() {
                     <div className="timeline-content">
                         <span>Masa Kini</span>
                         <h3>Pendidikan Modern</h3>
-                        <p style={{ color: "var(--text-muted)" }}>SSistem pendidkan yang ada di Pondok Pesantren Lirboyo
-                            Darussalam pada dasarnya dibagi menjadi dua kategori.
-                            Pertama, bagi santri yang tidak merangkap pendidikan formal
-                            wajib mengikuti pendidikan di MHM(Madrasah Hidayatul
-                            Mubtadiin). Kedua, bagi santri yang merangkap pendidikan
-                            formal wajib mengikuti pendidikan di MIU (madrasah Ihya'
-                            Ulumiddin). </p>
+                        <p style={{ color: "var(--text-muted)" }}>Sistem pendidikan yang ada di Pondok Pesantren Lirboyo
+                            Darussalam pada dasarnya dibagi menjadi dua kategori. Pertama,
+                            bagi santri yang tidak merangkap pendidikan formal wajib
+                            mengikuti pendidikan di MHM(Madrasah Hidayatul Mubtadiin).
+                            Kedua, bagi santri yang merangkap pendidikan formal wajib
+                            mengikuti pendidikan di MIU (madrasah Ihya' Ulumiddin). </p>
                     </div>
                     <div className="timeline-image-container">
                         <img src="images/gus-amin.webp" alt="Foto Baru" />

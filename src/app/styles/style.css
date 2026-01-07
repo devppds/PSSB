@@ -61,6 +61,17 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* Global Form Element Fixes */
+select {
+    color: #1a202c;
+    background-color: white;
+}
+
+option {
+    color: #1a202c;
+    background-color: white;
+}
+
 html {
     overflow-x: hidden;
     width: 100%;

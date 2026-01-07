@@ -13,13 +13,13 @@
         {
             "binding": "DB",
             "database_name": "pendaftaran",
-            "database_id": "ppdb-db-id-placeholder"
+            "database_id": "2a0d47f6-e32c-47c0-adc9-332cab4ca1cf"
         }
     ],
     "kv_namespaces": [
         {
             "binding": "NEXT_CACHE_WORKERS_KV",
-            "id": "next-cache-workers-kv-id-placeholder"
+            "id": "add72733183b4763b0c5ef1e9051c96c"
         }
     ]
 }

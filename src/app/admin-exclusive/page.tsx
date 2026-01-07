@@ -13,15 +13,62 @@ export default function AppleAdminPage() {
     const [registrations, setRegistrations] = useState<any[]>([]);
     const [gallery, setGallery] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
+    const [authLoading, setAuthLoading] = useState(false);
     const [saving, setSaving] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedSantri, setSelectedSantri] = useState<any>(null);
+    const [usernameInput, setUsernameInput] = useState("");
+
+    useEffect(() => {
+        const session = localStorage.getItem('admin_session');
+        if (session) {
+            const { timestamp } = JSON.parse(session);
+            const oneHour = 60 * 60 * 1000;
+            if (Date.now() - timestamp < oneHour) {
+                setIsLoggedIn(true);
+            } else {
+                localStorage.removeItem('admin_session');
+            }
+        }
+    }, []);
 
     useEffect(() => {
         if (isLoggedIn) {
             fetchData();
         }
     }, [isLoggedIn]);
+
+    const handleLogin = async () => {
+        setAuthLoading(true);
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: usernameInput, password: passwordInput })
+            });
+            const data = await res.json();
+            if (data.success) {
+                const sessionData = {
+                    timestamp: Date.now(),
+                    username: data.username,
+                    token: data.token
+                };
+                localStorage.setItem('admin_session', JSON.stringify(sessionData));
+                setIsLoggedIn(true);
+            } else {
+                alert(data.error || "Login gagal");
+            }
+        } catch (err) {
+            alert("Error login ke server");
+        } finally {
+            setAuthLoading(false);
+        }
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('admin_session');
+        setIsLoggedIn(false);
+    };
 
     const fetchData = async () => {
         setLoading(true);
@@ -127,19 +174,27 @@ export default function AppleAdminPage() {
                     <h2 style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '0.5rem' }}>Portal Manajemen</h2>
                     <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '2rem' }}>Autentikasi untuk mengakses kontrol sistem.</p>
                     <input
+                        type="text"
+                        className="apple-input"
+                        placeholder="Nama Pengguna"
+                        value={usernameInput}
+                        onChange={(e) => setUsernameInput(e.target.value)}
+                        style={{ marginBottom: '0.8rem', textAlign: 'center' }}
+                    />
+                    <input
                         type="password"
                         className="apple-input"
                         placeholder="Kata Sandi Sistem"
                         value={passwordInput}
                         onChange={(e) => setPasswordInput(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && passwordInput === 'sekretary25' && setIsLoggedIn(true)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
                         style={{ marginBottom: '1.2rem', textAlign: 'center' }}
                     />
-                    <button className="apple-btn-primary" style={{ width: '100%' }} onClick={() => passwordInput === 'sekretary25' && setIsLoggedIn(true)}>
-                        Masuk Sistem
+                    <button className="apple-btn-primary" style={{ width: '100%' }} onClick={handleLogin} disabled={authLoading}>
+                        {authLoading ? <i className="fas fa-spinner fa-spin"></i> : "Masuk Sistem"}
                     </button>
                     <div style={{ marginTop: '2rem', fontSize: '0.75rem', color: 'var(--apple-text-secondary)' }}>
-                        <i className="fas fa-lock"></i> Koneksi Terenkripsi Aktif
+                        <i className="fas fa-lock"></i> Sesi bertahan selama 1 jam
                     </div>
                 </div>
             </div>
@@ -187,7 +242,7 @@ export default function AppleAdminPage() {
                     <a href="/" className="apple-nav-item">
                         <i className="fas fa-globe"></i> <span className="apple-nav-text">Lihat Situs Utama</span>
                     </a>
-                    <button onClick={() => setIsLoggedIn(false)} className="apple-nav-item" style={{ width: '100%', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left' }}>
+                    <button onClick={handleLogout} className="apple-nav-item" style={{ width: '100%', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left' }}>
                         <i className="fas fa-sign-out-alt"></i> <span className="apple-nav-text">Keluar</span>
                     </button>
                 </div>

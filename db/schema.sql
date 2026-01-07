@@ -117,3 +117,15 @@ INSERT INTO site_settings (key, value) VALUES ('about_history', 'Pesantren ini b
 INSERT INTO site_settings (key, value) VALUES ('meta_title', 'PPDB Pondok Pesantren Darussalam Lirboyo Kediri');
 INSERT INTO site_settings (key, value) VALUES ('meta_description', 'Pendaftaran Santri Baru Pondok Pesantren Darussalam Lirboyo Kediri. Mencetak Generasi Bertakwa dan Berakhlak Qur''ani.');
 INSERT INTO site_settings (key, value) VALUES ('meta_keywords', 'ppdb, pesantren, lirboyo, darussalam, kediri, pendaftaran santri baru');
+
+-- 6. Users Table for Admin Access
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    role TEXT DEFAULT 'admin',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Seed initial admin user
+INSERT OR IGNORE INTO users (username, password) VALUES ('admin', 'sekretary25');

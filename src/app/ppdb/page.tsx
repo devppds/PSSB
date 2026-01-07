@@ -56,6 +56,18 @@ export default function PPDBPage() {
         <>
             <div className="section-wrapper">
                 <div className="ppdb-hero">
+                    <Link href="/" style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        marginBottom: '1.5rem',
+                        color: 'var(--ppdb-secondary)',
+                        fontWeight: 600,
+                        fontSize: '0.9rem',
+                        textDecoration: 'none'
+                    }}>
+                        <i className="fas fa-arrow-left"></i> Kembali ke Beranda
+                    </Link>
                     <h1>Pendaftaran Santri</h1>
                     <p>Bergabunglah dengan keluarga besar Pondok Pesantren Darussalam Lirboyo</p>
                 </div>

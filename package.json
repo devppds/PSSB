@@ -1,5 +1,6 @@
 {
   "name": "next-app",
+  "trigger": "nodejs_compat_enabled",
   "version": "0.1.0",
   "private": true,
   "scripts": {

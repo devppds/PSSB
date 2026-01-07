@@ -429,6 +429,19 @@ export default function AppleAdminPage() {
                                     <div className="apple-input-group">
                                         <textarea className="apple-input" placeholder="System Subtitle" rows={2} value={settings.hero_subtitle || ""} onChange={(e) => setSettings({ ...settings, hero_subtitle: e.target.value })} />
                                     </div>
+
+                                    <div style={{ marginTop: '30px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
+                                        <label className="apple-label">Profil & Identitas</label>
+                                        <div className="apple-input-group">
+                                            <textarea className="apple-input" placeholder="Sejarah Singkat / Tentang Kami" rows={4} value={settings.about_history || ""} onChange={(e) => setSettings({ ...settings, about_history: e.target.value })} />
+                                        </div>
+                                        <div className="apple-input-group">
+                                            <textarea className="apple-input" placeholder="Visi Pondok" rows={3} value={settings.visi_text || ""} onChange={(e) => setSettings({ ...settings, visi_text: e.target.value })} />
+                                        </div>
+                                        <div className="apple-input-group">
+                                            <input className="apple-input" placeholder="URL Video Profil (YouTube/Cloudinary)" value={settings.video_url || ""} onChange={(e) => setSettings({ ...settings, video_url: e.target.value })} />
+                                        </div>
+                                    </div>
                                 </div>
                             )}
 

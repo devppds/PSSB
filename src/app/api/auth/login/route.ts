@@ -6,12 +6,13 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
     try {
-        const { username, password } = await req.json();
+        const { password } = await req.json();
         const ctx = await getCloudflareContext();
         const env = ctx.env as unknown as { DB: any };
 
-        const user = await env.DB.prepare('SELECT * FROM users WHERE username = ? AND password = ?')
-            .bind(username, password)
+        // We check for the 'admin' user by default
+        const user = await env.DB.prepare('SELECT * FROM users WHERE username = "admin" AND password = ?')
+            .bind(password)
             .first();
 
         if (user) {

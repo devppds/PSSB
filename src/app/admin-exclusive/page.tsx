@@ -17,7 +17,6 @@ export default function AppleAdminPage() {
     const [saving, setSaving] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedSantri, setSelectedSantri] = useState<any>(null);
-    const [usernameInput, setUsernameInput] = useState("");
     const [toasts, setToasts] = useState<any[]>([]);
     const [confirmDialog, setConfirmDialog] = useState<any>(null);
 
@@ -61,7 +60,7 @@ export default function AppleAdminPage() {
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: usernameInput, password: passwordInput })
+                body: JSON.stringify({ password: passwordInput })
             });
             const data = await res.json();
             if (data.success) {
@@ -196,14 +195,6 @@ export default function AppleAdminPage() {
                         </div>
                         <h2 style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '0.5rem' }}>Portal Manajemen</h2>
                         <p style={{ color: 'var(--apple-text-secondary)', marginBottom: '2rem' }}>Autentikasi untuk mengakses kontrol sistem.</p>
-                        <input
-                            type="text"
-                            className="apple-input"
-                            placeholder="Nama Pengguna"
-                            value={usernameInput}
-                            onChange={(e) => setUsernameInput(e.target.value)}
-                            style={{ marginBottom: '0.8rem', textAlign: 'center' }}
-                        />
                         <input
                             type="password"
                             className="apple-input"

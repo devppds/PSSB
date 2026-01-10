@@ -636,6 +636,12 @@ export default function AppleAdminPage() {
                                                 <input className="apple-input" placeholder="WhatsApp Pusat" value={settings.whatsapp_number || ""} onChange={(e) => setSettings({ ...settings, whatsapp_number: e.target.value })} />
                                             </div>
                                             <div className="apple-input-group">
+                                                <input className="apple-input" placeholder="Fonnte API Key (WA Gateway)" value={settings.wa_gateway_api_key || ""} onChange={(e) => setSettings({ ...settings, wa_gateway_api_key: e.target.value })} />
+                                            </div>
+                                            <div className="apple-input-group">
+                                                <textarea className="apple-input" placeholder="Template WA Bukti (Gunakan {nama}, {id}, {kelas})" rows={3} value={settings.wa_template_pendaftaran || "Assalamu'alaikum, Terima kasih {nama} telah mendaftar di PPDS Lirboyo. No. Pendaftaran Anda adalah #{id}. Jenjang: {kelas}. Mohon simpan bukti pendaftaran terlampir."} onChange={(e) => setSettings({ ...settings, wa_template_pendaftaran: e.target.value })} />
+                                            </div>
+                                            <div className="apple-input-group">
                                                 <input className="apple-input" placeholder="Target Akademik" value={settings.ta_info || ""} onChange={(e) => setSettings({ ...settings, ta_info: e.target.value })} />
                                             </div>
                                         </div>

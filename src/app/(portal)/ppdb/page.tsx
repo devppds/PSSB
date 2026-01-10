@@ -20,6 +20,8 @@ const STEPS = [
 export default function PPDBPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [confirmWa, setConfirmWa] = useState("");
 
     // State to hold all form data matching legacy naming conventions
     const [formData, setFormData] = useState<any>({
@@ -168,27 +170,36 @@ export default function PPDBPage() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
+        // Prefill dengan nomor Ayah jika ada
+        setConfirmWa(formData.PhoneNumber_countrycode || "");
+        setShowConfirmModal(true);
+    };
+
+    const executeSubmit = async () => {
         setIsLoading(true);
+        setShowConfirmModal(false);
 
         const uploadData = new FormData();
         Object.keys(formData).forEach(key => {
             uploadData.append(key, formData[key]);
         });
+        // Tambahkan nomor konfirmasi WA
+        uploadData.append('confirm_wa', confirmWa);
 
         try {
-            // Using the new Next.js API route or matching legacy action if applicable
             const response = await fetch('/api/submit-registration', {
                 method: 'POST',
                 body: uploadData,
             });
 
             if (response.ok) {
-                alert("Pendaftaran Berhasil Dikirim!");
+                alert("Pendaftaran Berhasil Dikirim! Bukti pendaftaran akan dikirim ke WA Anda.");
                 window.location.href = "/";
             } else {
-                alert("Terjadi kesalahan saat mengirim data.");
+                const err = await response.json();
+                alert(err.message || "Terjadi kesalahan saat mengirim data.");
             }
         } catch (error) {
             console.error(error);
@@ -618,6 +629,52 @@ export default function PPDBPage() {
                     </div>
                 </form>
             </main>
+
+            {/* WA CONFIRMATION MODAL */}
+            {showConfirmModal && (
+                <div className="modal-overlay">
+                    <div className="modal-luxury">
+                        <div className="modal-wa-icon">
+                            <i className="fab fa-whatsapp"></i>
+                        </div>
+                        <h3>Kirim Bukti Pendaftaran</h3>
+                        <p>
+                            Pendaftaran Anda hampir selesai. Kami akan mengirimkan <b>File PDF Bukti Pendaftaran</b> resmi melalui WhatsApp.
+                        </p>
+
+                        <div className="input-luxury">
+                            <label>Konfirmasi Nomor WhatsApp Penerima</label>
+                            <input
+                                type="text"
+                                className="input-wa-premium"
+                                value={confirmWa}
+                                onChange={(e) => setConfirmWa(e.target.value)}
+                                placeholder="Contoh: 081234..."
+                                autoFocus
+                            />
+                        </div>
+
+                        <div className="modal-btns">
+                            <button
+                                type="button"
+                                className="btn-luxe btn-wa-confirm"
+                                onClick={executeSubmit}
+                                disabled={!confirmWa}
+                            >
+                                {isLoading ? <i className="fas fa-spinner fa-spin"></i> : "Konfirmasi & Kirim Sekarang"}
+                            </button>
+                            <button
+                                type="button"
+                                className="btn-luxe btn-luxe-secondary"
+                                onClick={() => setShowConfirmModal(false)}
+                                style={{ width: '100%', justifyContent: 'center' }}
+                            >
+                                Periksa Kembali Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

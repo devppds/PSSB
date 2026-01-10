@@ -291,6 +291,118 @@
     }
 }
 
+/* WA Confirmation Modal Luxury */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 1.5rem;
+    animation: fadeInModal 0.3s ease-out;
+}
+
+.modal-luxury {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 28px;
+    padding: 2.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.modal-luxury::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: #25d366; /* WA Green */
+}
+
+.modal-wa-icon {
+    width: 70px;
+    height: 70px;
+    background: #e7f9ee;
+    color: #25d366;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1.5rem;
+}
+
+.modal-luxury h3 {
+    font-size: 1.5rem;
+    font-family: var(--font-playfair), serif;
+    color: var(--primary-dark);
+    margin-bottom: 0.75rem;
+}
+
+.modal-luxury p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+}
+
+.input-wa-premium {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    border: 2px solid #edf2f7;
+    border-radius: 18px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s;
+    background: #f8fafc;
+    letter-spacing: 0.1em;
+}
+
+.input-wa-premium:focus {
+    border-color: #25d366;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(37, 211, 102, 0.1);
+    background: white;
+}
+
+.modal-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-wa-confirm {
+    background: #25d366;
+    color: white;
+    width: 100%;
+}
+
+.btn-wa-confirm:hover {
+    background: #128c7e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(37, 211, 102, 0.3);
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .form-card-luxury {

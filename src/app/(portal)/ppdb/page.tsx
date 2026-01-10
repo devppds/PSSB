@@ -22,7 +22,7 @@ export default function PPDBPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [confirmWa, setConfirmWa] = useState("");
+    const [confirmEmail, setConfirmEmail] = useState("");
 
     // State to hold all form data matching legacy naming conventions
     const [formData, setFormData] = useState<any>({
@@ -173,8 +173,8 @@ export default function PPDBPage() {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        // Prefill dengan nomor Ayah jika ada
-        setConfirmWa(formData.PhoneNumber_countrycode || "");
+        // Prefill dengan email jika ada (tapi biasanya pendaftar baru tidak ada email di form awal, jadi kosongkan atau ambil dari data jika ada field email)
+        setConfirmEmail("");
         setShowConfirmModal(true);
     };
 
@@ -186,8 +186,8 @@ export default function PPDBPage() {
         Object.keys(formData).forEach(key => {
             uploadData.append(key, formData[key]);
         });
-        // Tambahkan nomor konfirmasi WA
-        uploadData.append('confirm_wa', confirmWa);
+        // Tambahkan nomor konfirmasi Email
+        uploadData.append('confirm_email', confirmEmail);
 
         try {
             const response = await fetch('/api/submit-registration', {
@@ -642,23 +642,24 @@ export default function PPDBPage() {
                     <div className={`modal-luxury ${isSuccess ? 'success-pulse' : ''}`}>
                         {!isSuccess ? (
                             <>
-                                <div className="modal-wa-icon">
-                                    <i className="fab fa-whatsapp"></i>
+                                <div className="modal-wa-icon" style={{ backgroundColor: '#1e3a8a' }}>
+                                    <i className="fas fa-envelope"></i>
                                 </div>
-                                <h3>Kirim Bukti Pendaftaran</h3>
+                                <h3>Konfirmasi Email Bukti</h3>
                                 <p>
-                                    Pendaftaran Anda hampir selesai. Kami akan mengirimkan <b>File PDF Bukti Pendaftaran</b> resmi ke WhatsApp Ayah yang telah diinput.
+                                    Pendaftaran Anda hampir selesai. Kami akan mengirimkan <b>File PDF Bukti Pendaftaran</b> resmi ke email Anda.
                                 </p>
 
                                 <div className="input-luxury">
-                                    <label>Tinjau Kembali Nomor WhatsApp</label>
+                                    <label>Masukkan Email Penerima</label>
                                     <input
-                                        type="text"
+                                        type="email"
                                         className="input-wa-premium"
-                                        value={confirmWa}
-                                        onChange={(e) => setConfirmWa(e.target.value)}
-                                        placeholder="Contoh: 081234..."
+                                        value={confirmEmail}
+                                        onChange={(e) => setConfirmEmail(e.target.value)}
+                                        placeholder="contoh@email.com"
                                         autoFocus
+                                        required
                                     />
                                 </div>
 
@@ -666,10 +667,11 @@ export default function PPDBPage() {
                                     <button
                                         type="button"
                                         className="btn-luxe btn-wa-confirm"
+                                        style={{ backgroundColor: '#1e3a8a' }}
                                         onClick={executeSubmit}
-                                        disabled={!confirmWa || isLoading}
+                                        disabled={!confirmEmail || isLoading}
                                     >
-                                        {isLoading ? <><i className="fas fa-spinner fa-spin"></i> Memproses...</> : "Konfirmasi & Kirim Sekarang"}
+                                        {isLoading ? <><i className="fas fa-spinner fa-spin"></i> Memproses...</> : "Konfirmasi & Kirim Bukti"}
                                     </button>
                                     <button
                                         type="button"
@@ -690,7 +692,7 @@ export default function PPDBPage() {
                                 <h3>Pendaftaran Berhasil!</h3>
                                 <p>
                                     Terima kasih telah mendaftar. <br />
-                                    <b>Bukti pendaftaran (PDF)</b> sedang dikirim otomatis ke nomor WhatsApp <b>{confirmWa}</b>. Mohon tunggu sejenak dan cek aplikasi WA Anda.
+                                    <b>Bukti pendaftaran (PDF)</b> sedang dikirim otomatis ke email <b>{confirmEmail}</b>. Mohon cek inbox atau folder spam Anda.
                                 </p>
                                 <div className="loading-bar-container">
                                     <div className="loading-bar-fill" style={{ animationDuration: '10s' }}></div>

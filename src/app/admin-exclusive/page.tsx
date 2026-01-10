@@ -631,15 +631,22 @@ export default function AppleAdminPage() {
 
                                     <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginBottom: '30px' }}>
                                         <div>
-                                            <label className="apple-label">Kontak Lembaga</label>
+                                            <label className="apple-label">Gateway & Notifikasi</label>
                                             <div className="apple-input-group">
                                                 <input className="apple-input" placeholder="WhatsApp Pusat" value={settings.whatsapp_number || ""} onChange={(e) => setSettings({ ...settings, whatsapp_number: e.target.value })} />
                                             </div>
-                                            <div className="apple-input-group">
+                                            <div className="apple-input-group" style={{ border: '2px dashed #eee', padding: '15px', borderRadius: '12px', marginTop: '10px' }}>
+                                                <p style={{ fontSize: '0.8rem', fontWeight: 700, color: '#1e3a8a', marginBottom: '10px' }}>
+                                                    <i className="fas fa-envelope"></i> Konfigurasi Email (Resend)
+                                                </p>
+                                                <input className="apple-input" placeholder="Resend API Key" value={settings.email_gateway_api_key || ""} onChange={(e) => setSettings({ ...settings, email_gateway_api_key: e.target.value })} style={{ marginBottom: '8px' }} />
+                                                <input className="apple-input" placeholder="Nama Pengirim (e.g. PPDB Darussalam)" value={settings.sender_name || ""} onChange={(e) => setSettings({ ...settings, sender_name: e.target.value })} />
+                                            </div>
+                                            <div className="apple-input-group" style={{ marginTop: '15px' }}>
                                                 <input className="apple-input" placeholder="Fonnte API Key (WA Gateway)" value={settings.wa_gateway_api_key || ""} onChange={(e) => setSettings({ ...settings, wa_gateway_api_key: e.target.value })} />
                                             </div>
                                             <div className="apple-input-group">
-                                                <textarea className="apple-input" placeholder="Template WA Bukti (Gunakan {nama}, {id}, {kelas})" rows={3} value={settings.wa_template_pendaftaran || "Assalamu'alaikum, Terima kasih {nama} telah mendaftar di PPDS Lirboyo. No. Pendaftaran Anda adalah #{id}. Jenjang: {kelas}. Mohon simpan bukti pendaftaran terlampir."} onChange={(e) => setSettings({ ...settings, wa_template_pendaftaran: e.target.value })} />
+                                                <textarea className="apple-input" placeholder="Template Notifikasi Bukti (Gunakan {nama}, {id}, {kelas})" rows={3} value={settings.wa_template_pendaftaran || "Assalamu'alaikum, Terima kasih {nama} telah mendaftar di PPDS Lirboyo. No. Pendaftaran Anda adalah #{id}. Jenjang: {kelas}. Mohon simpan bukti pendaftaran terlampir."} onChange={(e) => setSettings({ ...settings, wa_template_pendaftaran: e.target.value })} />
                                             </div>
                                             <div className="apple-input-group">
                                                 <input className="apple-input" placeholder="Target Akademik" value={settings.ta_info || ""} onChange={(e) => setSettings({ ...settings, ta_info: e.target.value })} />

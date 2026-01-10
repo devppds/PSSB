@@ -1,8 +1,9 @@
-
 import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
 import { getCloudflareContext } from '@opennextjs/cloudflare/cloudflare-context';
 import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { Resend } from 'resend';
 
 // Helper to upload buffer to Cloudinary
 const uploadToCloudinary = (buffer: Buffer, folder: string, filename?: string): Promise<string | null> => {
@@ -30,16 +31,6 @@ const uploadToCloudinary = (buffer: Buffer, folder: string, filename?: string): 
             }
         ).end(buffer);
     });
-};
-
-const formatPhoneNumber = (number: string) => {
-    let cleaned = number.replace(/\D/g, '');
-    if (cleaned.startsWith('0')) {
-        cleaned = '62' + cleaned.substring(1);
-    } else if (!cleaned.startsWith('62')) {
-        cleaned = '62' + cleaned;
-    }
-    return cleaned;
 };
 
 export async function POST(req: NextRequest) {
@@ -146,7 +137,7 @@ export async function POST(req: NextRequest) {
 
         const registrationId = dbResult.meta.last_row_id;
 
-        // WHATSAPP NOTIFICATION & PDF GENERATION
+        // EMAIL NOTIFICATION & PDF GENERATION
         try {
             const settingsRes = await env.DB.prepare('SELECT key, value FROM site_settings').all();
             const settings = settingsRes.results.reduce((acc: any, item: any) => {
@@ -154,88 +145,111 @@ export async function POST(req: NextRequest) {
                 return acc;
             }, {});
 
-            if (settings.wa_gateway_api_key) {
-                // 1. Generate PDF
-                const doc = new jsPDF();
-                const margin = 20;
+            if (settings.email_gateway_api_key) {
+                const resend = new Resend(settings.email_gateway_api_key);
 
-                // Header
-                doc.setFillColor(0, 122, 255);
-                doc.rect(0, 0, 210, 40, 'F');
+                // 1. Generate Official PDF
+                const doc = new jsPDF();
+
+                // Header Design
+                doc.setFillColor(30, 58, 138); // Dark blue
+                doc.rect(0, 0, 210, 45, 'F');
+
                 doc.setTextColor(255, 255, 255);
                 doc.setFontSize(22);
-                doc.text("BUKTI PENDAFTARAN SANTRI", 105, 20, { align: 'center' });
-                doc.setFontSize(12);
-                doc.text("Pondok Pesantren Darussalam Lirboyo", 105, 30, { align: 'center' });
+                doc.setFont("helvetica", "bold");
+                doc.text("PONDOK PESANTREN DARUSSALAM", 105, 20, { align: 'center' });
+
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "normal");
+                doc.text("LIRBOYO - KEDIRI", 105, 28, { align: 'center' });
+                doc.text("BUKTI PENDAFTARAN SANTRI BARU", 105, 38, { align: 'center' });
 
                 // Content
                 doc.setTextColor(0, 0, 0);
-                doc.setFontSize(14);
-                doc.text(`No. Pendaftaran: #${registrationId}`, margin, 55);
-                doc.text(`Tanggal Cetak: ${new Date().toLocaleDateString('id-ID')}`, margin, 65);
-
-                doc.setDrawColor(200, 200, 200);
-                doc.line(margin, 70, 210 - margin, 70);
-
                 doc.setFontSize(12);
-                let y = 85;
-                const rows = [
-                    ["Nama Lengkap", `${data.nama_depan} ${data.nama_belakang}`],
-                    ["NIK", data.nik],
-                    ["Jenjang/Kelas", data.jenjang_kelas],
-                    ["Jenis Kelamin", data.jenis_kelamin],
-                    ["Tempat, Tgl Lahir", `${data.tempat_lahir}, ${data.tanggal_lahir}`],
-                    ["Alamat", `${data.alamat_jalan}, ${data.alamat_kota}`],
-                    ["Nama Ayah", `${data.nama_ayah_depan} ${data.nama_ayah_belakang}`],
-                    ["No HP Ayah", data.no_hp_ayah]
-                ];
+                doc.setFont("helvetica", "bold");
+                doc.text(`NO. REGISTRASI: #${registrationId.toString().padStart(5, '0')}`, 20, 55);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Tanggal: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`, 20, 62);
 
-                rows.forEach(([label, value]) => {
-                    doc.setFont("helvetica", "bold");
-                    doc.text(label + ":", margin, y);
-                    doc.setFont("helvetica", "normal");
-                    doc.text(value || "-", margin + 50, y);
-                    y += 10;
+                // Table for Data
+                autoTable(doc, {
+                    startY: 70,
+                    theme: 'grid',
+                    head: [['Kategori', 'Informasi Detail']],
+                    body: [
+                        ['Nama Lengkap', `${data.nama_depan} ${data.nama_belakang}`],
+                        ['NIK / No. Identitas', data.nik],
+                        ['Jenjang / Kelas', data.jenjang_kelas],
+                        ['Jenis Kelamin', data.jenis_kelamin],
+                        ['Tempat, Tanggal Lahir', `${data.tempat_lahir}, ${data.tanggal_lahir}`],
+                        ['Alamat Lengkap', `${data.alamat_jalan}, Kec. ${data.alamat_kecamatan}, ${data.alamat_kota}`],
+                        ['Nama Orang Tua (Ayah)', `${data.nama_ayah_depan} ${data.nama_ayah_belakang}`],
+                        ['No. HP Ortu', data.no_hp_ayah],
+                    ],
+                    headStyles: { fillColor: [30, 58, 138], textColor: [255, 255, 255], fontStyle: 'bold' },
+                    columnStyles: {
+                        0: { cellWidth: 50, fontStyle: 'bold', fillColor: [249, 250, 251] },
+                        1: { cellWidth: 'auto' }
+                    },
+                    margin: { left: 20, right: 20 }
                 });
 
                 // Footer
+                const finalY = (doc as any).lastAutoTable.finalY + 20;
                 doc.setFontSize(10);
-                doc.setTextColor(100, 100, 100);
-                doc.text("Dokumen ini dihasilkan secara otomatis oleh sistem pendaftaran online.", 105, 280, { align: 'center' });
+                doc.text("Kediri, " + new Date().toLocaleDateString('id-ID'), 150, finalY);
+                doc.text("Panitia PPDB", 150, finalY + 10);
+                doc.text("(................................)", 150, finalY + 30);
+
+                doc.setFontSize(9);
+                doc.setTextColor(150, 150, 150);
+                doc.text("* Simpan dokumen ini sebagai bukti pendaftaran resmi pesantren.", 20, 280);
 
                 const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
                 const pdfUrl = await uploadToCloudinary(pdfBuffer, 'ppdb_proofs', `bukti_${registrationId}`);
-                console.log('PDF Generated & Uploaded:', pdfUrl);
 
-                // 2. Transmit to WhatsApp via Fonnte
-                const confirmedWa = getVal('confirm_wa');
-                const waTarget = formatPhoneNumber(confirmedWa || data.no_hp_ayah || data.no_hp_ibu);
-                console.log('Sending WA to:', waTarget);
+                // 2. Send Email via Resend
+                const targetEmail = getVal('confirm_email') || `${data.nama_depan.toLowerCase()}@example.com`; // Fallback
 
-                const waMessage = (settings.wa_template_pendaftaran || "Assalamu'alaikum, Terima kasih {nama} telah mendaftar di PPDS Lirboyo. No. Pendaftaran Anda adalah #{id}. Jenjang: {kelas}. Mohon simpan bukti pendaftaran ini.")
-                    .replace('{nama}', `${data.nama_depan} ${data.nama_belakang}`)
-                    .replace('{id}', registrationId.toString())
-                    .replace('{kelas}', data.jenjang_kelas);
-
-                const waFormData = new FormData();
-                waFormData.append('target', waTarget);
-                waFormData.append('message', waMessage);
-                if (pdfUrl) waFormData.append('url', pdfUrl);
-
-                const waResponse = await fetch('https://api.fonnte.com/send', {
-                    method: 'POST',
-                    headers: { 'Authorization': settings.wa_gateway_api_key },
-                    body: waFormData
+                await resend.emails.send({
+                    from: `${settings.sender_name || 'PPDB Darussalam'} <onboarding@resend.dev>`,
+                    to: targetEmail,
+                    subject: `Bukti Pendaftaran - ${data.nama_depan} (#${registrationId})`,
+                    html: `
+                        <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: auto;">
+                            <h2 style="color: #1e3a8a;">Pendaftaran Berhasil!</h2>
+                            <p>Assalamu'alaikum Wr. Wb. Bapak/Ibu <b>${data.nama_ayah_depan}</b>,</p>
+                            <p>Terima kasih telah melakukan pendaftaran untuk calon santri <b>${data.nama_depan} ${data.nama_belakang}</b> di Pondok Pesantren Darussalam Lirboyo.</p>
+                            <p>Bersama email ini kami lampirkan file <b>Bukti Pendaftaran (PDF)</b>. Silakan simpan file tersebut untuk keperluan verifikasi berkas saat kedatangan di pesantren.</p>
+                            <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                                <b>Detail Pendaftaran:</b><br/>
+                                No. Registrasi: #${registrationId}<br/>
+                                Jenjang: ${data.jenjang_kelas}<br/>
+                                Tanggal: ${new Date().toLocaleDateString('id-ID')}
+                            </div>
+                            <p>Jika ada pertanyaan, silakan hubungi sekretariat PPDB melalui kontak resmi kami.</p>
+                            <p>Wassalamu'alaikum Wr. Wb.</p>
+                            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
+                            <small style="color: #888;">Email ini dikirim otomatis oleh sistem PPDB Online Darussalam.</small>
+                        </div>
+                    `,
+                    attachments: [
+                        {
+                            filename: `Bukti_Pendaftaran_${data.nama_depan}.pdf`,
+                            content: pdfBuffer,
+                        }
+                    ]
                 });
 
-                const waResult = await waResponse.json();
-                console.log('Fonnte Response:', waResult);
+                console.log('Email sent to:', targetEmail);
             } else {
-                console.warn('WhatsApp Gateway API Key not found in settings.');
+                console.warn('Email Gateway API Key not found in settings.');
             }
-        } catch (waErr) {
-            console.error('WhatsApp/PDF Error Detail:', waErr);
-            // Don't fail the whole request if WA fails
+        } catch (mailErr) {
+            console.error('Email Generation/Sending Error:', mailErr);
+            // Don't fail the whole request if email fails
         }
 
         return NextResponse.json({ success: true, message: 'Pendaftaran Berhasil!', id: registrationId });

@@ -197,10 +197,10 @@ export default function PPDBPage() {
 
             if (response.ok) {
                 setIsSuccess(true);
-                // Beri waktu user melihat notifikasi sukses sebelum redirect
+                // Beri waktu lebih lama agar user bisa baca dan cek WA
                 setTimeout(() => {
                     window.location.href = "/";
-                }, 5000);
+                }, 10000);
             } else {
                 const err = await response.json();
                 alert(err.message || "Terjadi kesalahan saat mengirim data.");
@@ -690,12 +690,20 @@ export default function PPDBPage() {
                                 <h3>Pendaftaran Berhasil!</h3>
                                 <p>
                                     Terima kasih telah mendaftar. <br />
-                                    <b>Bukti pendaftaran sedang dikirim</b> ke nomor WhatsApp <b>{confirmWa}</b>.
+                                    <b>Bukti pendaftaran (PDF)</b> sedang dikirim otomatis ke nomor WhatsApp <b>{confirmWa}</b>. Mohon tunggu sejenak dan cek aplikasi WA Anda.
                                 </p>
                                 <div className="loading-bar-container">
-                                    <div className="loading-bar-fill"></div>
+                                    <div className="loading-bar-fill" style={{ animationDuration: '10s' }}></div>
                                 </div>
-                                <p className="redirect-text">Mengalihkan ke halaman utama dalam beberapa detik...</p>
+                                <p className="redirect-text">Mengalihkan ke halaman utama dalam 10 detik...</p>
+                                <button
+                                    type="button"
+                                    className="btn-luxe btn-luxe-primary"
+                                    onClick={() => window.location.href = "/"}
+                                    style={{ width: '100%', marginTop: '1rem', justifyContent: 'center' }}
+                                >
+                                    Selesai & Ke Beranda
+                                </button>
                             </div>
                         )}
                     </div>

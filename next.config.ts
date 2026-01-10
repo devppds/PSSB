@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+initOpenNextCloudflareForDev();
 
 const nextConfig: NextConfig = {
   // Use serverExternalPackages to avoid bundling Node.js built-ins in the edge bundle

@@ -205,10 +205,13 @@ export async function POST(req: NextRequest) {
 
                 const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
                 const pdfUrl = await uploadToCloudinary(pdfBuffer, 'ppdb_proofs', `bukti_${registrationId}`);
+                console.log('PDF Generated & Uploaded:', pdfUrl);
 
                 // 2. Transmit to WhatsApp via Fonnte
                 const confirmedWa = getVal('confirm_wa');
                 const waTarget = formatPhoneNumber(confirmedWa || data.no_hp_ayah || data.no_hp_ibu);
+                console.log('Sending WA to:', waTarget);
+
                 const waMessage = (settings.wa_template_pendaftaran || "Assalamu'alaikum, Terima kasih {nama} telah mendaftar di PPDS Lirboyo. No. Pendaftaran Anda adalah #{id}. Jenjang: {kelas}. Mohon simpan bukti pendaftaran ini.")
                     .replace('{nama}', `${data.nama_depan} ${data.nama_belakang}`)
                     .replace('{id}', registrationId.toString())
@@ -219,14 +222,19 @@ export async function POST(req: NextRequest) {
                 waFormData.append('message', waMessage);
                 if (pdfUrl) waFormData.append('url', pdfUrl);
 
-                await fetch('https://api.fonnte.com/send', {
+                const waResponse = await fetch('https://api.fonnte.com/send', {
                     method: 'POST',
                     headers: { 'Authorization': settings.wa_gateway_api_key },
                     body: waFormData
                 });
+
+                const waResult = await waResponse.json();
+                console.log('Fonnte Response:', waResult);
+            } else {
+                console.warn('WhatsApp Gateway API Key not found in settings.');
             }
         } catch (waErr) {
-            console.error('WhatsApp/PDF Error:', waErr);
+            console.error('WhatsApp/PDF Error Detail:', waErr);
             // Don't fail the whole request if WA fails
         }
 

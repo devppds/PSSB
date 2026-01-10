@@ -266,23 +266,23 @@ export default function PPDBPage() {
 
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Nama Depan *</label>
-                                <input type="text" name="Name_First" placeholder="Nama Depan" onChange={handleInputChange} required />
+                                <label>Nama Depan</label>
+                                <input type="text" name="Name_First" placeholder="Nama Depan" onChange={handleInputChange} />
                             </div>
                             <div className="input-luxury">
-                                <label>Nama Belakang *</label>
-                                <input type="text" name="Name_Last" placeholder="Nama Belakang" onChange={handleInputChange} required />
+                                <label>Nama Belakang</label>
+                                <input type="text" name="Name_Last" placeholder="Nama Belakang" onChange={handleInputChange} />
                             </div>
                         </div>
 
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>NIK Santri *</label>
-                                <input type="text" name="Number" maxLength={16} placeholder="16 Digit NIK" onChange={handleInputChange} required />
+                                <label>NIK Santri</label>
+                                <input type="text" name="Number" maxLength={16} placeholder="16 Digit NIK" onChange={handleInputChange} />
                             </div>
                             <div className="input-luxury">
-                                <label>No. Kartu Keluarga *</label>
-                                <input type="text" name="Number1" maxLength={16} placeholder="16 Digit No. KK" onChange={handleInputChange} required />
+                                <label>No. Kartu Keluarga</label>
+                                <input type="text" name="Number1" maxLength={16} placeholder="16 Digit No. KK" onChange={handleInputChange} />
                             </div>
                         </div>
 
@@ -292,8 +292,8 @@ export default function PPDBPage() {
                                 <input type="text" name="Number2" maxLength={10} placeholder="10 Digit NISN (jika ada)" onChange={handleInputChange} />
                             </div>
                             <div className="input-luxury">
-                                <label>Jenis Kelamin *</label>
-                                <select name="Dropdown" onChange={handleInputChange} required>
+                                <label>Jenis Kelamin</label>
+                                <select name="Dropdown" onChange={handleInputChange}>
                                     <option value="">Pilih Jenis Kelamin</option>
                                     <option value="Laki-Laki">Laki-Laki</option>
                                     <option value="Perempuan">Perempuan</option>
@@ -303,19 +303,19 @@ export default function PPDBPage() {
 
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Tempat Lahir *</label>
-                                <input type="text" name="SingleLine2" placeholder="Kota Kelahiran" onChange={handleInputChange} required />
+                                <label>Tempat Lahir</label>
+                                <input type="text" name="SingleLine2" placeholder="Kota Kelahiran" onChange={handleInputChange} />
                             </div>
                             <div className="input-luxury">
-                                <label>Tanggal Lahir *</label>
-                                <input type="date" name="Date" onChange={handleInputChange} required />
+                                <label>Tanggal Lahir</label>
+                                <input type="date" name="Date" onChange={handleInputChange} />
                             </div>
                         </div>
 
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Agama *</label>
-                                <select name="Dropdown2" onChange={handleInputChange} required>
+                                <label>Agama</label>
+                                <select name="Dropdown2" onChange={handleInputChange}>
                                     <option value="">Pilih Agama</option>
                                     {religionOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                 </select>
@@ -324,8 +324,8 @@ export default function PPDBPage() {
                                 )}
                             </div>
                             <div className="input-luxury">
-                                <label>Pendidikan Terakhir *</label>
-                                <select name="Dropdown1" onChange={handleInputChange} required>
+                                <label>Pendidikan Terakhir</label>
+                                <select name="Dropdown1" onChange={handleInputChange}>
                                     <option value="">Pilih Pendidikan</option>
                                     <option value="SD/MI">SD/MI</option>
                                     <option value="SMP/MTS">SMP/MTS</option>
@@ -346,8 +346,8 @@ export default function PPDBPage() {
                         </div>
 
                         <div className="input-luxury">
-                            <label>Akan Masuk Kelas *</label>
-                            <select name="Dropdown3" onChange={handleInputChange} required>
+                            <label>Akan Masuk Kelas</label>
+                            <select name="Dropdown3" onChange={handleInputChange}>
                                 <option value="">Pilih Jenjang/Kelas</option>
                                 <optgroup label="MIU (Santri Sekolah Formal)">
                                     <option value="I Ula">I Ula</option>
@@ -369,12 +369,12 @@ export default function PPDBPage() {
 
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Hobi *</label>
-                                <input type="text" name="SingleLine" placeholder="Kegemaran" onChange={handleInputChange} required />
+                                <label>Hobi</label>
+                                <input type="text" name="SingleLine" placeholder="Kegemaran" onChange={handleInputChange} />
                             </div>
                             <div className="input-luxury">
-                                <label>Cita-Cita *</label>
-                                <input type="text" name="SingleLine1" placeholder="Tujuan Masa Depan" onChange={handleInputChange} required />
+                                <label>Cita-Cita</label>
+                                <input type="text" name="SingleLine1" placeholder="Tujuan Masa Depan" onChange={handleInputChange} />
                             </div>
                         </div>
                     </div>
@@ -393,8 +393,8 @@ export default function PPDBPage() {
                         <h3 className="section-label-gold">Data Ayah</h3>
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Nama Depan Ayah *</label>
-                                <input type="text" name="Name1_First" placeholder="Nama Depan" onChange={handleInputChange} required />
+                                <label>Nama Depan Ayah</label>
+                                <input type="text" name="Name1_First" placeholder="Nama Depan" onChange={handleInputChange} />
                             </div>
                             <div className="input-luxury">
                                 <label>Nama Belakang Ayah</label>
@@ -403,26 +403,26 @@ export default function PPDBPage() {
                         </div>
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>NIK Ayah *</label>
-                                <input type="text" name="Number3" maxLength={16} placeholder="16 Digit NIK" onChange={handleInputChange} required />
+                                <label>NIK Ayah</label>
+                                <input type="text" name="Number3" maxLength={16} placeholder="16 Digit NIK" onChange={handleInputChange} />
                             </div>
                             <div className="input-luxury">
-                                <label>No. HP/WA Ayah *</label>
-                                <input type="text" name="PhoneNumber_countrycode" placeholder="+62" onChange={handleInputChange} required />
+                                <label>No. HP/WA Ayah</label>
+                                <input type="text" name="PhoneNumber_countrycode" placeholder="+62" onChange={handleInputChange} />
                             </div>
                         </div>
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Pendidikan Ayah *</label>
-                                <select name="Dropdown8" onChange={handleInputChange} required>
+                                <label>Pendidikan Ayah</label>
+                                <select name="Dropdown8" onChange={handleInputChange}>
                                     <option value="">Pilih Pendidikan</option>
                                     {educationOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                 </select>
                                 {otherFields.pendidikanAyah && <input type="text" name="other_pendidikan_ayah" placeholder="Sebutkan..." className="mt-2" />}
                             </div>
                             <div className="input-luxury">
-                                <label>Pekerjaan Ayah *</label>
-                                <select name="Dropdown4" onChange={handleInputChange} required>
+                                <label>Pekerjaan Ayah</label>
+                                <select name="Dropdown4" onChange={handleInputChange}>
                                     <option value="">Pilih Pekerjaan</option>
                                     {jobOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                 </select>
@@ -430,8 +430,8 @@ export default function PPDBPage() {
                             </div>
                         </div>
                         <div className="input-luxury">
-                            <label>Penghasilan Ayah *</label>
-                            <select name="Dropdown6" onChange={handleInputChange} required>
+                            <label>Penghasilan Ayah</label>
+                            <select name="Dropdown6" onChange={handleInputChange}>
                                 <option value="">Pilih Rentang Penghasilan</option>
                                 {incomeOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                             </select>
@@ -443,8 +443,8 @@ export default function PPDBPage() {
                         <h3 className="section-label-gold">Data Ibu</h3>
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Nama Depan Ibu *</label>
-                                <input type="text" name="Name2_First" placeholder="Nama Depan" onChange={handleInputChange} required />
+                                <label>Nama Depan Ibu</label>
+                                <input type="text" name="Name2_First" placeholder="Nama Depan" onChange={handleInputChange} />
                             </div>
                             <div className="input-luxury">
                                 <label>Nama Belakang Ibu</label>
@@ -453,26 +453,26 @@ export default function PPDBPage() {
                         </div>
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>NIK Ibu *</label>
-                                <input type="text" name="Number4" maxLength={16} placeholder="16 Digit NIK" onChange={handleInputChange} required />
+                                <label>NIK Ibu</label>
+                                <input type="text" name="Number4" maxLength={16} placeholder="16 Digit NIK" onChange={handleInputChange} />
                             </div>
                             <div className="input-luxury">
-                                <label>No. HP/WA Ibu *</label>
-                                <input type="text" name="PhoneNumber1_countrycode" placeholder="+62" onChange={handleInputChange} required />
+                                <label>No. HP/WA Ibu</label>
+                                <input type="text" name="PhoneNumber1_countrycode" placeholder="+62" onChange={handleInputChange} />
                             </div>
                         </div>
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Pendidikan Ibu *</label>
-                                <select name="Dropdown9" onChange={handleInputChange} required>
+                                <label>Pendidikan Ibu</label>
+                                <select name="Dropdown9" onChange={handleInputChange}>
                                     <option value="">Pilih Pendidikan</option>
                                     {educationOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                 </select>
                                 {otherFields.pendidikanIbu && <input type="text" name="other_pendidikan_ibu" placeholder="Sebutkan..." className="mt-2" />}
                             </div>
                             <div className="input-luxury">
-                                <label>Pekerjaan Ibu *</label>
-                                <select name="Dropdown5" onChange={handleInputChange} required>
+                                <label>Pekerjaan Ibu</label>
+                                <select name="Dropdown5" onChange={handleInputChange}>
                                     <option value="">Pilih Pekerjaan</option>
                                     {jobOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                 </select>
@@ -480,8 +480,8 @@ export default function PPDBPage() {
                             </div>
                         </div>
                         <div className="input-luxury">
-                            <label>Penghasilan Ibu *</label>
-                            <select name="Dropdown7" onChange={handleInputChange} required>
+                            <label>Penghasilan Ibu</label>
+                            <select name="Dropdown7" onChange={handleInputChange}>
                                 <option value="">Pilih Rentang Penghasilan</option>
                                 {incomeOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                             </select>
@@ -499,14 +499,14 @@ export default function PPDBPage() {
                         </div>
 
                         <div className="input-luxury">
-                            <label>Jalan / Desa / RT & RW *</label>
-                            <input type="text" name="Address1_AddressLine1" placeholder="Nama Jalan, Nama Desa/Dusun, RT/RW" onChange={handleInputChange} required />
+                            <label>Jalan / Desa / RT & RW</label>
+                            <input type="text" name="Address1_AddressLine1" placeholder="Nama Jalan, Nama Desa/Dusun, RT/RW" onChange={handleInputChange} />
                         </div>
 
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Provinsi *</label>
-                                <select value={selectedProvince} onChange={(e) => handleRegionChange(e, 'prov')} required>
+                                <label>Provinsi</label>
+                                <select value={selectedProvince} onChange={(e) => handleRegionChange(e, 'prov')}>
                                     <option value="">Pilih Provinsi</option>
                                     {provinces.map(prov => (
                                         <option key={prov.id} value={prov.id}>{prov.name}</option>
@@ -514,8 +514,8 @@ export default function PPDBPage() {
                                 </select>
                             </div>
                             <div className="input-luxury">
-                                <label>Kota / Kabupaten *</label>
-                                <select value={selectedRegency} onChange={(e) => handleRegionChange(e, 'reg')} disabled={!selectedProvince} required>
+                                <label>Kota / Kabupaten</label>
+                                <select value={selectedRegency} onChange={(e) => handleRegionChange(e, 'reg')} disabled={!selectedProvince}>
                                     <option value="">Pilih Kota/Kabupaten</option>
                                     {regencies.map(reg => (
                                         <option key={reg.id} value={reg.id}>{reg.name}</option>
@@ -526,8 +526,8 @@ export default function PPDBPage() {
 
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Kecamatan *</label>
-                                <select value={selectedDistrict} onChange={(e) => handleRegionChange(e, 'dis')} disabled={!selectedRegency} required>
+                                <label>Kecamatan</label>
+                                <select value={selectedDistrict} onChange={(e) => handleRegionChange(e, 'dis')} disabled={!selectedRegency}>
                                     <option value="">Pilih Kecamatan</option>
                                     {districts.map(dis => (
                                         <option key={dis.id} value={dis.id}>{dis.name}</option>
@@ -535,8 +535,8 @@ export default function PPDBPage() {
                                 </select>
                             </div>
                             <div className="input-luxury">
-                                <label>Desa / Kelurahan *</label>
-                                <select value={selectedVillage} onChange={(e) => handleRegionChange(e, 'vil')} disabled={!selectedDistrict} required>
+                                <label>Desa / Kelurahan</label>
+                                <select value={selectedVillage} onChange={(e) => handleRegionChange(e, 'vil')} disabled={!selectedDistrict}>
                                     <option value="">Pilih Desa/Kelurahan</option>
                                     {villages.map(vil => (
                                         <option key={vil.id} value={vil.id}>{vil.name}</option>
@@ -578,18 +578,18 @@ export default function PPDBPage() {
 
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
-                                <label>Foto Santri (3x4) *</label>
+                                <label>Foto Santri (3x4)</label>
                                 <div className="upload-box-luxury">
-                                    <input type="file" name="FileUpload" accept="image/*" onChange={handleFileChange} required style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
+                                    <input type="file" name="FileUpload" accept="image/*" onChange={handleFileChange} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
                                     <i className="fas fa-camera"></i>
                                     <p style={{ fontSize: '0.8rem' }}>{formData.FileUpload ? formData.FileUpload.name : "Klik untuk Pilih Foto"}</p>
                                 </div>
                                 <small className="text-muted">Berbaju putih, berkerah & berkopyah hitam.</small>
                             </div>
                             <div className="input-luxury">
-                                <label>Scan Kartu Keluarga *</label>
+                                <label>Scan Kartu Keluarga</label>
                                 <div className="upload-box-luxury">
-                                    <input type="file" name="FileUpload1" accept="image/*,application/pdf" onChange={handleFileChange} required style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
+                                    <input type="file" name="FileUpload1" accept="image/*,application/pdf" onChange={handleFileChange} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
                                     <i className="fas fa-id-card"></i>
                                     <p style={{ fontSize: '0.8rem' }}>{formData.FileUpload1 ? formData.FileUpload1.name : "Klik untuk Pilih KK"}</p>
                                 </div>
@@ -598,9 +598,9 @@ export default function PPDBPage() {
                         </div>
 
                         <div className="input-luxury" style={{ marginTop: '1rem' }}>
-                            <label>Scan Ijazah Terakhir *</label>
+                            <label>Scan Ijazah Terakhir</label>
                             <div className="upload-box-luxury">
-                                <input type="file" name="FileUpload2" accept="image/*,application/pdf" onChange={handleFileChange} required style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
+                                <input type="file" name="FileUpload2" accept="image/*,application/pdf" onChange={handleFileChange} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
                                 <i className="fas fa-certificate"></i>
                                 <p style={{ fontSize: '0.8rem' }}>{formData.FileUpload2 ? formData.FileUpload2.name : "Klik untuk Pilih Scan Ijazah"}</p>
                             </div>

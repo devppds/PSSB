@@ -20,6 +20,7 @@ const STEPS = [
 export default function PPDBPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [confirmWa, setConfirmWa] = useState("");
 
@@ -195,15 +196,20 @@ export default function PPDBPage() {
             });
 
             if (response.ok) {
-                alert("Pendaftaran Berhasil Dikirim! Bukti pendaftaran akan dikirim ke WA Anda.");
-                window.location.href = "/";
+                setIsSuccess(true);
+                // Beri waktu user melihat notifikasi sukses sebelum redirect
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 5000);
             } else {
                 const err = await response.json();
                 alert(err.message || "Terjadi kesalahan saat mengirim data.");
+                setShowConfirmModal(false);
             }
         } catch (error) {
             console.error(error);
             alert("Terjadi kesalahan jaringan.");
+            setShowConfirmModal(false);
         } finally {
             setIsLoading(false);
         }
@@ -633,45 +639,65 @@ export default function PPDBPage() {
             {/* WA CONFIRMATION MODAL */}
             {showConfirmModal && (
                 <div className="modal-overlay">
-                    <div className="modal-luxury">
-                        <div className="modal-wa-icon">
-                            <i className="fab fa-whatsapp"></i>
-                        </div>
-                        <h3>Kirim Bukti Pendaftaran</h3>
-                        <p>
-                            Pendaftaran Anda hampir selesai. Kami akan mengirimkan <b>File PDF Bukti Pendaftaran</b> resmi melalui WhatsApp.
-                        </p>
+                    <div className={`modal-luxury ${isSuccess ? 'success-pulse' : ''}`}>
+                        {!isSuccess ? (
+                            <>
+                                <div className="modal-wa-icon">
+                                    <i className="fab fa-whatsapp"></i>
+                                </div>
+                                <h3>Kirim Bukti Pendaftaran</h3>
+                                <p>
+                                    Pendaftaran Anda hampir selesai. Kami akan mengirimkan <b>File PDF Bukti Pendaftaran</b> resmi ke WhatsApp Ayah yang telah diinput.
+                                </p>
 
-                        <div className="input-luxury">
-                            <label>Konfirmasi Nomor WhatsApp Penerima</label>
-                            <input
-                                type="text"
-                                className="input-wa-premium"
-                                value={confirmWa}
-                                onChange={(e) => setConfirmWa(e.target.value)}
-                                placeholder="Contoh: 081234..."
-                                autoFocus
-                            />
-                        </div>
+                                <div className="input-luxury">
+                                    <label>Tinjau Kembali Nomor WhatsApp</label>
+                                    <input
+                                        type="text"
+                                        className="input-wa-premium"
+                                        value={confirmWa}
+                                        onChange={(e) => setConfirmWa(e.target.value)}
+                                        placeholder="Contoh: 081234..."
+                                        autoFocus
+                                    />
+                                </div>
 
-                        <div className="modal-btns">
-                            <button
-                                type="button"
-                                className="btn-luxe btn-wa-confirm"
-                                onClick={executeSubmit}
-                                disabled={!confirmWa}
-                            >
-                                {isLoading ? <i className="fas fa-spinner fa-spin"></i> : "Konfirmasi & Kirim Sekarang"}
-                            </button>
-                            <button
-                                type="button"
-                                className="btn-luxe btn-luxe-secondary"
-                                onClick={() => setShowConfirmModal(false)}
-                                style={{ width: '100%', justifyContent: 'center' }}
-                            >
-                                Periksa Kembali Data
-                            </button>
-                        </div>
+                                <div className="modal-btns">
+                                    <button
+                                        type="button"
+                                        className="btn-luxe btn-wa-confirm"
+                                        onClick={executeSubmit}
+                                        disabled={!confirmWa || isLoading}
+                                    >
+                                        {isLoading ? <><i className="fas fa-spinner fa-spin"></i> Memproses...</> : "Konfirmasi & Kirim Sekarang"}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn-luxe btn-luxe-secondary"
+                                        onClick={() => setShowConfirmModal(false)}
+                                        style={{ width: '100%', justifyContent: 'center' }}
+                                        disabled={isLoading}
+                                    >
+                                        Periksa Kembali Data
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="success-state-luxe">
+                                <div className="success-check-icon">
+                                    <i className="fas fa-check-circle"></i>
+                                </div>
+                                <h3>Pendaftaran Berhasil!</h3>
+                                <p>
+                                    Terima kasih telah mendaftar. <br />
+                                    <b>Bukti pendaftaran sedang dikirim</b> ke nomor WhatsApp <b>{confirmWa}</b>.
+                                </p>
+                                <div className="loading-bar-container">
+                                    <div className="loading-bar-fill"></div>
+                                </div>
+                                <p className="redirect-text">Mengalihkan ke halaman utama dalam beberapa detik...</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

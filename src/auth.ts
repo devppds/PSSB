@@ -3,12 +3,10 @@ import Google from "next-auth/providers/google";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
-    }),
+    // Menggunakan cara otomatis agar lebih stabil di Cloudflare Edge
+    Google,
   ],
-  secret: process.env.AUTH_SECRET,
+  // Wajib untuk Cloudflare
   trustHost: true,
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
@@ -16,7 +14,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       const isOnPpdb = nextUrl.pathname.startsWith("/ppdb");
       if (isOnPpdb) {
         if (isLoggedIn) return true;
-        return false; // Redirect to login
+        return false; // Redirect ke sign-in
       }
       return true;
     },

@@ -3,6 +3,7 @@
 import "@/app/styles/ppdb.css";
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useSession, signOut } from "next-auth/react";
+import Image from "next/image";
 
 // Interfaces for Region Data
 interface Region {
@@ -17,6 +18,53 @@ const STEPS = [
     { id: 4, title: "Alamat", icon: "fa-map-marker-alt" },
     { id: 5, title: "Berkas", icon: "fa-file-upload" }
 ];
+
+interface RegistrationFormData {
+    Name_First?: string;
+    Name_Last?: string;
+    Number?: string;
+    Number1?: string;
+    Number2?: string;
+    Dropdown?: string;
+    SingleLine?: string;
+    SingleLine1?: string;
+    SingleLine2?: string;
+    Date?: string;
+    Dropdown1?: string;
+    Dropdown2?: string;
+    Dropdown3?: string;
+    Name1_First?: string;
+    Name1_Last?: string;
+    Number3?: string;
+    PhoneNumber_countrycode?: string;
+    Dropdown4?: string;
+    Dropdown6?: string;
+    Dropdown8?: string;
+    Name2_First?: string;
+    Name2_Last?: string;
+    Number4?: string;
+    PhoneNumber1_countrycode?: string;
+    Dropdown5?: string;
+    Dropdown7?: string;
+    Dropdown9?: string;
+    Address1_AddressLine1?: string;
+    Address1_AddressLine2?: string;
+    Address1_City?: string;
+    Address1_Region?: string;
+    Address1_ZipCode?: string;
+    Address1_Country?: string;
+    Address1_Village?: string;
+    FileUpload?: File;
+    FileUpload1?: File;
+    FileUpload2?: File;
+    confirm_email?: string;
+    other_agama?: string;
+    other_pendidikan_ayah?: string;
+    other_pekerjaan_ayah?: string;
+    other_pendidikan_ibu?: string;
+    other_pekerjaan_ibu?: string;
+    [key: string]: string | File | undefined;
+}
 
 export default function PPDBPage() {
     const { data: session } = useSession();
@@ -34,7 +82,7 @@ export default function PPDBPage() {
     }, [session]);
 
     // State to hold all form data matching legacy naming conventions
-    const [formData, setFormData] = useState<any>({
+    const [formData, setFormData] = useState<RegistrationFormData>({
         Dropdown: "", // Jenis Kelamin
         Dropdown1: "", // Pendidikan Terakhir Santri
         Dropdown2: "", // Agama
@@ -120,16 +168,16 @@ export default function PPDBPage() {
 
         if (type === 'prov') {
             setSelectedProvince(value);
-            setFormData((prev: any) => ({ ...prev, Address1_Region: label }));
+            setFormData((prev) => ({ ...prev, Address1_Region: label }));
         } else if (type === 'reg') {
             setSelectedRegency(value);
-            setFormData((prev: any) => ({ ...prev, Address1_City: label }));
+            setFormData((prev) => ({ ...prev, Address1_City: label }));
         } else if (type === 'dis') {
             setSelectedDistrict(value);
-            setFormData((prev: any) => ({ ...prev, Address1_AddressLine2: label }));
+            setFormData((prev) => ({ ...prev, Address1_AddressLine2: label }));
         } else if (type === 'vil') {
             setSelectedVillage(value);
-            setFormData((prev: any) => ({ ...prev, Address1_Village: label }));
+            setFormData((prev) => ({ ...prev, Address1_Village: label }));
 
             // Fetch Postal Code automatically
             try {
@@ -138,12 +186,12 @@ export default function PPDBPage() {
                 const data = await response.json();
                 if (data && data.data && data.data.length > 0) {
                     // Try to find the exact match for district if possible, else take first
-                    const match = data.data.find((item: any) =>
+                    const match = data.data.find((item: { subdistrict: string; urban: string; postalcode: string }) =>
                         item.subdistrict.toLowerCase().includes(districtName.toLowerCase()) ||
                         item.urban.toLowerCase() === label.toLowerCase()
                     ) || data.data[0];
 
-                    setFormData((prev: any) => ({ ...prev, Address1_ZipCode: match.postalcode }));
+                    setFormData((prev) => ({ ...prev, Address1_ZipCode: match.postalcode }));
                 }
             } catch (err) {
                 console.error("Gagal ambil kode pos", err);
@@ -153,7 +201,7 @@ export default function PPDBPage() {
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData((prev: any) => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
 
         // Toggle "Lainnya" fields
         if (name === "Dropdown2") setOtherFields(p => ({ ...p, agama: value === "Lainnya" }));
@@ -166,7 +214,7 @@ export default function PPDBPage() {
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, files } = e.target;
         if (files && files[0]) {
-            setFormData((prev: any) => ({ ...prev, [name]: files[0] }));
+            setFormData((prev) => ({ ...prev, [name]: files[0] }));
         }
     };
 
@@ -193,7 +241,10 @@ export default function PPDBPage() {
 
         const uploadData = new FormData();
         Object.keys(formData).forEach(key => {
-            uploadData.append(key, formData[key]);
+            const value = formData[key];
+            if (value !== undefined) {
+                uploadData.append(key, value);
+            }
         });
         // Tambahkan nomor konfirmasi Email
         uploadData.append('confirm_email', confirmEmail);
@@ -285,8 +336,14 @@ export default function PPDBPage() {
                             border: '1px solid var(--primary-light)',
                             boxShadow: '0 4px 10px rgba(0,0,0,0.05)'
                         }}>
-                            <img src={session.user.image || ""} alt="" style={{ width: '24px', height: '24px', borderRadius: '50%' }} />
-                            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{session.user.name}</span>
+                            <Image 
+                                src={session.user?.image || "https://res.cloudinary.com/dceamfy3n/image/upload/v1738424582/default-avatar.png"} 
+                                alt="User" 
+                                width={24} 
+                                height={24} 
+                                style={{ borderRadius: '50%' }} 
+                            />
+                            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{session.user?.name}</span>
                             <button 
                                 onClick={() => signOut({ callbackUrl: "/" })}
                                 style={{

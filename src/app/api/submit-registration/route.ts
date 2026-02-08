@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     try {
         const formData = await req.formData();
         const ctx = await getCloudflareContext();
-        const env = ctx.env as unknown as { DB: any };
+        const env = ctx.env as unknown as { DB: { prepare: (sql: string) => { bind: (...args: unknown[]) => { run: () => Promise<{ meta: { last_row_id: number } }> } } } };
         if (!env.DB) throw new Error('Database binding not found');
 
         // Extract basic fields
@@ -139,9 +139,10 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ success: true, message: 'Pendaftaran Berhasil!', id: registrationId });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Registration Error:', error);
-        return NextResponse.json({ success: false, message: 'Terjadi kesalahan server: ' + error.message }, { status: 500 });
+        const errorMessage = error instanceof Error ? error.message : 'Terjadi kesalahan server';
+        return NextResponse.json({ success: false, message: errorMessage }, { status: 500 });
     }
 }
 

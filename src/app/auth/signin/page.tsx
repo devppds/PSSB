@@ -2,6 +2,7 @@
 
 import { signIn } from "next-auth/react";
 import "@/app/styles/style.css";
+import Image from "next/image";
 
 export default function SignInPage() {
     return (
@@ -19,10 +20,12 @@ export default function SignInPage() {
                 textAlign: "center",
                 padding: "3rem 2rem"
             }}>
-                <img 
+                <Image 
                     src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png" 
                     alt="Logo" 
-                    style={{ height: "80px", margin: "0 auto 2rem" }}
+                    width={80}
+                    height={80}
+                    style={{ margin: "0 auto 2rem", objectFit: "contain" }}
                 />
                 <h2 style={{ marginBottom: "1rem", color: "var(--primary-dark)" }}>Pendaftaran Online</h2>
                 <p style={{ marginBottom: "2.5rem", color: "var(--text-muted)", fontSize: "0.95rem" }}>

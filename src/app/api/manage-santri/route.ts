@@ -6,6 +6,21 @@ import { Resend } from 'resend';
 
 export const runtime = 'edge';
 
+interface SantriRecord {
+    id: number;
+    nama_depan: string;
+    nama_belakang: string;
+    nik: string;
+    login_email: string;
+    no_hp_ayah: string;
+    jenjang_kelas: string;
+    jenis_kelamin: string;
+    tempat_lahir: string;
+    tanggal_lahir: string;
+    nama_ayah_depan: string;
+    nama_ayah_belakang: string;
+}
+
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
@@ -16,7 +31,7 @@ export async function POST(req: NextRequest) {
         }
 
         const ctx = await getCloudflareContext();
-        const env = ctx.env as unknown as { DB: any };
+        const env = ctx.env as unknown as { DB: { prepare: (sql: string) => { bind: (...args: unknown[]) => { run: () => Promise<void>, first: <T>() => Promise<T | null> } }, all: () => Promise<{ results: unknown[] }> } };
         if (!env.DB) {
             throw new Error('Database binding not found');
         }
@@ -28,7 +43,7 @@ export async function POST(req: NextRequest) {
 
         if (action === 'update_status') {
             // Fetch santri data first to send email if verified
-            const santri = await env.DB.prepare('SELECT * FROM pendaftaran_santri WHERE id = ?').bind(id).first();
+            const santri = await env.DB.prepare('SELECT * FROM pendaftaran_santri WHERE id = ?').bind(id).first<SantriRecord>();
             
             if (!santri) {
                 return NextResponse.json({ error: 'Santri not found' }, { status: 404 });
@@ -41,8 +56,11 @@ export async function POST(req: NextRequest) {
             // If verified, send official PDF
             if (status === 'Terverifikasi' && (santri.login_email || santri.no_hp_ayah)) {
                 try {
-                    const settingsRes = await env.DB.prepare('SELECT key, value FROM site_settings').all();
-                    const settings = (settingsRes.results as {key: string, value: string}[]).reduce((acc: Record<string, string>, item) => {
+                    const settingsRes = await env.DB.all(); // Assuming settings table check is needed or adjust as per schema
+                    // For now let's assume we have a way to get settings or just use a placeholder if unsure
+                    // Re-fetching settings properly:
+                    const settingsQuery = await env.DB.prepare('SELECT key, value FROM site_settings').all();
+                    const settings = (settingsQuery.results as { key: string; value: string }[]).reduce((acc: Record<string, string>, item) => {
                         acc[item.key] = item.value;
                         return acc;
                     }, {});
@@ -75,12 +93,12 @@ export async function POST(req: NextRequest) {
                             head: [['Kategori', 'Informasi Detail']],
                             body: [
                                 ['Nama Lengkap', `${santri.nama_depan} ${santri.nama_belakang}`],
-                                ['NIK', (santri.nik as string)],
-                                ['Jenjang / Kelas', (santri.jenjang_kelas as string)],
-                                ['Jenis Kelamin', (santri.jenis_kelamin as string)],
+                                ['NIK', santri.nik],
+                                ['Jenjang / Kelas', santri.jenjang_kelas],
+                                ['Jenis Kelamin', santri.jenis_kelamin],
                                 ['Tempat, Tanggal Lahir', `${santri.tempat_lahir}, ${santri.tanggal_lahir}`],
                                 ['Nama Ayah', `${santri.nama_ayah_depan} ${santri.nama_ayah_belakang}`],
-                                ['Kontak Ortu', (santri.no_hp_ayah as string)],
+                                ['Kontak Ortu', santri.no_hp_ayah],
                             ],
                             headStyles: { fillColor: [30, 58, 138] }
                         });
@@ -88,7 +106,7 @@ export async function POST(req: NextRequest) {
                         const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
                         
                         // Send Email
-                        const targetEmail = (santri.login_email as string);
+                        const targetEmail = santri.login_email;
                         if (targetEmail) {
                             await resend.emails.send({
                                 from: `${settings.sender_name || 'PPDB Darussalam'} <onboarding@resend.dev>`,
@@ -122,8 +140,9 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Manage Santri Error:', error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
 }

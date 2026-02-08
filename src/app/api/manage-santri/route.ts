@@ -4,7 +4,6 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Resend } from 'resend';
 
-export const runtime = 'edge';
 
 interface SantriRecord {
     id: number;

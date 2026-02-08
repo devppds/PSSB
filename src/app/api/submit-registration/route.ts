@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCloudflareContext } from '@opennextjs/cloudflare/cloudflare-context';
 
-export const runtime = 'edge';
 
 // Helper to calculate SHA-1 hash for Cloudinary signature
 async function generateSignature(params: Record<string, string>, apiSecret: string) {

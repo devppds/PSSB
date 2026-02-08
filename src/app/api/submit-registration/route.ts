@@ -18,10 +18,20 @@ async function generateSignature(params: Record<string, string>, apiSecret: stri
 }
 
 // Helper to upload to Cloudinary using Fetch API (Edge Compatible)
-const uploadToCloudinary = async (file: File, folder: string): Promise<string | null> => {
-    const cloudName = 'dceamfy3n';
-    const apiKey = '257842458234963';
-    const apiSecret = '4tpgYL-MxG30IhFH4qkT8KFYzwI';
+const uploadToCloudinary = async (
+    file: File, 
+    folder: string, 
+    env: { CLOUDINARY_CLOUD_NAME: string; CLOUDINARY_API_KEY: string; CLOUDINARY_API_SECRET: string }
+): Promise<string | null> => {
+    const cloudName = env.CLOUDINARY_CLOUD_NAME;
+    const apiKey = env.CLOUDINARY_API_KEY;
+    const apiSecret = env.CLOUDINARY_API_SECRET;
+    
+    if (!cloudName || !apiKey || !apiSecret) {
+        console.error('Cloudinary credentials missing in environment variables');
+        return null;
+    }
+
     const timestamp = Math.round(new Date().getTime() / 1000).toString();
 
     const params: Record<string, string> = {
@@ -60,7 +70,12 @@ export async function POST(req: NextRequest) {
     try {
         const formData = await req.formData();
         const ctx = await getCloudflareContext();
-        const env = ctx.env as unknown as { DB: { prepare: (sql: string) => { bind: (...args: unknown[]) => { run: () => Promise<{ meta: { last_row_id: number } }> } } } };
+        const env = ctx.env as unknown as { 
+            DB: { prepare: (sql: string) => { bind: (...args: unknown[]) => { run: () => Promise<{ meta: { last_row_id: number } }> } } },
+            CLOUDINARY_CLOUD_NAME: string,
+            CLOUDINARY_API_KEY: string,
+            CLOUDINARY_API_SECRET: string
+        };
         if (!env.DB) throw new Error('Database binding not found');
 
         // Extract basic fields
@@ -76,13 +91,13 @@ export async function POST(req: NextRequest) {
         let ijazahUrl = null;
 
         if (fotoSantri && fotoSantri.size > 0) {
-            fotoUrl = await uploadToCloudinary(fotoSantri, 'ppdb_uploads');
+            fotoUrl = await uploadToCloudinary(fotoSantri, 'ppdb_uploads', env);
         }
         if (scanKK && scanKK.size > 0) {
-            kkUrl = await uploadToCloudinary(scanKK, 'ppdb_uploads');
+            kkUrl = await uploadToCloudinary(scanKK, 'ppdb_uploads', env);
         }
         if (scanIjazah && scanIjazah.size > 0) {
-            ijazahUrl = await uploadToCloudinary(scanIjazah, 'ppdb_uploads');
+            ijazahUrl = await uploadToCloudinary(scanIjazah, 'ppdb_uploads', env);
         }
 
         const data = {

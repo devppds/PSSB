@@ -8,16 +8,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
     }),
   ],
-  secret: process.env.AUTH_SECRET, // Kita paksa baca secret di sini
+  secret: process.env.AUTH_SECRET,
   trustHost: true,
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnPpdb = nextUrl.pathname.startsWith("/ppdb");
-      if (isOnPpdb) {
-        if (isLoggedIn) return true;
-        return false; // Redirect to login
-      }
+    authorized() {
+      // Izinkan semua akses sementara selama reset Google Cloud
       return true;
     },
   },

@@ -265,6 +265,14 @@ export default function PPDBPage() {
         }
     };
 
+    // Custom Toast Notification System
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' | null }>({ message: "", type: null });
+
+    const showToast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+        setToast({ message, type });
+        setTimeout(() => setToast({ message: "", type: null }), 4000);
+    };
+
     const nextStep = () => {
         // Simple Validation for current step
         const currentStepEl = document.querySelector(`.form-card-luxury .step-content:nth-of-type(${currentStep})`);
@@ -273,7 +281,7 @@ export default function PPDBPage() {
             for (let i = 0; i < inputs.length; i++) {
                 const input = inputs[i] as HTMLInputElement | HTMLSelectElement;
                 if (!input.value) {
-                    alert(`Mohon lengkapi data yang wajib diisi pada langkah ini.`);
+                    showToast("Mohon lengkapi data yang wajib diisi pada langkah ini.", "error");
                     input.focus();
                     return;
                 }
@@ -302,7 +310,7 @@ export default function PPDBPage() {
         // Email Validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(confirmEmail)) {
-            alert("Mohon masukkan format email yang valid agar bukti pendaftaran bisa terkirim.");
+            showToast("Mohon masukkan format email yang valid.", "error");
             return;
         }
 
@@ -327,18 +335,19 @@ export default function PPDBPage() {
 
             if (response.ok) {
                 setIsSuccess(true);
+                showToast("Pendaftaran Berhasil Terkirim!", "success");
                 // Beri waktu lebih lama agar user bisa baca dan cek WA
                 setTimeout(() => {
                     window.location.href = "/";
                 }, 10000);
             } else {
                 const err = await response.json();
-                alert(err.message || "Terjadi kesalahan saat mengirim data.");
+                showToast(err.message || "Terjadi kesalahan saat mengirim data.", "error");
                 setShowConfirmModal(false);
             }
         } catch (error) {
             console.error(error);
-            alert("Terjadi kesalahan jaringan.");
+            showToast("Terjadi kesalahan jaringan.", "error");
             setShowConfirmModal(false);
         } finally {
             setIsLoading(false);
@@ -886,6 +895,59 @@ export default function PPDBPage() {
                     </div>
                 </div>
             )}
+
+            {/* CUSTOM TOAST UI */}
+            {toast.type && (
+                <div className={`toast-container ${toast.type}`}>
+                    <div className="toast-icon">
+                        {toast.type === 'success' && <i className="fas fa-check-circle"></i>}
+                        {toast.type === 'error' && <i className="fas fa-exclamation-circle"></i>}
+                        {toast.type === 'info' && <i className="fas fa-info-circle"></i>}
+                    </div>
+                    <div className="toast-message">{toast.message}</div>
+                </div>
+            )}
+
+            <style jsx>{`
+                .toast-container {
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    z-index: 10000;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px 24px;
+                    border-radius: 50px;
+                    color: white;
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                    animation: toastIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                    max-width: 90vw;
+                    width: max-content;
+                }
+                .toast-container.success { background: #10b981; }
+                .toast-container.error { background: #ef4444; }
+                .toast-container.info { background: #3b82f6; }
+
+                .toast-icon { font-size: 1.2rem; }
+
+                @keyframes toastIn {
+                    from { opacity: 0; transform: translate(-50%, -20px); }
+                    to { opacity: 1; transform: translate(-50%, 0); }
+                }
+
+                @media (max-width: 768px) {
+                    .toast-container {
+                        top: auto;
+                        bottom: 30px;
+                        font-size: 0.85rem;
+                        padding: 10px 20px;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

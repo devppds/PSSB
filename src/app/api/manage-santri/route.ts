@@ -31,7 +31,18 @@ export async function POST(req: NextRequest) {
         }
 
         const ctx = await getCloudflareContext();
-        const env = ctx.env as unknown as { DB: { prepare: (sql: string) => { bind: (...args: unknown[]) => { run: () => Promise<void>, first: <T>() => Promise<T | null> } }, all: () => Promise<{ results: unknown[] }> } };
+        const env = ctx.env as unknown as { 
+            DB: { 
+                prepare: (sql: string) => { 
+                    bind: (...args: unknown[]) => { 
+                        run: () => Promise<void>; 
+                        first: <T>() => Promise<T | null>;
+                        all: <T>() => Promise<{ results: T[] }>;
+                    };
+                    all: <T>() => Promise<{ results: T[] }>;
+                };
+            } 
+        };
         if (!env.DB) {
             throw new Error('Database binding not found');
         }
@@ -56,11 +67,9 @@ export async function POST(req: NextRequest) {
             // If verified, send official PDF
             if (status === 'Terverifikasi' && (santri.login_email || santri.no_hp_ayah)) {
                 try {
-                    const settingsRes = await env.DB.all(); // Assuming settings table check is needed or adjust as per schema
-                    // For now let's assume we have a way to get settings or just use a placeholder if unsure
-                    // Re-fetching settings properly:
-                    const settingsQuery = await env.DB.prepare('SELECT key, value FROM site_settings').all();
-                    const settings = (settingsQuery.results as { key: string; value: string }[]).reduce((acc: Record<string, string>, item) => {
+                    // Re-fetching settings properly
+                    const settingsQuery = await env.DB.prepare('SELECT key, value FROM site_settings').all<{ key: string; value: string }>();
+                    const settings = settingsQuery.results.reduce((acc: Record<string, string>, item) => {
                         acc[item.key] = item.value;
                         return acc;
                     }, {});

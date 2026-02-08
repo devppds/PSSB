@@ -19,13 +19,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   debug: false, // Set ke true jika ingin lihat log detail
   callbacks: {
-    async authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnPpdb = nextUrl.pathname.startsWith("/ppdb");
-      if (isOnPpdb) {
-        if (isLoggedIn) return true;
-        return false;
-      }
+    async authorized() {
+      // PERUBAHAN STRATEGIS: Izinkan semua akses (Bypass Login Google)
+      // agar fitur pendaftaran utama bisa langsung digunakan.
       return true;
     },
   },

@@ -1,35 +1,60 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { v2 as cloudinary } from 'cloudinary';
 import { getCloudflareContext } from '@opennextjs/cloudflare/cloudflare-context';
 
 export const runtime = 'edge';
 
-// Helper to upload buffer to Cloudinary
-const uploadToCloudinary = (buffer: Buffer, folder: string, filename?: string): Promise<string | null> => {
-    // Configure Cloudinary inside to ensure environment variables are ready if needed
-    cloudinary.config({
-        cloud_name: 'dceamfy3n',
-        api_key: '257842458234963',
-        api_secret: '4tpgYL-MxG30IhFH4qkT8KFYzwI'
-    });
+// Helper to calculate SHA-1 hash for Cloudinary signature
+async function generateSignature(params: Record<string, string>, apiSecret: string) {
+    const sortedKeys = Object.keys(params).sort();
+    const parameterString = sortedKeys
+        .map(key => `${key}=${params[key]}`)
+        .join('&') + apiSecret;
+    
+    const encoder = new TextEncoder();
+    const data = encoder.encode(parameterString);
+    const hashBuffer = await crypto.subtle.digest('SHA-1', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
 
-    return new Promise((resolve) => {
-        cloudinary.uploader.upload_stream(
-            {
-                folder: folder,
-                public_id: filename,
-                resource_type: 'raw' // Important for PDF
-            },
-            (error, result) => {
-                if (error) {
-                    console.error('Cloudinary upload error:', error);
-                    resolve(null);
-                } else {
-                    resolve(result?.secure_url || null);
-                }
-            }
-        ).end(buffer);
-    });
+// Helper to upload to Cloudinary using Fetch API (Edge Compatible)
+const uploadToCloudinary = async (file: File, folder: string): Promise<string | null> => {
+    const cloudName = 'dceamfy3n';
+    const apiKey = '257842458234963';
+    const apiSecret = '4tpgYL-MxG30IhFH4qkT8KFYzwI';
+    const timestamp = Math.round(new Date().getTime() / 1000).toString();
+
+    const params: Record<string, string> = {
+        folder: folder,
+        timestamp: timestamp,
+    };
+
+    const signature = await generateSignature(params, apiSecret);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('folder', folder);
+    formData.append('timestamp', timestamp);
+    formData.append('api_key', apiKey);
+    formData.append('signature', signature);
+
+    try {
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
+            method: 'POST',
+            body: formData,
+        });
+
+        const result = await response.json();
+        if (result.error) {
+            console.error('Cloudinary upload error:', result.error.message);
+            return null;
+        }
+        return result.secure_url;
+    } catch (error) {
+        console.error('Cloudinary fetch error:', error);
+        return null;
+    }
 };
 
 export async function POST(req: NextRequest) {
@@ -52,16 +77,13 @@ export async function POST(req: NextRequest) {
         let ijazahUrl = null;
 
         if (fotoSantri && fotoSantri.size > 0) {
-            const arrayBuffer = await fotoSantri.arrayBuffer();
-            fotoUrl = await uploadToCloudinary(Buffer.from(arrayBuffer), 'ppdb_uploads');
+            fotoUrl = await uploadToCloudinary(fotoSantri, 'ppdb_uploads');
         }
         if (scanKK && scanKK.size > 0) {
-            const arrayBuffer = await scanKK.arrayBuffer();
-            kkUrl = await uploadToCloudinary(Buffer.from(arrayBuffer), 'ppdb_uploads');
+            kkUrl = await uploadToCloudinary(scanKK, 'ppdb_uploads');
         }
         if (scanIjazah && scanIjazah.size > 0) {
-            const arrayBuffer = await scanIjazah.arrayBuffer();
-            ijazahUrl = await uploadToCloudinary(Buffer.from(arrayBuffer), 'ppdb_uploads');
+            ijazahUrl = await uploadToCloudinary(scanIjazah, 'ppdb_uploads');
         }
 
         const data = {
@@ -145,4 +167,3 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: false, message: errorMessage }, { status: 500 });
     }
 }
-

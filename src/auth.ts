@@ -11,8 +11,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET,
   trustHost: true,
   callbacks: {
-    authorized() {
-      // Izinkan semua akses sementara selama reset Google Cloud
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnPpdb = nextUrl.pathname.startsWith("/ppdb");
+      if (isOnPpdb) {
+        if (isLoggedIn) return true;
+        return false; // Redirect to login
+      }
       return true;
     },
   },

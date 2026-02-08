@@ -315,7 +315,7 @@ export default function PPDBPage() {
         }
 
         setIsLoading(true);
-        setShowConfirmModal(false);
+        // Jangan tutup modal di sini agar bisa menunjukkan state sukses
 
         const uploadData = new FormData();
         Object.keys(formData).forEach(key => {
@@ -336,19 +336,18 @@ export default function PPDBPage() {
             if (response.ok) {
                 setIsSuccess(true);
                 showToast("Pendaftaran Berhasil Terkirim!", "success");
-                // Beri waktu lebih lama agar user bisa baca dan cek WA
+                // Beri waktu 10 detik di layar sukses sebelum redirect
                 setTimeout(() => {
                     window.location.href = "/";
                 }, 10000);
             } else {
                 const err = await response.json();
                 showToast(err.message || "Terjadi kesalahan saat mengirim data.", "error");
-                setShowConfirmModal(false);
+                // Biarkan modal tetap terbuka agar user bisa coba lagi
             }
         } catch (error) {
             console.error(error);
             showToast("Terjadi kesalahan jaringan.", "error");
-            setShowConfirmModal(false);
         } finally {
             setIsLoading(false);
         }

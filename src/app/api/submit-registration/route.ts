@@ -176,8 +176,21 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: true, message: 'Pendaftaran Berhasil!', id: registrationId });
 
     } catch (error: unknown) {
-        console.error('Registration Error:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Terjadi kesalahan server';
-        return NextResponse.json({ success: false, message: errorMessage }, { status: 500 });
+        console.error('Registration API Full Error:', error);
+        let errorMessage = 'Terjadi kesalahan server saat memproses pendaftaran';
+        
+        if (error instanceof Error) {
+            errorMessage = error.message;
+            // Catch specific SQLITE errors if possible
+            if (errorMessage.includes('UNIQUE constraint failed')) {
+                errorMessage = "NIK atau Data sudah terdaftar sebelumnya.";
+            }
+        }
+        
+        return NextResponse.json({ 
+            success: false, 
+            message: errorMessage,
+            debug: process.env.NODE_ENV === 'development' ? String(error) : undefined
+        }, { status: 500 });
     }
 }

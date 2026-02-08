@@ -2,6 +2,7 @@
 
 import "@/app/styles/ppdb.css";
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useSession, signOut } from "next-auth/react";
 
 // Interfaces for Region Data
 interface Region {
@@ -18,11 +19,19 @@ const STEPS = [
 ];
 
 export default function PPDBPage() {
+    const { data: session } = useSession();
     const [currentStep, setCurrentStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [confirmEmail, setConfirmEmail] = useState("");
+
+    // Set confirmEmail once session is available
+    useEffect(() => {
+        if (session?.user?.email) {
+            setConfirmEmail(session.user.email);
+        }
+    }, [session]);
 
     // State to hold all form data matching legacy naming conventions
     const [formData, setFormData] = useState<any>({
@@ -257,6 +266,45 @@ export default function PPDBPage() {
                     ))}
                 </div>
 
+                {/* USER LOGGED IN BADGE */}
+                {session?.user && (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        marginBottom: '1rem',
+                        gap: '10px',
+                        alignItems: 'center'
+                    }}>
+                        <div className="glass-card" style={{
+                            padding: '0.5rem 1rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            background: 'white',
+                            borderRadius: '50px',
+                            border: '1px solid var(--primary-light)',
+                            boxShadow: '0 4px 10px rgba(0,0,0,0.05)'
+                        }}>
+                            <img src={session.user.image || ""} alt="" style={{ width: '24px', height: '24px', borderRadius: '50%' }} />
+                            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{session.user.name}</span>
+                            <button 
+                                onClick={() => signOut({ callbackUrl: "/" })}
+                                style={{
+                                    border: 'none',
+                                    background: 'none',
+                                    color: '#ef4444',
+                                    cursor: 'pointer',
+                                    fontSize: '0.8rem',
+                                    padding: '2px 5px',
+                                    marginLeft: '5px'
+                                }}
+                            >
+                                <i className="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 {/* FORM CONTENT LUXE */}
                 <form onSubmit={handleSubmit} className="form-card-luxury">
 
@@ -363,12 +411,12 @@ export default function PPDBPage() {
                                     <option value="I Ulya">I Ulya</option>
                                 </optgroup>
                                 <optgroup label="MHM (Santri Salaf)">
-                                    <option value="V Ibtida'iyyah">V Ibtida'iyyah</option>
-                                    <option value="VI Ibtida'iyyah">VI Ibtida'iyyah</option>
+                                    <option value="V Ibtida&apos;iyyah">V Ibtida&apos;iyyah</option>
+                                    <option value="VI Ibtida&apos;iyyah">VI Ibtida&apos;iyyah</option>
                                     <option value="I Tsanawiyyah">I Tsanawiyyah</option>
                                     <option value="I Aliyyah">I Aliyyah</option>
-                                    <option value="I Ma'had Aly">I Ma'had Aly</option>
-                                    <option value="II Ma'had Aly">II Ma'had Aly</option>
+                                    <option value="I Ma&apos;had Aly">I Ma&apos;had Aly</option>
+                                    <option value="II Ma&apos;had Aly">II Ma&apos;had Aly</option>
                                 </optgroup>
                             </select>
                         </div>

@@ -1,6 +1,6 @@
 "use client";
 import "@/app/styles/data-santri.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
 export default function DataSantriPage() {
@@ -48,7 +48,7 @@ export default function DataSantriPage() {
         }
     };
 
-    const fetchSantriData = async () => {
+    const fetchSantriData = useCallback(async () => {
         setIsLoading(true);
         try {
             // Mock Data for UI Testing (Replace with actual API call)
@@ -63,22 +63,22 @@ export default function DataSantriPage() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         if (isLoggedIn) {
             fetchSantriData();
         }
-    }, [isLoggedIn]);
+    }, [isLoggedIn, fetchSantriData]);
 
     const handleVerify = (id: number) => {
-        if (confirm("Konfirmasi: Apakah data santri ini sudah valid dan akan dipindahkan ke Database Pusat?")) {
+        if (confirm(`Konfirmasi: Apakah data santri ID #${id} ini sudah valid dan akan dipindahkan ke Database Pusat?`)) {
             alert("Fitur verifikasi belum terhubung ke backend.");
         }
     };
 
     const handleDelete = (id: number) => {
-        if (confirm("PERINGATAN: Hapus data ini?")) {
+        if (confirm(`PERINGATAN: Hapus data ID #${id} ini?`)) {
             alert("Fitur hapus belum terhubung ke backend.");
         }
     };
@@ -87,7 +87,13 @@ export default function DataSantriPage() {
         return (
             <div id="login-overlay">
                 <div className="login-box">
-                    <img src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png" alt="Logo" style={{ width: 80, marginBottom: "1rem" }} />
+                    <Image 
+                        src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png" 
+                        alt="Logo" 
+                        width={80} 
+                        height={80} 
+                        style={{ marginBottom: "1rem", objectFit: "contain" }} 
+                    />
                     <h2 style={{ color: "var(--primary)", marginBottom: "10px" }}>Akses Terbatas</h2>
                     <p style={{ fontSize: "0.9rem", color: "#666" }}>Halaman Khusus Admin PPDS Lirboyo</p>
 

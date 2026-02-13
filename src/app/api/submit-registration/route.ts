@@ -10,7 +10,7 @@ const uploadToCloudinary = async (buffer: Buffer, folder: string, filename?: str
     const uploadPreset = 'ml_default'; // Using the same preset as in /api/upload
 
     const formData = new FormData();
-    const blob = new Blob([buffer]);
+    const blob = new Blob([new Uint8Array(buffer)]);
     formData.append('file', blob);
     formData.append('upload_preset', uploadPreset);
     formData.append('folder', folder);

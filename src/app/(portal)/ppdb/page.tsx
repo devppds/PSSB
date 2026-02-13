@@ -609,19 +609,19 @@ export default function PPDBPage() {
                         <div className="form-grid-luxury">
                             <div className="input-luxury">
                                 <label>Foto Santri (3x4)</label>
-                                <div className="upload-box-luxury">
-                                    <input type="file" name="FileUpload" accept="image/*" onChange={handleFileChange} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
-                                    <i className="fas fa-camera"></i>
-                                    <p style={{ fontSize: '0.8rem' }}>{formData.FileUpload ? formData.FileUpload.name : "Klik untuk Pilih Foto"}</p>
+                                <div className="upload-box-luxury" style={{ position: 'relative', cursor: 'pointer' }}>
+                                    <input type="file" name="FileUpload" accept="image/*" onChange={handleFileChange} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 10 }} />
+                                    <i className="fas fa-camera" style={{ pointerEvents: 'none' }}></i>
+                                    <p style={{ fontSize: '0.8rem', pointerEvents: 'none' }}>{formData.FileUpload ? formData.FileUpload.name : "Klik untuk Pilih Foto"}</p>
                                 </div>
                                 <small className="text-muted">Berbaju putih, berkerah & berkopyah hitam.</small>
                             </div>
                             <div className="input-luxury">
                                 <label>Scan Kartu Keluarga</label>
-                                <div className="upload-box-luxury">
-                                    <input type="file" name="FileUpload1" accept="image/*,application/pdf" onChange={handleFileChange} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
-                                    <i className="fas fa-id-card"></i>
-                                    <p style={{ fontSize: '0.8rem' }}>{formData.FileUpload1 ? formData.FileUpload1.name : "Klik untuk Pilih KK"}</p>
+                                <div className="upload-box-luxury" style={{ position: 'relative', cursor: 'pointer' }}>
+                                    <input type="file" name="FileUpload1" accept="image/*,application/pdf" onChange={handleFileChange} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 10 }} />
+                                    <i className="fas fa-id-card" style={{ pointerEvents: 'none' }}></i>
+                                    <p style={{ fontSize: '0.8rem', pointerEvents: 'none' }}>{formData.FileUpload1 ? formData.FileUpload1.name : "Klik untuk Pilih KK"}</p>
                                 </div>
                                 <small className="text-muted">Terlihat jelas, tidak blur.</small>
                             </div>
@@ -629,10 +629,10 @@ export default function PPDBPage() {
 
                         <div className="input-luxury" style={{ marginTop: '1rem' }}>
                             <label>Scan Ijazah Terakhir</label>
-                            <div className="upload-box-luxury">
-                                <input type="file" name="FileUpload2" accept="image/*,application/pdf" onChange={handleFileChange} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
-                                <i className="fas fa-certificate"></i>
-                                <p style={{ fontSize: '0.8rem' }}>{formData.FileUpload2 ? formData.FileUpload2.name : "Klik untuk Pilih Scan Ijazah"}</p>
+                            <div className="upload-box-luxury" style={{ position: 'relative', cursor: 'pointer' }}>
+                                <input type="file" name="FileUpload2" accept="image/*,application/pdf" onChange={handleFileChange} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 10 }} />
+                                <i className="fas fa-certificate" style={{ pointerEvents: 'none' }}></i>
+                                <p style={{ fontSize: '0.8rem', pointerEvents: 'none' }}>{formData.FileUpload2 ? formData.FileUpload2.name : "Klik untuk Pilih Scan Ijazah"}</p>
                             </div>
                             <small className="text-muted">Terlihat jelas, tidak blur.</small>
                         </div>

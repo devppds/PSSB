@@ -282,7 +282,7 @@ export default function PPDBPage() {
                 </div>
 
                 {/* FORM CONTENT LUXE */}
-                <form onSubmit={handleSubmit} className="form-card-luxury">
+                <form onSubmit={handleSubmit} className="form-card-luxury" autoComplete="off">
 
                     {/* STEP 1: DATA PRIBADI SANTRI */}
                     <div className={`step-content ${currentStep === 1 ? 'show' : 'hide'}`}>

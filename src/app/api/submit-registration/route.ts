@@ -1,52 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCloudflareContext } from '@opennextjs/cloudflare/cloudflare-context';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { Resend } from 'resend';
 
-
-// Helper to calculate SHA-1 hash for Cloudinary signature
-async function generateSignature(params: Record<string, string>, apiSecret: string) {
-    const sortedKeys = Object.keys(params).sort();
-    const parameterString = sortedKeys
-        .map(key => `${key}=${params[key]}`)
-        .join('&') + apiSecret;
-    
-    const encoder = new TextEncoder();
-    const data = encoder.encode(parameterString);
-    const hashBuffer = await crypto.subtle.digest('SHA-1', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-}
-
-// Helper to upload to Cloudinary using Fetch API (Edge Compatible)
-const uploadToCloudinary = async (
-    file: File, 
-    folder: string, 
-    env: { CLOUDINARY_CLOUD_NAME: string; CLOUDINARY_API_KEY: string; CLOUDINARY_API_SECRET: string }
-): Promise<string | null> => {
-    const cloudName = env.CLOUDINARY_CLOUD_NAME;
-    const apiKey = env.CLOUDINARY_API_KEY;
-    const apiSecret = env.CLOUDINARY_API_SECRET;
-    
-    if (!cloudName || !apiKey || !apiSecret) {
-        console.error('Cloudinary credentials missing in environment variables');
-        return null;
-    }
-
-    const timestamp = Math.round(new Date().getTime() / 1000).toString();
-
-    const params: Record<string, string> = {
-        folder: folder,
-        timestamp: timestamp,
-    };
-
-    const signature = await generateSignature(params, apiSecret);
+// Helper to upload buffer to Cloudinary using fetch (Edge compatible)
+const uploadToCloudinary = async (buffer: Buffer, folder: string, filename?: string): Promise<string | null> => {
+    const cloudName = 'dceamfy3n';
+    const uploadPreset = 'ml_default'; // Using the same preset as in /api/upload
 
     const formData = new FormData();
-    formData.append('file', file);
+    const blob = new Blob([buffer]);
+    formData.append('file', blob);
+    formData.append('upload_preset', uploadPreset);
     formData.append('folder', folder);
-    formData.append('timestamp', timestamp);
-    formData.append('api_key', apiKey);
-    formData.append('signature', signature);
+    if (filename) {
+        formData.append('public_id', filename);
+    }
 
     try {
         const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
@@ -54,14 +24,14 @@ const uploadToCloudinary = async (
             body: formData,
         });
 
-        const result = await response.json();
-        if (result.error) {
-            console.error('Cloudinary upload error:', result.error.message);
+        const result: any = await response.json();
+        if (!response.ok) {
+            console.error('Cloudinary upload error:', result);
             return null;
         }
-        return result.secure_url;
+        return result.secure_url || null;
     } catch (error) {
-        console.error('Cloudinary fetch error:', error);
+        console.error('Cloudinary upload error:', error);
         return null;
     }
 };
@@ -70,12 +40,7 @@ export async function POST(req: NextRequest) {
     try {
         const formData = await req.formData();
         const ctx = await getCloudflareContext();
-        const env = ctx.env as unknown as { 
-            DB: { prepare: (sql: string) => { bind: (...args: unknown[]) => { run: () => Promise<{ meta: { last_row_id: number } }> } } },
-            CLOUDINARY_CLOUD_NAME: string,
-            CLOUDINARY_API_KEY: string,
-            CLOUDINARY_API_SECRET: string
-        };
+        const env = ctx.env as unknown as { DB: any };
         if (!env.DB) throw new Error('Database binding not found');
 
         // Extract basic fields
@@ -91,13 +56,16 @@ export async function POST(req: NextRequest) {
         let ijazahUrl = null;
 
         if (fotoSantri && fotoSantri.size > 0) {
-            fotoUrl = await uploadToCloudinary(fotoSantri, 'ppdb_uploads', env);
+            const arrayBuffer = await fotoSantri.arrayBuffer();
+            fotoUrl = await uploadToCloudinary(Buffer.from(arrayBuffer), 'ppdb_uploads');
         }
         if (scanKK && scanKK.size > 0) {
-            kkUrl = await uploadToCloudinary(scanKK, 'ppdb_uploads', env);
+            const arrayBuffer = await scanKK.arrayBuffer();
+            kkUrl = await uploadToCloudinary(Buffer.from(arrayBuffer), 'ppdb_uploads');
         }
         if (scanIjazah && scanIjazah.size > 0) {
-            ijazahUrl = await uploadToCloudinary(scanIjazah, 'ppdb_uploads', env);
+            const arrayBuffer = await scanIjazah.arrayBuffer();
+            ijazahUrl = await uploadToCloudinary(Buffer.from(arrayBuffer), 'ppdb_uploads');
         }
 
         const data = {
@@ -141,8 +109,7 @@ export async function POST(req: NextRequest) {
             alamat_negara: 'Indonesia',
             foto_santri: fotoUrl,
             scan_kk: kkUrl,
-            scan_ijazah: ijazahUrl,
-            login_email: getVal('confirm_email') // This will be the Gmail from session
+            scan_ijazah: ijazahUrl
         };
 
         const query = `
@@ -155,8 +122,8 @@ export async function POST(req: NextRequest) {
                 nama_ibu_depan, nama_ibu_belakang, nik_ibu, no_hp_ibu,
                 pendidikan_ibu, pendidikan_ibu_lainnya, pekerjaan_ibu, pekerjaan_ibu_lainnya, penghasilan_ibu,
                 alamat_jalan, alamat_kecamatan, alamat_kota, alamat_provinsi, alamat_kode_pos, alamat_negara,
-                foto_santri, scan_kk, scan_ijazah, login_email
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                foto_santri, scan_kk, scan_ijazah
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const dbResult = await env.DB.prepare(query).bind(
@@ -168,29 +135,131 @@ export async function POST(req: NextRequest) {
             data.nama_ibu_depan, data.nama_ibu_belakang, data.nik_ibu, data.no_hp_ibu,
             data.pendidikan_ibu, data.pendidikan_ibu_lainnya, data.pekerjaan_ibu, data.pekerjaan_ibu_lainnya, data.penghasilan_ibu,
             data.alamat_jalan, data.alamat_kecamatan, data.alamat_kota, data.alamat_provinsi, data.alamat_kode_pos, data.alamat_negara,
-            data.foto_santri, data.scan_kk, data.scan_ijazah, data.login_email
+            data.foto_santri, data.scan_kk, data.scan_ijazah
         ).run();
 
         const registrationId = dbResult.meta.last_row_id;
 
+        // EMAIL NOTIFICATION & PDF GENERATION
+        try {
+            const settingsRes = await env.DB.prepare('SELECT key, value FROM site_settings').all();
+            const settings = settingsRes.results.reduce((acc: any, item: any) => {
+                acc[item.key] = item.value;
+                return acc;
+            }, {});
+
+            if (settings.email_gateway_api_key) {
+                const resend = new Resend(settings.email_gateway_api_key);
+
+                // 1. Generate Official PDF
+                const doc = new jsPDF();
+
+                // Header Design
+                doc.setFillColor(30, 58, 138); // Dark blue
+                doc.rect(0, 0, 210, 45, 'F');
+
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(22);
+                doc.setFont("helvetica", "bold");
+                doc.text("PONDOK PESANTREN DARUSSALAM", 105, 20, { align: 'center' });
+
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "normal");
+                doc.text("LIRBOYO - KEDIRI", 105, 28, { align: 'center' });
+                doc.text("BUKTI PENDAFTARAN SANTRI BARU", 105, 38, { align: 'center' });
+
+                // Content
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text(`NO. REGISTRASI: #${registrationId.toString().padStart(5, '0')}`, 20, 55);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Tanggal: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`, 20, 62);
+
+                // Table for Data
+                autoTable(doc, {
+                    startY: 70,
+                    theme: 'grid',
+                    head: [['Kategori', 'Informasi Detail']],
+                    body: [
+                        ['Nama Lengkap', `${data.nama_depan} ${data.nama_belakang}`],
+                        ['NIK / No. Identitas', data.nik],
+                        ['Jenjang / Kelas', data.jenjang_kelas],
+                        ['Jenis Kelamin', data.jenis_kelamin],
+                        ['Tempat, Tanggal Lahir', `${data.tempat_lahir}, ${data.tanggal_lahir}`],
+                        ['Alamat Lengkap', `${data.alamat_jalan}, Kec. ${data.alamat_kecamatan}, ${data.alamat_kota}`],
+                        ['Nama Orang Tua (Ayah)', `${data.nama_ayah_depan} ${data.nama_ayah_belakang}`],
+                        ['No. HP Ortu', data.no_hp_ayah],
+                    ],
+                    headStyles: { fillColor: [30, 58, 138], textColor: [255, 255, 255], fontStyle: 'bold' },
+                    columnStyles: {
+                        0: { cellWidth: 50, fontStyle: 'bold', fillColor: [249, 250, 251] },
+                        1: { cellWidth: 'auto' }
+                    },
+                    margin: { left: 20, right: 20 }
+                });
+
+                // Footer
+                const finalY = (doc as any).lastAutoTable.finalY + 20;
+                doc.setFontSize(10);
+                doc.text("Kediri, " + new Date().toLocaleDateString('id-ID'), 150, finalY);
+                doc.text("Panitia PPDB", 150, finalY + 10);
+                doc.text("(................................)", 150, finalY + 30);
+
+                doc.setFontSize(9);
+                doc.setTextColor(150, 150, 150);
+                doc.text("* Simpan dokumen ini sebagai bukti pendaftaran resmi pesantren.", 20, 280);
+
+                const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
+                const pdfUrl = await uploadToCloudinary(pdfBuffer, 'ppdb_proofs', `bukti_${registrationId}`);
+
+                // 2. Send Email via Resend
+                const targetEmail = getVal('confirm_email') || `${data.nama_depan.toLowerCase()}@example.com`; // Fallback
+
+                await resend.emails.send({
+                    from: `${settings.sender_name || 'PPDB Darussalam'} <onboarding@resend.dev>`,
+                    to: targetEmail,
+                    subject: `Bukti Pendaftaran - ${data.nama_depan} (#${registrationId})`,
+                    html: `
+                        <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: auto;">
+                            <h2 style="color: #1e3a8a;">Pendaftaran Berhasil!</h2>
+                            <p>Assalamu'alaikum Wr. Wb. Bapak/Ibu <b>${data.nama_ayah_depan}</b>,</p>
+                            <p>Terima kasih telah melakukan pendaftaran untuk calon santri <b>${data.nama_depan} ${data.nama_belakang}</b> di Pondok Pesantren Darussalam Lirboyo.</p>
+                            <p>Bersama email ini kami lampirkan file <b>Bukti Pendaftaran (PDF)</b>. Silakan simpan file tersebut untuk keperluan verifikasi berkas saat kedatangan di pesantren.</p>
+                            <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                                <b>Detail Pendaftaran:</b><br/>
+                                No. Registrasi: #${registrationId}<br/>
+                                Jenjang: ${data.jenjang_kelas}<br/>
+                                Tanggal: ${new Date().toLocaleDateString('id-ID')}
+                            </div>
+                            <p>Jika ada pertanyaan, silakan hubungi sekretariat PPDB melalui kontak resmi kami.</p>
+                            <p>Wassalamu'alaikum Wr. Wb.</p>
+                            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
+                            <small style="color: #888;">Email ini dikirim otomatis oleh sistem PPDB Online Darussalam.</small>
+                        </div>
+                    `,
+                    attachments: [
+                        {
+                            filename: `Bukti_Pendaftaran_${data.nama_depan}.pdf`,
+                            content: pdfBuffer,
+                        }
+                    ]
+                });
+
+                console.log('Email sent to:', targetEmail);
+            } else {
+                console.warn('Email Gateway API Key not found in settings.');
+            }
+        } catch (mailErr) {
+            console.error('Email Generation/Sending Error:', mailErr);
+            // Don't fail the whole request if email fails
+        }
+
         return NextResponse.json({ success: true, message: 'Pendaftaran Berhasil!', id: registrationId });
 
-    } catch (error: unknown) {
-        console.error('Registration API Full Error:', error);
-        let errorMessage = 'Terjadi kesalahan server saat memproses pendaftaran';
-        
-        if (error instanceof Error) {
-            errorMessage = error.message;
-            // Catch specific SQLITE errors if possible
-            if (errorMessage.includes('UNIQUE constraint failed')) {
-                errorMessage = "NIK atau Data sudah terdaftar sebelumnya.";
-            }
-        }
-        
-        return NextResponse.json({ 
-            success: false, 
-            message: errorMessage,
-            debug: process.env.NODE_ENV === 'development' ? String(error) : undefined
-        }, { status: 500 });
+    } catch (error: any) {
+        console.error('Registration Error:', error);
+        return NextResponse.json({ success: false, message: 'Terjadi kesalahan server: ' + error.message }, { status: 500 });
     }
 }
+

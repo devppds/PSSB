@@ -1,6 +1,6 @@
 "use client";
 import "@/app/styles/data-santri.css";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function DataSantriPage() {
@@ -33,7 +33,6 @@ export default function DataSantriPage() {
         foto_santri?: string;
         scan_kk?: string;
         scan_ijazah?: string;
-        status?: string;
     }
 
     const [dataSantri, setDataSantri] = useState<Santri[]>([]);
@@ -49,59 +48,38 @@ export default function DataSantriPage() {
         }
     };
 
-    const fetchSantriData = useCallback(async () => {
+    const fetchSantriData = async () => {
         setIsLoading(true);
         try {
-            const res = await fetch('/api/get-santri');
-            if (!res.ok) throw new Error("Gagal mengambil data");
-            const data = await res.json();
-            setDataSantri(data);
+            // Mock Data for UI Testing (Replace with actual API call)
+            // const res = await fetch('/api/get_santri'); 
+            // const data = await res.json();
+
+            // FIXME: Use real API
+            const mockData: Santri[] = [];
+            setDataSantri(mockData);
         } catch (error) {
             console.error("Failed to fetch data", error);
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    };
 
     useEffect(() => {
         if (isLoggedIn) {
             fetchSantriData();
         }
-    }, [isLoggedIn, fetchSantriData]);
+    }, [isLoggedIn]);
 
-    const handleVerify = async (id: number) => {
-        if (confirm(`Konfirmasi: Apakah data santri ID #${id} ini sudah valid?`)) {
-            try {
-                const res = await fetch('/api/manage-santri', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'update_status', id, status: 'Terverifikasi' })
-                });
-                if (res.ok) {
-                    alert("Data berhasil diverifikasi!");
-                    fetchSantriData();
-                }
-            } catch (error) {
-                console.error("Gagal verifikasi", error);
-            }
+    const handleVerify = (id: number) => {
+        if (confirm("Konfirmasi: Apakah data santri ini sudah valid dan akan dipindahkan ke Database Pusat?")) {
+            alert("Fitur verifikasi belum terhubung ke backend.");
         }
     };
 
-    const handleDelete = async (id: number) => {
-        if (confirm(`PERINGATAN: Hapus data ID #${id} secara permanen?`)) {
-            try {
-                const res = await fetch('/api/manage-santri', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'delete', id })
-                });
-                if (res.ok) {
-                    alert("Data berhasil dihapus.");
-                    fetchSantriData();
-                }
-            } catch (error) {
-                console.error("Gagal menghapus", error);
-            }
+    const handleDelete = (id: number) => {
+        if (confirm("PERINGATAN: Hapus data ini?")) {
+            alert("Fitur hapus belum terhubung ke backend.");
         }
     };
 
@@ -109,13 +87,7 @@ export default function DataSantriPage() {
         return (
             <div id="login-overlay">
                 <div className="login-box">
-                    <Image 
-                        src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png" 
-                        alt="Logo" 
-                        width={80} 
-                        height={80} 
-                        style={{ marginBottom: "1rem", objectFit: "contain" }} 
-                    />
+                    <img src="https://res.cloudinary.com/dceamfy3n/image/upload/v1766596001/logo_zdenyr.png" alt="Logo" style={{ width: 80, marginBottom: "1rem" }} />
                     <h2 style={{ color: "var(--primary)", marginBottom: "10px" }}>Akses Terbatas</h2>
                     <p style={{ fontSize: "0.9rem", color: "#666" }}>Halaman Khusus Admin PPDS Lirboyo</p>
 
@@ -179,11 +151,7 @@ export default function DataSantriPage() {
                                     <td>{item.jenis_kelamin || '-'}</td>
                                     <td><span style={{ color: "var(--secondary)", fontWeight: 500 }}>{item.jenjang_kelas || '-'}</span></td>
                                     <td>{item.alamat_kota || '-'}</td>
-                                    <td>
-                                        <span className={`badge badge-${item.status?.toLowerCase() || 'pending'}`}>
-                                            {item.status || 'Pending'}
-                                        </span>
-                                    </td>
+                                    <td><span className="badge badge-pending">Menunggu</span></td>
                                     <td>
                                         <div style={{ display: "flex", gap: "5px" }}>
                                             <button onClick={() => setSelectedSantri(item)} title="Lihat Detail" style={{ background: "#3b82f6", color: "white", border: "none", padding: "8px 12px", borderRadius: "6px", cursor: "pointer" }}>

@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "@/app/globals.css";
 import "@/app/styles/style.css";
-import { Providers } from "@/components/Providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: settings.meta_title || "Pondok Pesantren Darussalam Lirboyo",
       description: settings.meta_description || "Mencetak Generasi Bertakwa, Berakhlak Qur'ani dan As-Sunnah...",
     };
-  } catch {
+  } catch (e) {
     return {
       title: "Pondok Pesantren Darussalam Lirboyo",
       description: "Mencetak Generasi Bertakwa, Berakhlak Qur'ani dan As-Sunnah...",
@@ -44,9 +43,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       </head>
       <body className={`${inter.variable} ${playfair.variable} antialiased`}>
-        <Providers>
-          {children}
-        </Providers>
+        {children}
       </body>
     </html>
   );

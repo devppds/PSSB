@@ -2,265 +2,265 @@
 
 /* HERO SECTION STYLES (Missing Previously) */
 .info-hero-section {
-  padding: 14rem 1.5rem 6rem;
-  text-align: center;
-  background: radial-gradient(
-    circle at center top,
-    rgba(37, 99, 235, 0.05) 0%,
-    transparent 60%
-  );
-  position: relative;
-  overflow: hidden;
+    padding: 14rem 1.5rem 6rem;
+    text-align: center;
+    background: radial-gradient(circle at center top, rgba(37, 99, 235, 0.05) 0%, transparent 60%);
+    position: relative;
+    overflow: hidden;
 }
 
 .ornament-icon {
-  display: inline-block;
-  font-size: 3rem;
-  color: var(--gold-main);
-  margin-bottom: 1.5rem;
-  opacity: 0.8;
-  filter: drop-shadow(0 4px 6px rgba(217, 119, 6, 0.2));
+    display: inline-block;
+    font-size: 3rem;
+    color: var(--gold-main);
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+    filter: drop-shadow(0 4px 6px rgba(217, 119, 6, 0.2));
 }
 
 .page-hero-title {
-  font-family: var(--font-playfair), serif;
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 800;
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
+    font-family: var(--font-playfair), serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
 }
 
 .page-hero-subtitle {
-  font-size: 1.2rem;
-  color: var(--text-muted);
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.6;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
 }
 
 .text-dark {
-  color: var(--text-main);
+    color: var(--text-main);
 }
 
 .text-primary {
-  color: var(--primary);
+    color: var(--primary);
 }
 
 .materi-grid {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  /* Prevent content blowout */
-  grid-auto-rows: min-content;
-  gap: 1.5rem;
-  max-width: 1280px;
-  margin: -3rem auto 4rem;
-  padding: 0 1.5rem;
-  position: relative;
-  z-index: 20;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    /* Prevent content blowout */
+    grid-auto-rows: min-content;
+    gap: 1.5rem;
+    max-width: 1280px;
+    margin: -3rem auto 4rem;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 20;
 }
 
 /* Glass Card Enhanced */
 .glass-card-materi {
-  background: var(--bg-glass);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-2xl);
-  padding: 2rem;
-  box-shadow: var(--shadow-premium);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+    background: var(--bg-glass);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-2xl);
+    padding: 2rem;
+    box-shadow: var(--shadow-premium);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .glass-card-materi:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 30px 40px -15px rgba(0, 0, 0, 0.1);
-  border-color: var(--gold-main);
+    transform: translateY(-8px);
+    box-shadow: 0 30px 40px -15px rgba(0, 0, 0, 0.1);
+    border-color: var(--gold-main);
 }
 
 /* Bento Sizing */
 .materi-item-large {
-  grid-column: span 6;
+    grid-column: span 12;
 }
 
 .materi-item-med {
-  grid-column: span 6;
+    grid-column: span 6;
 }
 
 .materi-item-small {
-  grid-column: span 4;
+    grid-column: span 4;
 }
 
 /* Section Header Decoration */
 .materi-category-header {
-  grid-column: span 12;
-  margin-top: 2rem;
-  margin-bottom: 0.5rem;
-  padding-left: 1.5rem;
-  position: relative;
+    grid-column: span 12;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
 }
 
 .materi-category-header::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 6px;
-  height: 80%;
-  background: var(--gold-gradient);
-  border-radius: 10px;
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 80%;
+    background: var(--gold-gradient);
+    border-radius: 10px;
 }
 
 .materi-category-header h2 {
-  font-family: var(--font-playfair), serif;
-  font-size: 2rem;
-  color: var(--primary-dark);
+    font-family: var(--font-playfair), serif;
+    font-size: 2rem;
+    color: var(--primary-dark);
 }
 
 /* Tab Styles - Premium Integrated */
 .materi-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  /* Allow wrapping */
-  gap: 0.5rem;
-  /* Tighter gap */
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    /* Allow wrapping */
+    gap: 0.5rem;
+    /* Tighter gap */
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
 }
 
 .materi-tab-btn {
-  flex: 1;
-  background: #f1f5f9;
-  border: 1px solid transparent;
-  padding: 0.75rem 1rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  cursor: pointer;
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  white-space: nowrap;
+    flex: 1;
+    /* Distribute space */
+    background: rgba(37, 99, 235, 0.05);
+    /* Slight tint background */
+    border: none;
+    padding: 0.6rem 1rem;
+    /* Reduced padding */
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Center content */
+    gap: 6px;
+    white-space: nowrap;
+    /* Prevent word break usually */
 }
 
 .materi-tab-btn:hover {
-  background: #e2e8f0;
-  color: var(--primary);
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
 }
 
 .materi-tab-btn.active {
-  color: var(--primary);
-  background: white;
-  border: 1px solid var(--primary-light);
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
-  transform: translateY(-1px);
+    color: white;
+    background: var(--grad-premium);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+    /* Add shadow to active */
 }
 
 /* Make text wrap on very small buttons */
 @media (max-width: 1200px) {
-  .materi-tab-btn {
-    flex-basis: 100%;
-    /* Full width on smaller/cramped screens */
-    justify-content: flex-start;
-  }
+    .materi-tab-btn {
+        flex-basis: 100%;
+        /* Full width on smaller/cramped screens */
+        justify-content: flex-start;
+    }
 }
 
 /* List Styling Luxury */
 .materi-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex-grow: 1;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
 }
 
 .materi-li {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
-  font-size: 0.95rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+    font-size: 0.95rem;
 }
 
 .materi-li i {
-  color: var(--gold-main);
-  margin-top: 4px;
-  font-size: 1rem;
+    color: var(--gold-main);
+    margin-top: 4px;
+    font-size: 1rem;
 }
 
 /* Highlight Indicator */
 .age-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--gold-light);
-  color: var(--gold-deep);
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold-light);
+    color: var(--gold-deep);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: auto;
 }
 
 /* Tab Animation */
 .tab-content-anim {
-  animation: fadeIn 0.5s ease-out;
+    animation: fadeIn 0.5s ease-out;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* RESPONSIVE */
 @media (max-width: 992px) {
-  .materi-grid {
-    grid-template-columns: repeat(2, 1fr);
-    /* 2 Columns on Tablet */
-  }
+    .materi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 Columns on Tablet */
+    }
 
-  .materi-item-med,
-  .materi-item-small {
-    grid-column: span 1;
-    /* reset span */
-  }
+    .materi-item-med,
+    .materi-item-small {
+        grid-column: span 1;
+        /* reset span */
+    }
 
-  .materi-item-large {
-    grid-column: span 2;
-  }
+    .materi-item-large {
+        grid-column: span 2;
+    }
 
-  .materi-category-header {
-    grid-column: span 2;
-  }
+    .materi-category-header {
+        grid-column: span 2;
+    }
 }
 
 @media (max-width: 768px) {
-  .materi-grid {
-    display: flex;
-    flex-direction: column;
-    margin-top: -2rem;
-    gap: 1.25rem;
-  }
+    .materi-grid {
+        display: flex;
+        flex-direction: column;
+        margin-top: -2rem;
+        gap: 1.25rem;
+    }
 
-  .glass-card-materi {
-    padding: 1.5rem;
-  }
+    .glass-card-materi {
+        padding: 1.5rem;
+    }
 
-  .info-hero-section {
-    padding: 10rem 1rem 4rem;
-  }
+    .info-hero-section {
+        padding: 10rem 1rem 4rem;
+    }
 }

@@ -1,34 +1,10 @@
 "use client";
 
 import "@/app/styles/materi-ujian.css";
-import React, { useEffect, useState } from "react";
-
-// Types
-interface MateriContent {
-    id: number;
-    label: string;
-    icon_type: string;
-    group_title?: string;
-}
-
-interface MateriItem {
-    id?: number;
-    title: string;
-    age?: string;
-    size?: string;
-    description?: string;
-    kurikulum: MateriContent[];
-    materi: MateriContent[];
-}
-
-interface MateriCategory {
-    id: number;
-    name: string;
-    items: MateriItem[];
-}
+import { useEffect, useState } from "react";
 
 // Utility Icons Mapping
-const IconMap: Record<string, () => React.ReactNode> = {
+const IconMap: any = {
     check: () => <i className="fas fa-check-circle" style={{ color: 'var(--gold-main)', marginRight: '8px' }}></i>,
     edit: () => <i className="fas fa-edit" style={{ color: 'var(--primary)', marginRight: '8px' }}></i>,
     mic: () => <i className="fas fa-microphone" style={{ color: 'var(--primary)', marginRight: '8px' }}></i>,
@@ -36,20 +12,20 @@ const IconMap: Record<string, () => React.ReactNode> = {
 };
 
 // Utility Component for Class Cards in Bento Style
-const BentoMateriCard = ({ title, materi, kurikulum, age, size = "materi-item-med", description }: MateriItem) => {
+const BentoMateriCard = ({ title, materi, kurikulum, age, size = "materi-item-med", description }: any) => {
     const [activeTab, setActiveTab] = useState("kurikulum"); // default to kurikulum
 
     const headerParts = title.includes(' - ') ? title.split(' - ') : [title, ""];
     const categoryName = headerParts[0];
     const subTitle = headerParts[1] || "";
 
-    const renderList = (items: MateriContent[]) => {
+    const renderList = (items: any[]) => {
         if (!items || items.length === 0) {
             return <div style={{ textAlign: 'center', padding: '1rem', color: 'var(--text-muted)' }}>{description || "-"}</div>;
         }
 
         // Group by group_title if exists
-        const groups: Record<string, MateriContent[]> = {};
+        const groups: any = {};
         items.forEach(it => {
             const g = it.group_title || 'default';
             if (!groups[g]) groups[g] = [];
@@ -62,7 +38,7 @@ const BentoMateriCard = ({ title, materi, kurikulum, age, size = "materi-item-me
                     <h4 style={{ color: 'var(--primary)', marginBottom: '0.5rem', fontSize: '0.9rem' }}>{groupKey}:</h4>
                 )}
                 <ul>
-                    {groups[groupKey].map((li: MateriContent) => (
+                    {groups[groupKey].map((li: any) => (
                         <li className="materi-li" key={li.id} style={{ fontSize: '0.9rem' }}>
                             {IconMap[li.icon_type] ? IconMap[li.icon_type]() : null}
                             {li.label}
@@ -119,7 +95,7 @@ const BentoMateriCard = ({ title, materi, kurikulum, age, size = "materi-item-me
 };
 
 export default function MateriUjianPage() {
-    const [categories, setCategories] = useState<MateriCategory[]>([]);
+    const [categories, setCategories] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -174,22 +150,21 @@ export default function MateriUjianPage() {
                 <div className="reveal fade-bottom active">
                     <span className="ornament-icon"><i className="fas fa-book-reader"></i></span>
                     <h1 className="page-hero-title">
-                        <span className="text-dark">Kelas, Kurikulum, & Materi Ujian</span> <br/>
-                        <span className="text-primary" style={{ fontSize: '0.8em', display: 'block', marginTop: '10px' }}>Madrasah Hidayatul Mubtadi&apos;in (MHM) Khusus Salaf</span>
+                        <span className="text-dark">Materi &</span> <span className="text-primary">Kurikulum</span>
                     </h1>
                     <p className="page-hero-subtitle">
-                        Rincian lengkap kurikulum kitab salaf dan materi ujian masuk Madrasah Hidayatul Mubtadi&apos;in (MHM) Pondok Pesantren Lirboyo Kediri.
+                        Informasi lengkap rincian materi ujian masuk, kurikulum kitab salaf, dan batas usia minimal santri Pondok Pesantren Darussalam Lirboyo.
                     </p>
                 </div>
             </section>
 
             <div className="materi-grid">
-                {categories.map((cat: MateriCategory) => (
+                {categories.map((cat: any) => (
                     <div key={cat.id} style={{ display: 'contents' }}>
                         <div className="materi-category-header reveal fade-left">
                             <h2>{cat.name}</h2>
                         </div>
-                        {cat.items.map((item: MateriItem) => (
+                        {cat.items.map((item: any) => (
                             <BentoMateriCard
                                 key={item.id}
                                 title={item.title}

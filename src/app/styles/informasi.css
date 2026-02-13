@@ -154,39 +154,6 @@
     color: var(--gold-main);
 }
 
-/* Document & Payment Extensions */
-.doc-list-premium li {
-    background: #fcfdfe;
-    padding: 1rem;
-    border-radius: 12px;
-    border: 1px solid #edf2f7;
-    transition: all 0.3s ease;
-}
-
-.doc-list-premium li:hover {
-    border-color: var(--gold-main);
-    background: white;
-    transform: translateX(5px);
-}
-
-.payment-tier-card {
-    background: #fcfdfe;
-    padding: 1.5rem;
-    border-radius: var(--radius-xl);
-    border: 1px solid #edf2f7;
-    position: relative;
-}
-
-.payment-tier-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 20px;
-    width: 30px;
-    height: 3px;
-    background: var(--gold-main);
-}
-
 /* RESPONSIVE BENTO */
 @media (max-width: 992px) {
 
